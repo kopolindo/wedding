@@ -1,0 +1,27 @@
+services:
+  mariadb:
+    image: mariadb:latest
+    container_name: mariadb
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Etc/UTC
+      - MARIADB_DATABASE=wedding #not a secret
+      - MARIADB_USER=user #not a secret
+      - MARIADB_PASSWORD=/run/secrets/password_db
+      - MARIADB_ROOT_PASSWORD=/run/secrets/password_db_root
+    secrets:
+       - password_db_root
+       - password_db
+    volumes:
+      - ./mariadb/data:/config
+      - ./mariadb/init-db:/docker-entrypoint-initdb.d
+    ports:
+      - 3306:3306
+    restart: unless-stopped
+
+secrets:
+   password_db:
+     file: password_db.txt
+   password_db_root:
+     file: password_db_root.txt
