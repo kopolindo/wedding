@@ -12,7 +12,7 @@ type PageData struct {
 }
 
 // HandleForm renders the form page
-func HandleForm(w http.ResponseWriter, r *http.Request) {
+func handleForm(w http.ResponseWriter, r *http.Request) {
 	// Retrieve UUID from query parameter
 	uuid := r.URL.Query().Get("uuid")
 

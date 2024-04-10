@@ -3,7 +3,7 @@ package api
 import "net/http"
 
 // HandleConfirmation handles form submission
-func HandleConfirmation(w http.ResponseWriter, r *http.Request) {
+func handleConfirmation(w http.ResponseWriter, r *http.Request) {
 	// Retrieve form values
 	r.ParseForm()
 	guests := r.Form.Get("guests")
