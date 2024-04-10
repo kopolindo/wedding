@@ -1,36 +1,11 @@
 package main
 
 import (
-	"html/template"
 	"net/http"
+	"wedding/api"
 
 	"github.com/gorilla/mux"
 )
-
-// PageData represents data to be rendered in HTML template
-type PageData struct {
-	UUID string
-}
-
-// HandleForm renders the form page
-func HandleForm(w http.ResponseWriter, r *http.Request) {
-	// Retrieve UUID from query parameter
-	uuid := r.URL.Query().Get("uuid")
-
-	// Pass UUID to the template
-	data := PageData{UUID: uuid}
-
-	// Render the HTML template
-	tmpl, err := template.New("form").Parse(formTemplate)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-	err = tmpl.Execute(w, data)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-	}
-}
 
 // HandleConfirmation handles form submission
 func HandleConfirmation(w http.ResponseWriter, r *http.Request) {
@@ -55,7 +30,7 @@ func main() {
 	router := mux.NewRouter()
 
 	// Define routes
-	router.HandleFunc("/form", HandleForm).Methods("GET")
+	router.HandleFunc("/form", api.HandleForm).Methods("GET")
 	router.HandleFunc("/confirm", HandleConfirmation).Methods("POST")
 
 	// Serve static files (like CSS or JavaScript)
@@ -64,44 +39,3 @@ func main() {
 	// Start the server
 	http.ListenAndServe(":8080", router)
 }
-
-// HTML template for the form
-var formTemplate = `
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Confirmation Form</title>
-    <link rel="stylesheet" type="text/css" href="/static/style.css">
-</head>
-<body>
-    <h1>Confirmation Form</h1>
-    <form action="/confirm" method="post">
-        <input type="hidden" id="uuid" name="uuid">
-        <label for="guests">Number of guests:</label>
-        <input type="number" id="guests" name="guests" required>
-        <br>
-        <input type="submit" value="Confirm">
-    </form>	
-	<script>
-	// Function to extract query parameter from URL
-	function getQueryParam(name) {
-		const urlParams = new URLSearchParams(window.location.search);
-		return urlParams.get(name);
-	}
-
-	// Set the UUID value from query string to the hidden input field
-	const uuidInput = document.getElementById('uuid');
-	const uuidValue = getQueryParam('uuid');
-	uuidInput.value = uuidValue;
-
-	// Submit the form
-	document.getElementById('confirmationForm').onsubmit = function() {
-		if (!uuidValue) {
-			alert('UUID not found in query string');
-			return false; // Prevent form submission if UUID is missing
-		}
-	};
-</script>
-</body>
-</html>
-`
