@@ -8,14 +8,15 @@ services:
       - TZ=Etc/UTC
       - MARIADB_DATABASE=wedding #not a secret
       - MARIADB_USER=user #not a secret
-      - MARIADB_PASSWORD=/run/secrets/password_db
-      - MARIADB_ROOT_PASSWORD=/run/secrets/password_db_root
+      - MARIADB_PASSWORD_FILE=/run/secrets/password_db
+      - MARIADB_ROOT_PASSWORD_FILE=/run/secrets/password_db_root
     secrets:
        - password_db_root
        - password_db
     volumes:
       - ./mariadb/data:/config
-      - ./mariadb/init-db:/docker-entrypoint-initdb.d
+      - ./mariadb/init-db:/docker-entrypoint-initdb.d:ro
+      - ./mariadb/my.cnf:/etc/mysql/my.cnf:ro
     ports:
       - 3306:3306
     restart: unless-stopped
