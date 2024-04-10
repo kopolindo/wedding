@@ -36,8 +36,8 @@ func HandleForm(w http.ResponseWriter, r *http.Request) {
 func HandleConfirmation(w http.ResponseWriter, r *http.Request) {
 	// Retrieve form values
 	r.ParseForm()
-	uuid := r.Form.Get("uuid")
 	guests := r.Form.Get("guests")
+	uuid := r.Form.Get("uuid")
 
 	// Perform any necessary processing here
 	// For demonstration, we'll just print the values
@@ -76,12 +76,32 @@ var formTemplate = `
 <body>
     <h1>Confirmation Form</h1>
     <form action="/confirm" method="post">
-        <input type="hidden" name="uuid" value="{{.UUID}}">
+        <input type="hidden" id="uuid" name="uuid">
         <label for="guests">Number of guests:</label>
         <input type="number" id="guests" name="guests" required>
         <br>
         <input type="submit" value="Confirm">
-    </form>
+    </form>	
+	<script>
+	// Function to extract query parameter from URL
+	function getQueryParam(name) {
+		const urlParams = new URLSearchParams(window.location.search);
+		return urlParams.get(name);
+	}
+
+	// Set the UUID value from query string to the hidden input field
+	const uuidInput = document.getElementById('uuid');
+	const uuidValue = getQueryParam('uuid');
+	uuidInput.value = uuidValue;
+
+	// Submit the form
+	document.getElementById('confirmationForm').onsubmit = function() {
+		if (!uuidValue) {
+			alert('UUID not found in query string');
+			return false; // Prevent form submission if UUID is missing
+		}
+	};
+</script>
 </body>
 </html>
 `
