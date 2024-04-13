@@ -13,7 +13,10 @@ import (
 // HandleConfirmation handles form submission
 func handleConfirmation(w http.ResponseWriter, r *http.Request) {
 	// Retrieve form values
-	r.ParseForm()
+	err := r.ParseForm()
+	if err != nil {
+		log.Printf("error during request parsing: %s\n", err.Error())
+	}
 	numberOfGuests := r.Form.Get("guests")
 	uuidValue := r.Form.Get("uuid")
 
@@ -45,5 +48,8 @@ func handleConfirmation(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Return a success message
-	w.Write([]byte("Confirmation received!"))
+	_, err = w.Write([]byte("Confirmation received!"))
+	if err != nil {
+		log.Printf("error during reposonse writing: %s\n", err.Error())
+	}
 }
