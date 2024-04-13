@@ -2,20 +2,24 @@ package api
 
 import (
 	"net/http"
+	"time"
 
 	"github.com/gorilla/mux"
 )
 
-var Router *mux.Router
+var Router http.Handler
 
 func init() {
 	// Create a new Gorilla Mux router
-	Router = mux.NewRouter()
+	router := mux.NewRouter()
 
 	// Define routes
-	Router.HandleFunc("/form", handleForm).Methods("GET")
-	Router.HandleFunc("/confirm", handleConfirmation).Methods("POST")
+	router.HandleFunc("/form", handleForm).Methods("GET")
+	router.HandleFunc("/confirm", handleConfirmation).Methods("POST")
 
 	// Serve static files (like CSS or JavaScript)
-	Router.PathPrefix("/static/").Handler(http.StripPrefix("/static/", http.FileServer(http.Dir("static"))))
+	router.PathPrefix("/static/").Handler(http.StripPrefix("/static/", http.FileServer(http.Dir("static"))))
+
+	// Add timeout
+	Router = http.TimeoutHandler(router, time.Second*3, "Timeout!")
 }
