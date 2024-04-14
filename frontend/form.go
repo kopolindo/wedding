@@ -12,7 +12,13 @@ var FormTemplate = `
     <h1>Confirmation Form</h1>
     <form action="/confirm" method="post">
         <input type="hidden" id="uuid" name="uuid">
-        <label for="guests">Number of guests:</label>
+		<label for="firstname">Nome:</label>
+		<input type="text" id="firstname" name="firstname" required>
+        <br>
+		<label for="lastname">Cognome:</label>
+		<input type="lastname" id="guests" name="lastname" required>
+        <br>
+        <label for="guests">Numero <b>totale</b> di partecipanti:</label>
         <input type="number" id="guests" name="guests" required>
         <br>
         <input type="submit" value="Confirm">

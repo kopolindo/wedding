@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"strconv"
 	"wedding/database"
+	"wedding/models"
 
 	"github.com/google/uuid"
 )
@@ -18,6 +19,8 @@ func handleConfirmation(w http.ResponseWriter, r *http.Request) {
 		log.Printf("error during request parsing: %s\n", err.Error())
 	}
 	numberOfGuests := r.Form.Get("guests")
+	firstName := r.Form.Get("firstname")
+	lastName := r.Form.Get("lastname")
 	uuidValue := r.Form.Get("uuid")
 
 	numberOfGuestsParsed, err := strconv.Atoi(numberOfGuests)
@@ -29,15 +32,21 @@ func handleConfirmation(w http.ResponseWriter, r *http.Request) {
 	// For demonstration, we'll just print the values
 	println("UUID:", uuidValue)
 	println("Guests:", numberOfGuests)
+	println("First name:", firstName)
+	println("Last name:", lastName)
 
 	uuidParsed, err := uuid.Parse(uuidValue)
 	if err != nil {
 		log.Printf("Error during UUID parsing. %s\n", err.Error())
 	}
 
-	guest := database.Guest{
+	guest := models.Guest{
+		FirstName:            firstName,
+		LastName:             lastName,
 		UUID:                 uuidParsed,
 		NumberOfPartecipants: numberOfGuestsParsed,
+		Confirmed:            true,
+		Notes:                []byte{},
 	}
 
 	index, err := database.InsertGuestData(guest)
