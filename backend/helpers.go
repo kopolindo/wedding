@@ -2,7 +2,6 @@ package backend
 
 import (
 	"encoding/csv"
-	"fmt"
 	"log"
 	"os"
 	"wedding/models"
@@ -36,8 +35,6 @@ func createGuestList() {
 			Confirmed:            false,
 			Notes:                []byte{},
 		}
-		fmt.Println("Inserting guest:")
-		g.Print()
 		GUESTS = append(GUESTS, g)
 	}
 }

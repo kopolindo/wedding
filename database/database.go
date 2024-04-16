@@ -6,8 +6,8 @@ import (
 	"wedding/backend"
 	"wedding/models"
 
-	"github.com/jinzhu/gorm"
-	_ "github.com/jinzhu/gorm/dialects/mysql"
+	"gorm.io/driver/mysql"
+	"gorm.io/gorm"
 )
 
 var db *gorm.DB
@@ -38,7 +38,7 @@ func init() {
 	)
 
 	// Establish a connection to the MySQL database
-	db, err = gorm.Open("mysql", DSN)
+	db, err = gorm.Open(mysql.Open(DSN))
 	if err != nil {
 		panic("failed to connect database")
 	}
@@ -47,11 +47,16 @@ func init() {
 	// Automigrate the schema, creating the users table if it doesn't exist
 	db.AutoMigrate(&models.Guest{})
 	for _, g := range backend.GUESTS {
-		InsertGuestData(g)
+		db.Where(&models.Guest{
+			FirstName: g.FirstName,
+			LastName:  g.LastName,
+		}).FirstOrCreate(&g)
 	}
 }
 
-func InsertGuestData(guest models.Guest) (uint, error) {
+// CreateGuest function insert new guests in guest table
+// returns index (uint) and error
+func CreateGuest(guest models.Guest) (uint, error) {
 	result := db.Create(&guest)
 	log.Printf("inserting guest: %v\n", guest)
 	index := guest.ID   // returns inserted data's primary key
@@ -61,4 +66,40 @@ func InsertGuestData(guest models.Guest) (uint, error) {
 		return 0, err
 	}
 	return index, err
+}
+
+// GuestExists function returns true if guest exists, false otherwise
+func GuestExists(update models.Guest) bool {
+	guest := models.Guest{}
+	result := db.First(&guest, &models.Guest{
+		FirstName: update.FirstName,
+		LastName:  update.LastName,
+		UUID:      update.UUID,
+	})
+	return result.Error == nil
+}
+
+// UpdateGuest function update guest data
+// returns index (uint) and error
+func UpdateGuest(update models.Guest) error {
+	if !GuestExists(update) {
+		return fmt.Errorf(
+			"user %s %s (%s) not found",
+			update.FirstName,
+			update.LastName,
+			update.UUID,
+		)
+	}
+	result := db.Model(&models.Guest{}).
+		Where(&models.Guest{UUID: update.UUID}).
+		Updates(models.Guest{
+			NumberOfPartecipants: update.NumberOfPartecipants,
+			Confirmed:            update.Confirmed,
+			Notes:                update.Notes,
+		})
+	err := result.Error // returns error
+	if err != nil {
+		return err
+	}
+	return nil
 }

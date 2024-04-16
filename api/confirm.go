@@ -30,10 +30,6 @@ func handleConfirmation(w http.ResponseWriter, r *http.Request) {
 
 	// Perform any necessary processing here
 	// For demonstration, we'll just print the values
-	println("UUID:", uuidValue)
-	println("Guests:", numberOfGuests)
-	println("First name:", firstName)
-	println("Last name:", lastName)
 
 	uuidParsed, err := uuid.Parse(uuidValue)
 	if err != nil {
@@ -49,11 +45,14 @@ func handleConfirmation(w http.ResponseWriter, r *http.Request) {
 		Notes:                []byte{},
 	}
 
-	index, err := database.InsertGuestData(guest)
+	err = database.UpdateGuest(guest)
 	if err != nil {
-		log.Printf("Error during database insert. %s\n", err.Error())
-	} else {
-		fmt.Println(index)
+		log.Printf("Error during database update. %s\n", err.Error())
+		_, err = w.Write([]byte(fmt.Sprintf("User %v not found!", guest)))
+		if err != nil {
+			log.Printf("error during reposonse writing: %s\n", err.Error())
+		}
+		return
 	}
 
 	// Return a success message
