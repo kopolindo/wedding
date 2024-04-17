@@ -55,7 +55,7 @@ func init() {
 		db.Where(&models.Guest{
 			FirstName: g.FirstName,
 			LastName:  g.LastName,
-		}).FirstOrCreate(&g)
+		}).FirstOrCreate(&g) // #nosec G601 This issue disappears with Go 1.22 because the loop variable is not reused. From the draft release notes: In Go 1.22, each iteration of the loop creates new variables, to avoid accidental sharing bugs.
 	}
 }
 
