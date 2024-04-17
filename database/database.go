@@ -47,7 +47,10 @@ func init() {
 	//defer db.Close()
 
 	// Automigrate the schema, creating the users table if it doesn't exist
-	db.AutoMigrate(&models.Guest{})
+	err = db.AutoMigrate(&models.Guest{})
+	if err != nil {
+		log.Fatalf("error during db initialization: %s", err.Error())
+	}
 	for _, g := range backend.GUESTS {
 		db.Where(&models.Guest{
 			FirstName: g.FirstName,
