@@ -2,3 +2,4 @@ password*
 mariadb/**
 *.sarif
 *.csv
+vendor/**
