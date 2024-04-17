@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Form di conferma</title>
+        <link rel="stylesheet" type="text/css" href="/static/style.css">
+    </head>
+    <body>
+        <h1>Form di conferma</h1>
+        <form action="/guest/{{ .UUID }}" method="post">
+            <label for="firstname">Nome:</label>
+            <input type="text" id="firstname" name="firstname" value="{{ .FirstName }}" readonly required>
+            <br>
+            <label for="lastname">Cognome:</label>
+            <input type="text" id="lastname" name="lastname" value="{{ .LastName }}" readonly required>
+            <br>
+            <label for="guests">Numero <b>totale</b> di partecipanti:</label>
+            <input type="number" id="guests" name="guests" required>
+            <br>
+            <label for="notes">Note:</label>
+            <textarea id="notes" name="notes" rows="4" cols="50"></textarea>
+            <br>
+            <input type="submit" value="Conferma">
+        </form>	
+    </body>
+</html>

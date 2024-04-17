@@ -2,31 +2,33 @@ package api
 
 import (
 	"net/http"
-	"text/template"
-	"wedding/frontend"
+	"wedding/database"
+	"wedding/models"
+
+	"github.com/gofiber/fiber/v2"
+	"github.com/google/uuid"
 )
 
-// PageData represents data to be rendered in HTML template
-type PageData struct {
-	UUID string
-}
-
 // HandleForm renders the form page
-func handleForm(w http.ResponseWriter, r *http.Request) {
+// method GET
+// route /:uuid
+func handleFormGet(c *fiber.Ctx) error {
 	// Retrieve UUID from query parameter
-	uuid := r.URL.Query().Get("uuid")
-
-	// Pass UUID to the template
-	data := PageData{UUID: uuid}
-
-	// Render the HTML template
-	tmpl, err := template.New("form").Parse(frontend.FormTemplate)
+	uuidString := c.Params("uuid")
+	uuid, err := uuid.Parse(uuidString)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
+		return c.JSON(fiber.Map{
+			"errorMessage": err.Error(),
+			"statusCode":   http.StatusInternalServerError,
+		})
 	}
-	err = tmpl.Execute(w, data)
+	guest, err := database.GetUserByUUID(uuid)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return c.JSON(fiber.Map{
+			"errorMessage": err.Error(),
+			"statusCode":   http.StatusInternalServerError,
+		})
 	}
+	guestMap := models.StructToMap(guest)
+	return c.Render("form", guestMap)
 }

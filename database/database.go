@@ -1,11 +1,13 @@
 package database
 
 import (
+	"errors"
 	"fmt"
 	"log"
 	"wedding/backend"
 	"wedding/models"
 
+	"github.com/google/uuid"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )
@@ -102,4 +104,17 @@ func UpdateGuest(update models.Guest) error {
 		return err
 	}
 	return nil
+}
+
+// GetUserByUUID function returns guest given a UUID
+func GetUserByUUID(u uuid.UUID) (models.Guest, error) {
+	guest := models.Guest{}
+	// debugging!!
+	result := db.Debug().First(&guest, &models.Guest{
+		UUID: u,
+	})
+	if result.Error != nil && errors.Is(result.Error, gorm.ErrRecordNotFound) {
+		return models.Guest{}, fmt.Errorf("user not found")
+	}
+	return guest, nil
 }
