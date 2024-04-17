@@ -28,12 +28,11 @@ func createGuestList() {
 	}
 	for _, r := range records {
 		g := models.Guest{
-			FirstName:            r[0],
-			LastName:             r[1],
-			UUID:                 uuid.New(),
-			NumberOfPartecipants: 0,
-			Confirmed:            false,
-			Notes:                []byte{},
+			FirstName: r[0],
+			LastName:  r[1],
+			UUID:      uuid.New(),
+			Confirmed: false,
+			Notes:     []byte{},
 		}
 		GUESTS = append(GUESTS, g)
 	}

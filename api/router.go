@@ -25,11 +25,9 @@ func init() {
 		WriteBufferSize: 1024,
 	})
 
-	//App.Static("/", "../static/")
 	App.Get("/guest/:uuid", handleFormGet)
 	App.Post("/guest/:uuid", handleFormPost)
 	App.Get("/confirmation", func(c *fiber.Ctx) error {
 		return c.SendFile("./views/confirmation.html")
 	})
-
 }

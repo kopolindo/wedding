@@ -93,11 +93,10 @@ func UpdateGuest(update models.Guest) error {
 		)
 	}
 	result := db.Model(&models.Guest{}).
-		Where(&models.Guest{UUID: update.UUID}).
+		Where(&models.Guest{FirstName: update.FirstName, UUID: update.UUID}).
 		Updates(models.Guest{
-			NumberOfPartecipants: update.NumberOfPartecipants,
-			Confirmed:            update.Confirmed,
-			Notes:                update.Notes,
+			Confirmed: update.Confirmed,
+			Notes:     update.Notes,
 		})
 	err := result.Error // returns error
 	if err != nil {
