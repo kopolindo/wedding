@@ -21,7 +21,7 @@ func init() {
 		AppName:         "wedding",
 		ReadTimeout:     10 * time.Millisecond,
 		ReadBufferSize:  1024,
-		RequestMethods:  []string{"GET", "POST", "HEAD"},
+		RequestMethods:  []string{"GET", "POST", "HEAD", "DELETE"},
 		ServerHeader:    "you are a curious dolphin",
 		Views:           engine,
 		WriteTimeout:    10 * time.Millisecond,
@@ -50,6 +50,7 @@ func init() {
 
 	App.Get("/guest/:uuid", handleFormGet)
 	App.Post("/guest/:uuid", handleFormPost)
+	App.Delete("/guest/:uuid", handleDelete)
 	App.Get("/confirmation", func(c *fiber.Ctx) error {
 		return c.SendFile("./views/confirmation.html")
 	})

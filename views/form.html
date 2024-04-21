@@ -131,6 +131,12 @@
         });
 
         $("body").on("click", "#DeleteRow", function () {
+            var row = $(this).closest("#row");
+            var idInput = row.find("input[name^='id_']");
+            var idValue = parseInt(idInput.val());
+            console.log(idValue);
+            sendDelete(idValue);
+            
             $(this).parents("#row").remove();
             // Decrement the value of the input element with the ID "guests"
             var guestsInput = document.getElementById("guests");
@@ -142,6 +148,26 @@
                 // Update the value of the input element
                 guestsInput.value = newVal;
             }
-        })
+        });
+
+        function sendDelete(id){
+            var form = $(".guest_form");
+            // Convert form data to JSON
+            var jsonData = JSON.stringify({ "id": id });
+
+            // Example of sending JSON data using jQuery AJAX
+            $.ajax({
+                url: form.attr("action"),
+                type: "DELETE",
+                contentType: "application/json",
+                data: jsonData,
+                success: function(response) {
+                    // Handle success response
+                },
+                error: function(xhr, status, error) {
+                    // Handle error response
+                }
+            });
+        }
     </script>
 </html>

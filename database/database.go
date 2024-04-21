@@ -154,3 +154,10 @@ func GetUserByID(id uint) (models.Guest, error) {
 	}
 	return guest, nil
 }
+
+// DeleteGuest function delete a guest given its uuid and id
+func DeleteGuest(id uint, u uuid.UUID) error {
+	guest := models.Guest{}
+	result := db.Debug().Delete(&guest, "id = ? AND uuid = ?", id, u)
+	return result.Error
+}

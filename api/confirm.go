@@ -1,7 +1,6 @@
 package api
 
 import (
-	"fmt"
 	"log"
 	"net/http"
 	"wedding/database"
@@ -54,11 +53,8 @@ func handleFormPost(c *fiber.Ctx) error {
 		guests = append(guests, guest)
 	}
 
-	fmt.Println(guests)
 	for _, guest := range guests {
-		log.Printf("Check existence of guest %v\n", guest)
 		if database.GuestExists(guest) {
-			log.Printf("Updating guest: %v\n", guest)
 			err = database.UpdateGuest(guest)
 			if err != nil {
 				log.Printf("error after updating guest: %s\n", err.Error())
@@ -68,7 +64,6 @@ func handleFormPost(c *fiber.Ctx) error {
 				})
 			}
 		} else {
-			log.Printf("Creating guest: %v\n", guest)
 			_, err := database.CreateGuest(guest)
 			if err != nil {
 				log.Printf("error after updating guest: %s\n", err.Error())
