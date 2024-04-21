@@ -7,6 +7,7 @@ import (
 	"wedding/backend"
 	"wedding/models"
 
+	"github.com/gofiber/fiber/v2"
 	"github.com/google/uuid"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
@@ -82,9 +83,9 @@ func CreateGuest(guest models.Guest) (uint, error) {
 }
 
 // GuestExists function returns true if guest exists, false otherwise
-func GuestExists(update models.Guest) bool {
+func GuestExists(id uint, u uuid.UUID) bool {
 	guest := models.Guest{}
-	result := db.Debug().First(&guest, "id = ? AND uuid = ?", update.ID, update.UUID)
+	result := db.Debug().First(&guest, "id = ? AND uuid = ?", id, u)
 	return result.Error == nil
 }
 
@@ -108,7 +109,7 @@ func CountGuests(u uuid.UUID) (total int64) {
 // UpdateGuest function update guest data
 // returns index (uint) and error
 func UpdateGuest(update models.Guest) error {
-	if !GuestExists(update) {
+	if !GuestExists(update.ID, update.UUID) {
 		return fmt.Errorf(
 			"user %s %s (%s) not found",
 			update.FirstName,
@@ -158,6 +159,13 @@ func GetUserByID(id uint) (models.Guest, error) {
 // DeleteGuest function delete a guest given its uuid and id
 func DeleteGuest(id uint, u uuid.UUID) error {
 	guest := models.Guest{}
-	result := db.Debug().Delete(&guest, "id = ? AND uuid = ?", id, u)
-	return result.Error
+	if GuestExists(id, u) {
+		if n := CountGuests(u); n == 1 {
+			return fiber.NewError(fiber.StatusForbidden, "you can't delete the last user")
+		}
+		result := db.Debug().Delete(&guest, "id = ? AND uuid = ?", id, u)
+		return result.Error
+	} else {
+		return fiber.NewError(fiber.StatusNotFound, "user not found")
+	}
 }

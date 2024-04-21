@@ -33,17 +33,13 @@ func init() {
 		uuidString := c.Params("uuid")
 		uuid, err := uuid.Parse(uuidString)
 		if err != nil {
-			return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
-				"errorMessage": err.Error(),
-				"statusCode":   fiber.StatusInternalServerError,
-			})
+			return c.Status(fiber.StatusInternalServerError).
+				JSON(fiber.Map{"errorMessage": err.Error()})
 		}
 
 		if !database.GuestExistsByUUID(uuid) {
-			return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
-				"errorMessage": fmt.Errorf("user not found").Error(),
-				"statusCode":   fiber.StatusNotFound,
-			})
+			return c.Status(fiber.StatusNotFound).
+				JSON(fiber.Map{"errorMessage": fmt.Errorf("user not found").Error()})
 		}
 		return c.Next()
 	})

@@ -135,19 +135,25 @@
             var idInput = row.find("input[name^='id_']");
             var idValue = parseInt(idInput.val());
             console.log(idValue);
-            sendDelete(idValue);
-            
-            $(this).parents("#row").remove();
-            // Decrement the value of the input element with the ID "guests"
-            var guestsInput = document.getElementById("guests");
-            if (guestsInput) {
-                // Parse the value as an integer and decrement it
-                var newVal = parseInt(guestsInput.value) - 1;
-                // Make sure the new value is at least 1
-                newVal = Math.max(newVal, 1);
-                // Update the value of the input element
-                guestsInput.value = newVal;
-            }
+            sendDelete(idValue)
+                .then(function(response) {
+                    $(this).parents("#row").remove();
+                    // Decrement the value of the input element with the ID "guests"
+                    var guestsInput = document.getElementById("guests");
+                    if (guestsInput) {
+                        // Parse the value as an integer and decrement it
+                        var newVal = parseInt(guestsInput.value) - 1;
+                        // Make sure the new value is at least 1
+                        newVal = Math.max(newVal, 1);
+                        // Update the value of the input element
+                        guestsInput.value = newVal;
+                    }
+                })
+                .catch(function(error) {
+                    // Handle error
+                    console.error("Delete request failed:", error);
+                    // Stop execution of the outer function or perform any other action as needed
+                });
         });
 
         function sendDelete(id){
@@ -155,18 +161,20 @@
             // Convert form data to JSON
             var jsonData = JSON.stringify({ "id": id });
 
-            // Example of sending JSON data using jQuery AJAX
-            $.ajax({
-                url: form.attr("action"),
-                type: "DELETE",
-                contentType: "application/json",
-                data: jsonData,
-                success: function(response) {
-                    // Handle success response
-                },
-                error: function(xhr, status, error) {
-                    // Handle error response
-                }
+            return new Promise(function(resolve, reject) {
+                // Example of sending JSON data using jQuery AJAX
+                $.ajax({
+                    url: form.attr("action"),
+                    type: "DELETE",
+                    contentType: "application/json",
+                    data: jsonData,
+                    success: function(response) {
+                        resolve(response);
+                    },
+                    error: function(xhr, status, error) {
+                        reject(error);
+                    }
+                });
             });
         }
     </script>

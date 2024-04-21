@@ -54,7 +54,7 @@ func handleFormPost(c *fiber.Ctx) error {
 	}
 
 	for _, guest := range guests {
-		if database.GuestExists(guest) {
+		if database.GuestExists(guest.ID, guest.UUID) {
 			err = database.UpdateGuest(guest)
 			if err != nil {
 				log.Printf("error after updating guest: %s\n", err.Error())

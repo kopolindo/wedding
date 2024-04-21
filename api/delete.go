@@ -1,6 +1,7 @@
 package api
 
 import (
+	"errors"
 	"wedding/database"
 
 	"github.com/gofiber/fiber/v2"
@@ -19,24 +20,22 @@ func handleDelete(c *fiber.Ctx) error {
 	uuidString := c.Params("uuid")
 	uuid, err := uuid.Parse(uuidString)
 	if err != nil {
-		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
-			"errorMessage": err.Error(),
-			"statusCode":   fiber.StatusInternalServerError,
-		})
+		return c.Status(fiber.StatusInternalServerError).
+			JSON(fiber.Map{"errorMessage": err.Error()})
 	}
 	guest := new(GuestToDelete)
 	if err := c.BodyParser(guest); err != nil {
-		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
-			"errorMessage": err.Error(),
-			"statusCode":   fiber.StatusInternalServerError,
-		})
+		return c.Status(fiber.StatusInternalServerError).
+			JSON(fiber.Map{"errorMessage": err.Error()})
 	}
 	err = database.DeleteGuest(guest.ID, uuid)
 	if err != nil {
-		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
-			"errorMessage": err.Error(),
-			"statusCode":   fiber.StatusInternalServerError,
-		})
+		var e *fiber.Error
+		if errors.As(err, &e) {
+			return c.Status(e.Code).
+				JSON(fiber.Map{"errorMessage": e.Message})
+		}
 	}
-	return c.Status(fiber.StatusOK).JSON(fiber.Map{"message": "user successfully deleted"})
+	return c.Status(fiber.StatusOK).
+		JSON(fiber.Map{"message": "user successfully deleted"})
 }
