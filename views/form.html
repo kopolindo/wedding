@@ -11,16 +11,36 @@
     </head>
     <body>
         <h1>Form di conferma</h1>
-        <form class="guest_form" action="/guest/{{ .UUID }}" method="post">
+        <form class="guest_form" action="/guest/{{ (index . 0).UUID }}" method="post">
             <label for="guests">Numero <b>totale</b> di partecipanti:</label>
-            <input type="number" id="guests" name="guests" min="1" max="5" value="1" required>
+            {{ if eq (len .) 1 }}
+                <input type="number" id="guests" name="guests" min="1" max="5" value="1" required>
+            {{ else }}
+                <input type="number" id="guests" name="guests" min="1" max="5" value="{{ len . }}" required>
+            {{ end }}
             <br>
             <div class="divs">
-              <div>
-                <input type="text" name="first_name_1" placeholder="Nome"/>
-                <input type="text" name="last_name_1" placeholder="Cognome"/>
-                <input type="text" name="notes_1" placeholder="Intolleranze/allergie"/>
-              </div>
+                {{ range $key, $value := . }}
+                <div id="row">
+                    <button class="btn btn-danger"
+                            id="DeleteRow"
+                            type="button">
+                        <i class="bi bi-trash"></i>
+                        Cancella
+                    </button>
+                    {{ if eq .Confirmed true }}
+                    <input type="text" name="first_name_{{ Increment $key}}" value="{{ $value.FirstName }}"/>
+                    <input type="text" name="last_name_{{ Increment $key}}" value="{{ $value.LastName }}"/>
+                    <input type="text" name="notes_{{ Increment $key}}" value="{{ $value.Notes }}"/>
+                    <input type="hidden" name="id_{{ Increment $key}}" value="{{ $value.ID }}"/>
+                    {{ else }}
+                    <input type="text" name="first_name_{{ Increment $key}}" placeholder="Nome"/>
+                    <input type="text" name="last_name_{{ Increment $key}}" placeholder="Cognome"/>
+                    <input type="text" name="notes_{{ Increment $key}}" placeholder="Allergie/intolleranze"/>
+                    <input type="hidden" name="id_{{ Increment $key}}" value="{{ $value.ID }}"/>
+                    {{ end }}
+                </div>
+                {{ end }}
             </div>
             <button type="button" onclick="submitForm()">Conferma</button>
         </form>
@@ -28,7 +48,7 @@
     <script>
         var min = 1;
         var max = 5;
-        var oldVal = 1;
+        var oldVal = document.getElementById("guests").value;
         var form = $(".guest_form");
 
         function submitForm() {
@@ -42,7 +62,15 @@
                 var firstName = $(this).find("input[name^='first_name']").val();
                 var lastName = $(this).find("input[name^='last_name']").val();
                 var notesData = $(this).find("input[name^='notes']").val();
-                formData.people.push({ first_name: firstName, last_name: lastName, notes: notesData});
+                var idString = $(this).find("input[name^='id']").val();
+                var person = { first_name: firstName, last_name: lastName, notes: notesData}
+                if (idString){
+                    var id = parseInt(idString, 10);
+                    if (!isNaN(id)) {
+                        person.id = id;
+                    }
+                }
+                formData.people.push(person);
             });
 
             // Convert form data to JSON
@@ -81,11 +109,18 @@
             }
             if(currentVal > oldVal){
                 for(i=oldVal;i<currentVal;i++){
-                fieldHTML = fieldHTML = `<div>
-                <input type="text" name="first_name_'+currentVal+'" placeholder="Nome"/>
-                <input type="text" name="last_name_'+currentVal+'" placeholder="Cognome"/>
-                <input type="text" name="notes_'+currentVal+'" placeholder="Intolleranze/allergie"/>
-                </div>`;
+                fieldHTML = fieldHTML = `<div id="row">
+                    <button class="btn btn-danger"
+                    id="DeleteRow"
+                    type="button">
+                    <i class="bi bi-trash"></i>
+                    Cancella
+                    </button>
+                    <input type="text" name="first_name_'+currentVal+'" placeholder="Nome"/>
+                    <input type="text" name="last_name_'+currentVal+'" placeholder="Cognome"/>
+                    <input type="text" name="notes_'+currentVal+'" placeholder="Allergie/intolleranze"/>
+                    </div>
+                    </div>`;
                 $(".divs").append(fieldHTML); // Append new divs to outer div with class "divs"
                 }
             }
@@ -94,5 +129,19 @@
             }
             oldVal = currentVal;
         });
+
+        $("body").on("click", "#DeleteRow", function () {
+            $(this).parents("#row").remove();
+            // Decrement the value of the input element with the ID "guests"
+            var guestsInput = document.getElementById("guests");
+            if (guestsInput) {
+                // Parse the value as an integer and decrement it
+                var newVal = parseInt(guestsInput.value) - 1;
+                // Make sure the new value is at least 1
+                newVal = Math.max(newVal, 1);
+                // Update the value of the input element
+                guestsInput.value = newVal;
+            }
+        })
     </script>
 </html>

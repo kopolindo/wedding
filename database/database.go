@@ -49,7 +49,7 @@ func init() {
 	// Automigrate the schema, creating the users table if it doesn't exist
 	err = db.AutoMigrate(&models.Guest{})
 	if err != nil {
-		log.Fatalf("error during db initialization: %s", err.Error())
+		log.Printf("error during db initialization: %s\n", err.Error())
 	}
 	for _, g := range backend.GUESTS {
 		db.Where(&models.Guest{
@@ -58,33 +58,51 @@ func init() {
 			// This issue disappears with Go 1.22 because the loop variable is not reused.
 			// From the draft release notes: In Go 1.22, each iteration of the loop
 			// creates new variables, to avoid accidental sharing bugs.
-		}).FirstOrCreate(&g) // #nosec G601
+		}).FirstOrCreate(&g) /* #nosec G601 */
 	}
 }
 
 // CreateGuest function insert new guests in guest table
 // returns index (uint) and error
 func CreateGuest(guest models.Guest) (uint, error) {
-	result := db.Create(&guest)
-	log.Printf("inserting guest: %v\n", guest)
-	index := guest.ID   // returns inserted data's primary key
-	err := result.Error // returns error
+	n := CountGuests(guest.UUID)
+	fmt.Printf("number of guests per UUID(%s):%d\n", guest.UUID.String(), n)
+	if n < 5 {
+		result := db.Create(&guest)
+		log.Printf("inserting guest: %v\n", guest)
+		index := guest.ID   // returns inserted data's primary key
+		err := result.Error // returns error
 
-	if err != nil {
-		return 0, err
+		if err != nil {
+			return 0, err
+		}
+		return index, err
 	}
-	return index, err
+	return 0, fmt.Errorf("too many guests")
 }
 
 // GuestExists function returns true if guest exists, false otherwise
 func GuestExists(update models.Guest) bool {
 	guest := models.Guest{}
+	result := db.Debug().First(&guest, "id = ? AND uuid = ?", update.ID, update.UUID)
+	return result.Error == nil
+}
+
+// GuestExistsByUUID function returns true if guest exists, false otherwise
+func GuestExistsByUUID(u uuid.UUID) bool {
+	guest := models.Guest{}
 	result := db.First(&guest, &models.Guest{
-		FirstName: update.FirstName,
-		LastName:  update.LastName,
-		UUID:      update.UUID,
+		UUID: u,
 	})
 	return result.Error == nil
+}
+
+// CountGuests function returns the number of guests given the UUID
+func CountGuests(u uuid.UUID) (total int64) {
+	db.Model(&models.Guest{}).
+		Where("uuid = ?", u).
+		Count(&total)
+	return total
 }
 
 // UpdateGuest function update guest data
@@ -99,8 +117,10 @@ func UpdateGuest(update models.Guest) error {
 		)
 	}
 	result := db.Model(&models.Guest{}).
-		Where(&models.Guest{FirstName: update.FirstName, UUID: update.UUID}).
+		Where(&models.Guest{ID: update.ID, UUID: update.UUID}).
 		Updates(models.Guest{
+			FirstName: update.FirstName,
+			LastName:  update.LastName,
 			Confirmed: update.Confirmed,
 			Notes:     update.Notes,
 		})
@@ -111,12 +131,23 @@ func UpdateGuest(update models.Guest) error {
 	return nil
 }
 
-// GetUserByUUID function returns guest given a UUID
-func GetUserByUUID(u uuid.UUID) (models.Guest, error) {
-	guest := models.Guest{}
-	// debugging!!
-	result := db.Debug().First(&guest, &models.Guest{
+// GetUsersByUUID function returns guests slice given a UUID
+func GetUsersByUUID(u uuid.UUID) ([]models.Guest, error) {
+	var guests []models.Guest
+	result := db.Debug().Find(&guests, &models.Guest{
 		UUID: u,
+	})
+	if result.Error != nil && errors.Is(result.Error, gorm.ErrRecordNotFound) {
+		return []models.Guest{}, fmt.Errorf("user not found")
+	}
+	return guests, nil
+}
+
+// GetUserByID function returns guests slice given a UUID
+func GetUserByID(id uint) (models.Guest, error) {
+	var guest models.Guest
+	result := db.Debug().First(&guest, &models.Guest{
+		ID: id,
 	})
 	if result.Error != nil && errors.Is(result.Error, gorm.ErrRecordNotFound) {
 		return models.Guest{}, fmt.Errorf("user not found")

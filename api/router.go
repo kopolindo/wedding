@@ -1,11 +1,14 @@
 package api
 
 import (
+	"fmt"
 	"net/http"
 	"time"
+	"wedding/database"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/template/html/v2"
+	"github.com/google/uuid"
 )
 
 var Router http.Handler
@@ -23,6 +26,26 @@ func init() {
 		Views:           engine,
 		WriteTimeout:    10 * time.Millisecond,
 		WriteBufferSize: 1024,
+	})
+
+	App.Use("/guest/:uuid", func(c *fiber.Ctx) error {
+		// Retrieve UUID from query parameter
+		uuidString := c.Params("uuid")
+		uuid, err := uuid.Parse(uuidString)
+		if err != nil {
+			return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+				"errorMessage": err.Error(),
+				"statusCode":   fiber.StatusInternalServerError,
+			})
+		}
+
+		if !database.GuestExistsByUUID(uuid) {
+			return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
+				"errorMessage": fmt.Errorf("user not found").Error(),
+				"statusCode":   fiber.StatusNotFound,
+			})
+		}
+		return c.Next()
 	})
 
 	App.Get("/guest/:uuid", handleFormGet)
