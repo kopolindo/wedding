@@ -50,4 +50,8 @@ func init() {
 	App.Get("/confirmation", func(c *fiber.Ctx) error {
 		return c.SendFile("./views/confirmation.html")
 	})
+	App.Get("/chisono", func(c *fiber.Ctx) error {
+		return c.SendFile("./views/secret.html")
+	})
+	App.Post("/chisono", handleSecret)
 }
