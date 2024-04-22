@@ -3,3 +3,4 @@ mariadb/**
 *.sarif
 *.csv
 vendor/**
+passphrase-generator-dictionary.txt

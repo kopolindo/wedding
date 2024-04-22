@@ -1,6 +1,8 @@
 package api
 
 import (
+	"fmt"
+
 	"github.com/gofiber/fiber/v2"
 )
 
@@ -9,7 +11,8 @@ import (
 // route /secret
 func handleSecret(c *fiber.Ctx) error {
 	// Parse form data
-	c.FormValue("secret")
+	secret := c.FormValue("secret")
+	fmt.Println(secret)
 	// Redirect to a success page or return a response
 	c.Type("html")
 	return nil
