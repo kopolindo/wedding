@@ -11,7 +11,9 @@ import (
 
 var GUESTS []models.Guest
 
-const guestsfile string = "guests.csv"
+const (
+	guestsfile string = "guests.csv"
+)
 
 // createGuestList read the list of guest names (only per group) and stores it in GUESTS
 func createGuestList() {
@@ -26,6 +28,10 @@ func createGuestList() {
 	if err != nil {
 		log.Fatal(err)
 	}
+	dictionary, err := readDictionary()
+	if err != nil {
+		log.Fatal(err.Error())
+	}
 	for _, r := range records {
 		g := models.Guest{
 			FirstName: r[0],
@@ -35,5 +41,7 @@ func createGuestList() {
 			Notes:     []byte{},
 		}
 		GUESTS = append(GUESTS, g)
+		passphrase, entropy := GeneratePassphrase(dictionary)
+		log.Printf("%s (%d)\n", passphrase, entropy)
 	}
 }
