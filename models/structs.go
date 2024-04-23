@@ -6,7 +6,7 @@ import (
 
 // Define a struct to represent your database model
 type Guest struct {
-	ID        uint      `gorm:"primary_key;autoIncrement"`
+	ID        uint      `gorm:"primaryKey;autoIncrement"`
 	FirstName string    `gorm:"not null;type:varchar(30)"`
 	LastName  string    `gorm:"not null;type:varchar(30)"`
 	UUID      uuid.UUID `gorm:"not null;type:uuid"`
@@ -14,3 +14,5 @@ type Guest struct {
 	Confirmed bool      `gorm:"type:bool"`
 	Notes     []byte
 }
+
+type Guests []Guest
