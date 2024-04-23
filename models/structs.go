@@ -10,6 +10,7 @@ type Guest struct {
 	FirstName string    `gorm:"not null;type:varchar(30)"`
 	LastName  string    `gorm:"not null;type:varchar(30)"`
 	UUID      uuid.UUID `gorm:"not null;type:uuid"`
+	Secret    string    `gorm:"not null;type:varchar(100)"`
 	Confirmed bool      `gorm:"type:bool"`
 	Notes     []byte
 }

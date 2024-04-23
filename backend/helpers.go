@@ -2,6 +2,7 @@ package backend
 
 import (
 	"encoding/csv"
+	"fmt"
 	"log"
 	"os"
 	"wedding/models"
@@ -33,15 +34,20 @@ func createGuestList() {
 		log.Fatal(err.Error())
 	}
 	for _, r := range records {
+		passphrase, _ := generatePassphrase(dictionary)
+		hash, err := generateFromPassword(passphrase)
+		if err != nil {
+			log.Printf("error during argon2 password generation: %s\n", err.Error())
+		}
 		g := models.Guest{
 			FirstName: r[0],
 			LastName:  r[1],
 			UUID:      uuid.New(),
+			Secret:    hash,
 			Confirmed: false,
 			Notes:     []byte{},
 		}
+		fmt.Println(g.FirstName, g.LastName, passphrase)
 		GUESTS = append(GUESTS, g)
-		passphrase, entropy := GeneratePassphrase(dictionary)
-		log.Printf("%s (%d)\n", passphrase, entropy)
 	}
 }
