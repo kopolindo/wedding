@@ -100,7 +100,7 @@ func ServeFile(ctx *RequestCtx, path string) {
 		rootFSHandler = rootFS.NewRequestHandler()
 	})
 
-	if path == "" || !filepath.IsAbs(path) {
+	if len(path) == 0 || !filepath.IsAbs(path) {
 		// extend relative path to absolute path
 		hasTrailingSlash := len(path) > 0 && (path[len(path)-1] == '/' || path[len(path)-1] == '\\')
 
@@ -429,7 +429,7 @@ func (fs *FS) normalizeRoot(root string) string {
 	// fs.FS uses relative paths, that paths are slash-separated on all systems, even Windows.
 	if fs.FS == nil {
 		// Serve files from the current working directory if Root is empty or if Root is a relative path.
-		if (!fs.AllowEmptyRoot && root == "") || (root != "" && !filepath.IsAbs(root)) {
+		if (!fs.AllowEmptyRoot && len(root) == 0) || (len(root) > 0 && !filepath.IsAbs(root)) {
 			path, err := os.Getwd()
 			if err != nil {
 				path = "."
@@ -452,14 +452,14 @@ func (fs *FS) initRequestHandler() {
 	root := fs.normalizeRoot(fs.Root)
 
 	compressRoot := fs.CompressRoot
-	if compressRoot == "" {
+	if len(compressRoot) == 0 {
 		compressRoot = root
 	} else {
 		compressRoot = fs.normalizeRoot(compressRoot)
 	}
 
 	compressedFileSuffixes := fs.CompressedFileSuffixes
-	if compressedFileSuffixes["br"] == "" || compressedFileSuffixes["gzip"] == "" ||
+	if len(compressedFileSuffixes["br"]) == 0 || len(compressedFileSuffixes["gzip"]) == 0 ||
 		compressedFileSuffixes["br"] == compressedFileSuffixes["gzip"] {
 		// Copy global map
 		compressedFileSuffixes = make(map[string]string, len(FSCompressedFileSuffixes))
@@ -558,7 +558,7 @@ func (ff *fsFile) smallFileReader() (io.Reader, error) {
 	return r, nil
 }
 
-// Files bigger than this size are sent with sendfile.
+// files bigger than this size are sent with sendfile
 const maxSmallFileSize = 2 * 4096
 
 func (ff *fsFile) isBig() bool {
@@ -961,9 +961,7 @@ func (cm *inMemoryCacheManager) cleanCache(pendingFiles []*fsFile) []*fsFile {
 	return pendingFiles
 }
 
-func cleanCacheNolock(
-	cache map[string]*fsFile, pendingFiles, filesToRelease []*fsFile, cacheDuration time.Duration,
-) ([]*fsFile, []*fsFile) {
+func cleanCacheNolock(cache map[string]*fsFile, pendingFiles, filesToRelease []*fsFile, cacheDuration time.Duration) ([]*fsFile, []*fsFile) {
 	t := time.Now()
 	for k, ff := range cache {
 		if t.Sub(ff.t) > cacheDuration {
@@ -1383,9 +1381,7 @@ func (h *fsHandler) compressAndOpenFSFile(filePath string, fileEncoding string) 
 	return ff, err
 }
 
-func (h *fsHandler) compressFileNolock(
-	f fs.File, fileInfo fs.FileInfo, filePath, compressedFilePath, fileEncoding string,
-) (*fsFile, error) {
+func (h *fsHandler) compressFileNolock(f fs.File, fileInfo fs.FileInfo, filePath, compressedFilePath string, fileEncoding string) (*fsFile, error) {
 	// Attempt to open compressed file created by another concurrent
 	// goroutine.
 	// It is safe opening such a file, since the file creation
@@ -1436,7 +1432,7 @@ func (h *fsHandler) compressFileNolock(
 	return h.newCompressedFSFile(compressedFilePath, fileEncoding)
 }
 
-// newCompressedFSFileCache use memory cache compressed files.
+// newCompressedFSFileCache use memory cache compressed files
 func (h *fsHandler) newCompressedFSFileCache(f fs.File, fileInfo fs.FileInfo, filePath, fileEncoding string) (*fsFile, error) {
 	var (
 		w   = &bytebufferpool.ByteBuffer{}
@@ -1474,7 +1470,7 @@ func (h *fsHandler) newCompressedFSFileCache(f fs.File, fileInfo fs.FileInfo, fi
 
 	ext := fileExtension(fileInfo.Name(), false, h.compressedFileSuffixes[fileEncoding])
 	contentType := mime.TypeByExtension(ext)
-	if contentType == "" {
+	if len(contentType) == 0 {
 		data, err := readFileHeader(f, false, fileEncoding)
 		if err != nil {
 			return nil, fmt.Errorf("cannot read header of the file %q: %w", fileInfo.Name(), err)
@@ -1573,7 +1569,7 @@ func (h *fsHandler) newFSFile(f fs.File, fileInfo fs.FileInfo, compressed bool, 
 	// detect content-type
 	ext := fileExtension(fileInfo.Name(), compressed, h.compressedFileSuffixes[fileEncoding])
 	contentType := mime.TypeByExtension(ext)
-	if contentType == "" {
+	if len(contentType) == 0 {
 		data, err := readFileHeader(f, compressed, fileEncoding)
 		if err != nil {
 			return nil, fmt.Errorf("cannot read header of the file %q: %w", fileInfo.Name(), err)

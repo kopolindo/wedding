@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"net/http"
 	"time"
-	"wedding/database"
+	"wedding/src/database"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/template/html/v2"

@@ -2,7 +2,7 @@ package api
 
 import (
 	"errors"
-	"wedding/database"
+	"wedding/src/database"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/google/uuid"

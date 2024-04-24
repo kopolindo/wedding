@@ -2,7 +2,7 @@ package main
 
 import (
 	"log"
-	"wedding/api"
+	"wedding/src/api"
 )
 
 func main() {

@@ -6,9 +6,9 @@ import (
 	"net/url"
 	"sync"
 	"time"
-	"wedding/backend"
-	"wedding/database"
-	"wedding/models"
+	"wedding/src/backend"
+	"wedding/src/database"
+	"wedding/src/models"
 
 	"github.com/gofiber/fiber/v2"
 )

@@ -4,8 +4,8 @@ import (
 	"errors"
 	"fmt"
 	"log"
-	"wedding/backend"
-	"wedding/models"
+	"wedding/src/backend"
+	"wedding/src/models"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/google/uuid"

@@ -3,8 +3,8 @@ package api
 import (
 	"log"
 	"net/http"
-	"wedding/database"
-	"wedding/models"
+	"wedding/src/database"
+	"wedding/src/models"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/google/uuid"

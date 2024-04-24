@@ -3,7 +3,7 @@ package database
 import (
 	"log"
 	"os"
-	"wedding/models"
+	"wedding/src/models"
 )
 
 // readUserPassword initializes USERPASSWORD variable with content of USERPASSWORDFILE

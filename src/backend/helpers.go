@@ -7,7 +7,7 @@ import (
 	"log"
 	"math/big"
 	"os"
-	"wedding/models"
+	"wedding/src/models"
 
 	"github.com/google/uuid"
 )

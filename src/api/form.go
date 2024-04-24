@@ -4,7 +4,7 @@ import (
 	"html/template"
 	"net/http"
 	"os"
-	"wedding/database"
+	"wedding/src/database"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/google/uuid"
