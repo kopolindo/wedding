@@ -1,6 +1,7 @@
 package api
 
 import (
+	"encoding/json"
 	"html/template"
 	"net/http"
 	"os"
@@ -59,11 +60,13 @@ func handleFormGet(c *fiber.Ctx) error {
 		}
 		guestMapSlice = append(guestMapSlice, guestMap)
 	}
-	// Execute the template with the data
-	err = t.Execute(c.Response().BodyWriter(), guestMapSlice)
+	// Marshal guestMapSlice into JSON
+	guestsJSON, err := json.Marshal(guestMapSlice)
 	if err != nil {
 		return err
 	}
-	c.Type("html")
-	return nil
+
+	// Write JSON response
+	c.Set(fiber.HeaderContentType, fiber.MIMEApplicationJSON)
+	return c.Send(guestsJSON)
 }

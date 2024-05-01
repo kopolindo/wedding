@@ -4,3 +4,4 @@ mariadb/**
 *.csv
 vendor/**
 passphrase-generator-dictionary.txt
+.env
