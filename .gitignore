@@ -5,3 +5,4 @@ mariadb/**
 vendor/**
 passphrase-generator-dictionary.txt
 .env
+cookie-passphrase.txt

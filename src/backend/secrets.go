@@ -13,7 +13,7 @@ import (
 )
 
 const (
-	FILENAME      string = "./passphrase-generator-dictionary.txt"
+	FILENAME      string = "../passphrase-generator-dictionary.txt"
 	MINSCORE      int    = 3
 	PASSPHRASELEN int    = 2
 )

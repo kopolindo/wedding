@@ -15,7 +15,7 @@ import (
 var GUESTS []models.Guest
 
 const (
-	guestsfile string = "guests.csv"
+	guestsfile string = "../guests.csv"
 )
 
 // createGuestList read the list of guest names (only per group) and stores it in GUESTS

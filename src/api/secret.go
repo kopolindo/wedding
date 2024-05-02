@@ -1,9 +1,8 @@
 package api
 
 import (
-	"fmt"
-	"net/http"
-	"net/url"
+	"encoding/json"
+	"log"
 	"sync"
 	"time"
 	"wedding/src/backend"
@@ -13,14 +12,22 @@ import (
 	"github.com/gofiber/fiber/v2"
 )
 
+type Payload struct {
+	Secret string `json:"secret"`
+}
+
 // handleSecret renders the login page
 // method POST
 // route /secret
 func handleSecret(c *fiber.Ctx) error {
 	start := time.Now()
-	c.Type("html")
 	// Parse form data
-	secret := c.FormValue("secret")
+	payload := &Payload{}
+	if err := c.BodyParser(&payload); err != nil {
+		return c.Status(fiber.StatusNotFound).
+			JSON(fiber.Map{"errorMessage": err.Error()})
+	}
+	secret := payload.Secret
 	guests := database.GetAllUsers()
 	type result struct {
 		guest models.Guest
@@ -47,23 +54,48 @@ func handleSecret(c *fiber.Ctx) error {
 	for range guests {
 		res := <-results
 		if res.err != nil {
-			return c.JSON(fiber.Map{
-				"errorMessage": res.err.Error(),
-				"statusCode":   http.StatusInternalServerError,
-			})
+			return c.Status(fiber.StatusNotFound).
+				JSON(fiber.Map{"errorMessage": res.err.Error()})
 		}
 		if res.ok {
-			location, err := url.JoinPath("/guest", res.guest.UUID.String())
+			uuid := res.guest.UUID
+			guests, err := database.GetUsersByUUID(uuid)
 			if err != nil {
-				return c.JSON(fiber.Map{
-					"errorMessage": err.Error(),
-					"statusCode":   http.StatusInternalServerError,
-				})
+				return c.Status(fiber.StatusInternalServerError).
+					JSON(fiber.Map{"errorMessage": err.Error()})
 			}
-			fmt.Println(time.Since(start).Milliseconds())
-			return c.Redirect(location)
+			var guestMapSlice []map[string]interface{}
+			for _, guest := range guests {
+				guestMap := map[string]interface{}{
+					"ID":        guest.ID,
+					"FirstName": guest.FirstName,
+					"LastName":  guest.LastName,
+					"Confirmed": guest.Confirmed,
+					"Notes":     string(guest.Notes), // Convert []byte to string
+				}
+				guestMapSlice = append(guestMapSlice, guestMap)
+			}
+			// Marshal guestMapSlice into JSON
+			guestsJSON, err := json.Marshal(guestMapSlice)
+			if err != nil {
+				return c.Status(fiber.StatusInternalServerError).
+					JSON(fiber.Map{"errorMessage": err.Error()})
+			}
+			// Write JSON response
+			c.Set(fiber.HeaderContentType, fiber.MIMEApplicationJSON)
+			c.Cookie(&fiber.Cookie{
+				Name:     "UUID",
+				Value:    uuid.String(),
+				Expires:  time.Now().Add(24 * 7 * time.Hour),
+				Secure:   true,
+				HTTPOnly: true,
+				SameSite: "strict",
+			})
+			log.Println(time.Since(start).Milliseconds())
+			return c.Send(guestsJSON)
 		}
 	}
-	fmt.Println(time.Since(start).Milliseconds())
-	return c.Redirect("/chisono")
+	log.Println(time.Since(start).Milliseconds())
+	return c.Status(fiber.StatusNotFound).
+		JSON(fiber.Map{"errorMessage": "I don't know who you are"})
 }

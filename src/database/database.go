@@ -20,7 +20,7 @@ var (
 )
 
 const (
-	USERPASSWORDFILE string = "password_db.txt"
+	USERPASSWORDFILE string = "../password_db.txt"
 	USER             string = "user"    // not a secret
 	DBNAME           string = "wedding" // not a secret
 	PORT             int    = 3306

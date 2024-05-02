@@ -8,12 +8,16 @@ import (
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
+	"github.com/gofiber/fiber/v2/middleware/encryptcookie"
 	"github.com/gofiber/template/html/v2"
 	"github.com/google/uuid"
 )
 
-var Router http.Handler
-var App *fiber.App
+var (
+	Router         http.Handler
+	App            *fiber.App
+	COOKIEPASSWORD string
+)
 
 func init() {
 	engine := html.New("./views", ".html")
@@ -55,6 +59,11 @@ func init() {
 		return c.Next()
 	})
 
+	readCookiePassword()
+	// Provide a minimal configuration
+	App.Use(encryptcookie.New(encryptcookie.Config{
+		Key: COOKIEPASSWORD,
+	}))
 	App.Get("/guest/:uuid", handleFormGet)
 	App.Post("/guest/:uuid", handleFormPost)
 	App.Delete("/guest/:uuid", handleDelete)

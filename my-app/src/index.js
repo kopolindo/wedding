@@ -2,11 +2,9 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter as Router, Switch, Route} from "react-router-dom";
 
-import Home from './components/Home';
 import Header from './components/Header'
 import SecretPage from './components/SecretPage'
 import GuestFormPage from './components/GuestFormPage'
-import Info from './components/Info'
 
 const Routing = () => {
   return(
