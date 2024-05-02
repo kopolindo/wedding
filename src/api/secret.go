@@ -16,6 +16,18 @@ type Payload struct {
 	Secret string `json:"secret"`
 }
 
+type responseGuest struct {
+	ID        int    `json:"id"`
+	FirstName string `json:"firstName"`
+	LastName  string `json:"lastName"`
+	Confirmed bool   `json:"confirmed"`
+	Notes     string `json:"notes"`
+}
+
+type responseGuests struct {
+	Guests []responseGuest `json:"guests"`
+}
+
 // handleSecret renders the login page
 // method POST
 // route /secret
@@ -64,27 +76,29 @@ func handleSecret(c *fiber.Ctx) error {
 				return c.Status(fiber.StatusInternalServerError).
 					JSON(fiber.Map{"errorMessage": err.Error()})
 			}
-			var guestMapSlice []map[string]interface{}
+			//var guestMapSlice []map[string]interface{}
+			var respGuests []responseGuest
 			for _, guest := range guests {
-				guestMap := map[string]interface{}{
-					"ID":        guest.ID,
-					"FirstName": guest.FirstName,
-					"LastName":  guest.LastName,
-					"Confirmed": guest.Confirmed,
-					"Notes":     string(guest.Notes), // Convert []byte to string
+				respGuest := responseGuest{
+					ID:        int(guest.ID),
+					FirstName: guest.FirstName,
+					LastName:  guest.LastName,
+					Confirmed: guest.Confirmed,
+					Notes:     string(guest.Notes), // Convert []byte to string
 				}
-				guestMapSlice = append(guestMapSlice, guestMap)
+				respGuests = append(respGuests, respGuest)
 			}
-			// Marshal guestMapSlice into JSON
-			guestsJSON, err := json.Marshal(guestMapSlice)
+			responseGuests := responseGuests{
+				Guests: respGuests,
+			}
+			guestsJSON, err := json.Marshal(responseGuests)
 			if err != nil {
 				return c.Status(fiber.StatusInternalServerError).
 					JSON(fiber.Map{"errorMessage": err.Error()})
 			}
-			// Write JSON response
 			c.Set(fiber.HeaderContentType, fiber.MIMEApplicationJSON)
 			c.Cookie(&fiber.Cookie{
-				Name:     "UUID",
+				Name:     "session",
 				Value:    uuid.String(),
 				Expires:  time.Now().Add(24 * 7 * time.Hour),
 				Secure:   true,
@@ -97,5 +111,5 @@ func handleSecret(c *fiber.Ctx) error {
 	}
 	log.Println(time.Since(start).Milliseconds())
 	return c.Status(fiber.StatusNotFound).
-		JSON(fiber.Map{"errorMessage": "I don't know who you are"})
+		JSON(fiber.Map{"errorMessage": "Parola d'ordine sbagliata. Neville vai a chiamare Hermione e riprova"})
 }
