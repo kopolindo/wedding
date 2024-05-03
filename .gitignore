@@ -6,3 +6,5 @@ vendor/**
 passphrase-generator-dictionary.txt
 .env
 cookie-passphrase.txt
+keyfile.key
+keyfile.pub

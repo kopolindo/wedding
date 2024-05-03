@@ -5,14 +5,16 @@ import (
 	"os"
 )
 
-const COOKIEPASSWORDFILE = "../cookie-passphrase.txt"
+const (
+	COOKIEPASSWORDFILE = "../cookie-passphrase.txt"
+)
 
 // readCookiePassword initializes COOKIEPASSWORD variable with content of COOKIEPASSWORDFILE
-func readCookiePassword() {
+func readCookiePassword() string {
 	content, err := os.ReadFile(COOKIEPASSWORDFILE)
 	if err != nil {
 		log.Fatalf("Error reading password file. %s\n", err.Error())
-		return
+		return ""
 	}
-	COOKIEPASSWORD = string(content)
+	return string(content)
 }

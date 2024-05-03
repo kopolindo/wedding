@@ -2,6 +2,7 @@ package api
 
 import (
 	"fmt"
+	"log"
 	"net/http"
 	"time"
 	"wedding/src/database"
@@ -14,9 +15,8 @@ import (
 )
 
 var (
-	Router         http.Handler
-	App            *fiber.App
-	COOKIEPASSWORD string
+	Router http.Handler
+	App    *fiber.App
 )
 
 func init() {
@@ -58,12 +58,33 @@ func init() {
 		}
 		return c.Next()
 	})
-
-	readCookiePassword()
-	// Provide a minimal configuration
+	COOKIEPASSWORD := readCookiePassword()
 	App.Use(encryptcookie.New(encryptcookie.Config{
 		Key: COOKIEPASSWORD,
 	}))
+	COOKIEPASSWORD = ""
+
+	App.Use(func(c *fiber.Ctx) error {
+		c.Locals("isAuthenticated", false)
+		// Check if the session cookie exists
+		sessionID := c.Cookies("session")
+		if sessionID != "" {
+			log.Printf("found session cookie: %s\n", sessionID)
+			u, err := uuid.Parse(sessionID)
+			if err != nil {
+				return c.Status(fiber.StatusForbidden).
+					JSON(fiber.Map{"errorMessage": fmt.Sprintf("you are not authenticated: %s", err.Error())})
+			}
+			if database.GuestExistsByUUID(u) {
+				log.Println("UUID is correctly formatted and a user with such UUID exists")
+				c.Locals("isAuthenticated", true)
+			} else {
+				return c.Status(fiber.StatusForbidden).
+					JSON(fiber.Map{"errorMessage": fmt.Sprintln("you are not authenticated")})
+			}
+		}
+		return c.Next()
+	})
 	App.Get("/guest/:uuid", handleFormGet)
 	App.Post("/guest/:uuid", handleFormPost)
 	App.Delete("/guest/:uuid", handleDelete)
