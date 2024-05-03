@@ -3,6 +3,7 @@ package api
 import (
 	"encoding/json"
 	"html/template"
+	"log"
 	"net/http"
 	"os"
 	"wedding/src/database"
@@ -17,11 +18,11 @@ func Increment(x int) int {
 
 // HandleForm renders the form page
 // method GET
-// route /:uuid
+// route /guest
 func handleFormGet(c *fiber.Ctx) error {
-	// Retrieve UUID from query parameter
-	uuidString := c.Params("uuid")
-	uuid, err := uuid.Parse(uuidString)
+	sessionID := c.Cookies("session")
+	log.Println(sessionID)
+	uuid, err := uuid.Parse(sessionID)
 	if err != nil {
 		return c.JSON(fiber.Map{
 			"errorMessage": err.Error(),

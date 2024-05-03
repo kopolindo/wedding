@@ -11,6 +11,7 @@ import GuestFormPage from './GuestFormPage';
 export default function Header() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [refresh, setRefresh] = useState(false);
+  const [uuid, setUuid] = useState(null); // State to hold data
 
   useEffect(() => {
       // Check if authentication cookie is present
@@ -23,11 +24,12 @@ export default function Header() {
   }, [refresh]); // Run whenever 'refresh' state changes
 
   // Function to handle events that might change authentication status
-  const handleEventThatMightChangeAuthStatus = () => {
+  const handleEventThatMightChangeAuthStatus = (d) => {
       // Logic to handle event that might change authentication status
       // For example, after form submission
       // You may need to adjust this logic based on your actual implementation
       setRefresh(prevRefresh => !prevRefresh); // Toggle 'refresh' state to trigger re-render
+      setUuid(d.uuid);
   };
 
     return (
@@ -42,7 +44,7 @@ export default function Header() {
                 <TabPanel><Home/></TabPanel>
                 <TabPanel><Info/></TabPanel>
                 <TabPanel>
-                    {isAuthenticated ? <GuestFormPage /> : <SecretPage onFormSubmit={handleEventThatMightChangeAuthStatus}/>}
+                    {isAuthenticated ? <GuestFormPage uuid={uuid} /> : <SecretPage onFormSubmit={handleEventThatMightChangeAuthStatus}/>}
                 </TabPanel>
             </Tabs>
         </div>

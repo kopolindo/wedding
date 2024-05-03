@@ -25,6 +25,7 @@ type responseGuest struct {
 }
 
 type responseGuests struct {
+	UUID   string          `json:"uuid"`
 	Guests []responseGuest `json:"guests"`
 }
 
@@ -89,6 +90,7 @@ func handleSecret(c *fiber.Ctx) error {
 				respGuests = append(respGuests, respGuest)
 			}
 			responseGuests := responseGuests{
+				UUID:   uuid.String(),
 				Guests: respGuests,
 			}
 			guestsJSON, err := json.Marshal(responseGuests)

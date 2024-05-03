@@ -2,7 +2,6 @@ package api
 
 import (
 	"fmt"
-	"log"
 	"net/http"
 	"time"
 	"wedding/src/database"
@@ -64,35 +63,11 @@ func init() {
 	}))
 	COOKIEPASSWORD = ""
 
-	App.Use(func(c *fiber.Ctx) error {
-		c.Locals("isAuthenticated", false)
-		// Check if the session cookie exists
-		sessionID := c.Cookies("session")
-		if sessionID != "" {
-			log.Printf("found session cookie: %s\n", sessionID)
-			u, err := uuid.Parse(sessionID)
-			if err != nil {
-				return c.Status(fiber.StatusForbidden).
-					JSON(fiber.Map{"errorMessage": fmt.Sprintf("you are not authenticated: %s", err.Error())})
-			}
-			if database.GuestExistsByUUID(u) {
-				log.Println("UUID is correctly formatted and a user with such UUID exists")
-				c.Locals("isAuthenticated", true)
-			} else {
-				return c.Status(fiber.StatusForbidden).
-					JSON(fiber.Map{"errorMessage": fmt.Sprintln("you are not authenticated")})
-			}
-		}
-		return c.Next()
-	})
-	App.Get("/guest/:uuid", handleFormGet)
-	App.Post("/guest/:uuid", handleFormPost)
-	App.Delete("/guest/:uuid", handleDelete)
-	App.Get("/confirmation", func(c *fiber.Ctx) error {
-		return c.SendFile("./views/confirmation.html")
-	})
-	App.Get("/chisono", func(c *fiber.Ctx) error {
-		return c.SendFile("./views/secret.html")
-	})
 	App.Post("/chisono", handleSecret)
+
+	api := App.Group("/api", authMiddleware)
+
+	api.Get("/guest", handleFormGet)
+	api.Post("/guest", handleFormPost)
+	api.Delete("/guest", handleDelete)
 }
