@@ -16,17 +16,8 @@ type Payload struct {
 	Secret string `json:"secret"`
 }
 
-type responseGuest struct {
-	ID        int    `json:"id"`
-	FirstName string `json:"firstName"`
-	LastName  string `json:"lastName"`
-	Confirmed bool   `json:"confirmed"`
-	Notes     string `json:"notes"`
-}
-
-type responseGuests struct {
-	UUID   string          `json:"uuid"`
-	Guests []responseGuest `json:"guests"`
+type response struct {
+	UUID string `json:"uuid"`
 }
 
 // handleSecret renders the login page
@@ -72,33 +63,14 @@ func handleSecret(c *fiber.Ctx) error {
 		}
 		if res.ok {
 			uuid := res.guest.UUID
-			guests, err := database.GetUsersByUUID(uuid)
+			response := response{
+				UUID: uuid.String(),
+			}
+			responseJSON, err := json.Marshal(response)
 			if err != nil {
 				return c.Status(fiber.StatusInternalServerError).
 					JSON(fiber.Map{"errorMessage": err.Error()})
 			}
-			//var guestMapSlice []map[string]interface{}
-			var respGuests []responseGuest
-			for _, guest := range guests {
-				respGuest := responseGuest{
-					ID:        int(guest.ID),
-					FirstName: guest.FirstName,
-					LastName:  guest.LastName,
-					Confirmed: guest.Confirmed,
-					Notes:     string(guest.Notes), // Convert []byte to string
-				}
-				respGuests = append(respGuests, respGuest)
-			}
-			responseGuests := responseGuests{
-				UUID:   uuid.String(),
-				Guests: respGuests,
-			}
-			guestsJSON, err := json.Marshal(responseGuests)
-			if err != nil {
-				return c.Status(fiber.StatusInternalServerError).
-					JSON(fiber.Map{"errorMessage": err.Error()})
-			}
-			c.Set(fiber.HeaderContentType, fiber.MIMEApplicationJSON)
 			c.Cookie(&fiber.Cookie{
 				Name:     "session",
 				Value:    uuid.String(),
@@ -122,7 +94,8 @@ func handleSecret(c *fiber.Ctx) error {
 				SameSite: "strict",
 			})
 			log.Println(time.Since(start).Milliseconds())
-			return c.Send(guestsJSON)
+			c.Set(fiber.HeaderContentType, fiber.MIMEApplicationJSON)
+			return c.Send(responseJSON)
 		}
 	}
 	log.Println(time.Since(start).Milliseconds())
