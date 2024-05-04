@@ -5,7 +5,6 @@ import './info.css';
 const Info = () => {
     return(
         <div className='Info'>
-            <h1>Informazioni utili</h1>
             <hr/>
             <h2>Ristorante</h2>
             <Map />

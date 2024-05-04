@@ -38,7 +38,7 @@ export default function Header() {
             <Tabs>
                 <TabList>
                     <Tab>Home</Tab>
-                    <Tab>Info</Tab>
+                    <Tab>Informazioni utili</Tab>
                     {isAuthenticated ?<Tab>Form di conferma</Tab> : <Tab>Dimmi il tuo segreto e ti dirò chi sei</Tab>}
                 </TabList>
                 <TabPanel><Home/></TabPanel>

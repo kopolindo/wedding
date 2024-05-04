@@ -22,21 +22,23 @@ type JSONForm struct {
 
 // handleFormPost handles form submission
 func handleFormPost(c *fiber.Ctx) error {
-	// Retrieve form values
-	uuidString := c.Params("uuid")
-	// Parse UUID string to create uuid.UUID object
-	uuidParsed, err := uuid.Parse(uuidString)
+	sessionID := c.Cookies("session")
+	if sessionID == "" {
+		return c.Status(fiber.StatusInternalServerError).
+			JSON(fiber.Map{"errorMessage": "Hai trovato il modo di superare il cane a tre teste! Ma non supererai me..."})
+	}
+	log.Println(sessionID)
+	uuid, err := uuid.Parse(sessionID)
 	if err != nil {
-		log.Printf("Error during UUID parsing. %s\n", err.Error())
+		return c.Status(fiber.StatusInternalServerError).
+			JSON(fiber.Map{"errorMessage": err.Error()})
 	}
 
 	data := new(JSONForm)
 	if err := c.BodyParser(data); err != nil {
 		log.Printf("error during JSON parsing: %s\n", err.Error())
-		return c.JSON(fiber.Map{
-			"errorMessage": err.Error(),
-			"statusCode":   http.StatusInternalServerError,
-		})
+		return c.Status(fiber.StatusInternalServerError).
+			JSON(fiber.Map{"errorMessage": err.Error()})
 	}
 
 	var guests []models.Guest
@@ -46,7 +48,7 @@ func handleFormPost(c *fiber.Ctx) error {
 			ID:        g.ID,
 			FirstName: g.FirstName,
 			LastName:  g.LastName,
-			UUID:      uuidParsed,
+			UUID:      uuid,
 			Confirmed: true,
 			Notes:     []byte(g.Notes),
 		}
@@ -74,7 +76,6 @@ func handleFormPost(c *fiber.Ctx) error {
 			}
 		}
 	}
-
-	// Redirect to confirmation page
-	return c.Redirect("/confirmation")
+	return c.Status(fiber.StatusOK).
+		JSON(fiber.Map{"status": "ok"})
 }

@@ -16,51 +16,20 @@ const GuestFormPage = () => {
         if (!response.ok) {
           throw new Error(data.errorMessage);
         }
-        setGuests(data);
+        setGuests(data.guests);
+        setPrefilledGuests(data.guests.filter(guest => guest.confirmed));
+        setSubmitSuccess(true);
       } catch (error) {
         setErrorMessage(error.message);
       }
     };
-
     fetchGuests();
   }, []);
 
   useEffect(() => {
-    // Set guests count based on prefilledGuests length
     setGuestsCount(prefilledGuests.length);
-    // Set prefilled guests data
     setGuests(prefilledGuests);
   }, [prefilledGuests]);
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      const formData = guests.map((guest) => ({
-        id: guest.ID,
-        firstName: e.target.elements[`first_name_${guest.ID}`].value,
-        lastName: e.target.elements[`last_name_${guest.ID}`].value,
-        notes: e.target.elements[`notes_${guest.ID}`].value,
-      }));
-      const response = await fetch(`/api/guest`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
-      });
-      const data = await response.json();
-      if (!response.ok) {
-        throw new Error(data.errorMessage);
-      }
-      console.log('Form submitted successfully');
-      // Optionally handle success (redirect, show confirmation, etc.)
-      setPrefilledGuests(data.guests.filter(guest => guest.confirmed));
-      setSubmitSuccess(true);
-    } catch (error) {
-      console.error('Error submitting form:', error);
-      // Optionally handle error (display error message, retry, etc.)
-    }
-  };
 
   const handleGuestChange = (index, field, value) => {
     const updatedGuests = [...guests];
@@ -77,6 +46,32 @@ const GuestFormPage = () => {
     }
   };
 
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    try {
+      const formData = guests.map((guest) => ({
+        id: guest.ID,
+        firstName: event.target.elements[`first_name_${guest.ID}`].value,
+        lastName: event.target.elements[`last_name_${guest.ID}`].value,
+        notes: event.target.elements[`notes_${guest.ID}`].value,
+      }));
+      const response = await fetch(`/api/guest`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data.errorMessage);
+      }
+      console.log('Form submitted successfully');
+    } catch (error) {
+      console.error('Error submitting form:', error);
+    }
+  };
+
   const submitForm = async () => {
     try {
       const formData = {
@@ -88,7 +83,7 @@ const GuestFormPage = () => {
       const jsonData = JSON.stringify(formData);
 
       // Example of sending JSON data using fetch API
-      const response = await fetch(`/api/guest/${guests[0].id}`, {
+      const response = await fetch(`/api/guest/`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -112,41 +107,11 @@ const GuestFormPage = () => {
 
   return (
     <div className='GuestFormPage'>
-{/*       <h1>Guest Form</h1>
-      <form onSubmit={handleSubmit}>
-        {guests.map((guest) => (
-          <div key={guest.ID}>
-            <input
-              type="text"
-              name={`first_name_${guest.ID}`}
-              placeholder="First Name"
-              defaultValue={guest.FirstName || ''}
-              readOnly={guest.Confirmed}
-            />
-            <input
-              type="text"
-              name={`last_name_${guest.ID}`}
-              placeholder="Last Name"
-              defaultValue={guest.LastName || ''}
-              readOnly={guest.Confirmed}
-            />
-            <input
-              type="text"
-              name={`notes_${guest.ID}`}
-              placeholder="Notes"
-              defaultValue={guest.Notes || ''}
-              readOnly={guest.Confirmed}
-            />
-          </div>
-        ))}
-        <button type="submit">Submit</button>
-      </form> */}
       <div id="formContainer">
       {errorMessage && <p className='error'>{errorMessage}</p>}
         {submitSuccess && (
           <div>
-            <h1>Form di conferma</h1>
-            <form className="guest_form" action={`/guest/${guests[0].id}`} method="post" onSubmit={handleSubmit}>
+            <form className="guest_form" action={`/guest`} method="post" onSubmit={handleSubmit}>
               <label htmlFor="guests">Numero <b>totale</b> di partecipanti:</label>
               <input
                 type="number"
