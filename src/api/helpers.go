@@ -10,10 +10,6 @@ import (
 	"github.com/google/uuid"
 )
 
-const (
-	COOKIEPASSWORDFILE = "../cookie-passphrase.txt"
-)
-
 // readCookiePassword initializes COOKIEPASSWORD variable with content of COOKIEPASSWORDFILE
 func readCookiePassword() string {
 	content, err := os.ReadFile(COOKIEPASSWORDFILE)

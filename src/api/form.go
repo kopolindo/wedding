@@ -9,18 +9,6 @@ import (
 	"github.com/google/uuid"
 )
 
-type responseGuest struct {
-	ID        int    `json:"id"`
-	FirstName string `json:"firstName"`
-	LastName  string `json:"lastName"`
-	Confirmed bool   `json:"confirmed"`
-	Notes     string `json:"notes"`
-}
-
-type responseGuests struct {
-	Guests []responseGuest `json:"guests"`
-}
-
 // HandleForm renders the form page
 // method GET
 // route /guest

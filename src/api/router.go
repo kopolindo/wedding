@@ -2,7 +2,6 @@ package api
 
 import (
 	"fmt"
-	"net/http"
 	"time"
 	"wedding/src/database"
 
@@ -11,11 +10,6 @@ import (
 	"github.com/gofiber/fiber/v2/middleware/encryptcookie"
 	"github.com/gofiber/template/html/v2"
 	"github.com/google/uuid"
-)
-
-var (
-	Router http.Handler
-	App    *fiber.App
 )
 
 func init() {

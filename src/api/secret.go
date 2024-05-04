@@ -12,21 +12,13 @@ import (
 	"github.com/gofiber/fiber/v2"
 )
 
-type Payload struct {
-	Secret string `json:"secret"`
-}
-
-type response struct {
-	UUID string `json:"uuid"`
-}
-
 // handleSecret renders the login page
 // method POST
 // route /secret
 func handleSecret(c *fiber.Ctx) error {
 	start := time.Now()
 	// Parse form data
-	payload := &Payload{}
+	payload := &secretRequestPayload{}
 	if err := c.BodyParser(&payload); err != nil {
 		return c.Status(fiber.StatusNotFound).
 			JSON(fiber.Map{"errorMessage": err.Error()})
@@ -63,7 +55,7 @@ func handleSecret(c *fiber.Ctx) error {
 		}
 		if res.ok {
 			uuid := res.guest.UUID
-			response := response{
+			response := secretResponseBody{
 				UUID: uuid.String(),
 			}
 			responseJSON, err := json.Marshal(response)

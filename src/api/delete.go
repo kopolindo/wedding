@@ -8,10 +8,6 @@ import (
 	"github.com/google/uuid"
 )
 
-type GuestToDelete struct {
-	ID uint `json:"ID"`
-}
-
 // handleDelete removes guest from db
 // method DELETE
 // route /:uuid
