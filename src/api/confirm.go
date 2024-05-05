@@ -3,7 +3,6 @@ package api
 import (
 	"fmt"
 	"log"
-	"net/http"
 	"strings"
 	"wedding/src/database"
 	"wedding/src/models"
@@ -15,8 +14,6 @@ import (
 
 func (v XValidator) Validate(data interface{}) []ErrorResponse {
 	validationErrors := []ErrorResponse{}
-
-	fmt.Printf("%v", data)
 	errs := validate.Struct(data)
 	if errs != nil {
 		for _, err := range errs.(validator.ValidationErrors) {
@@ -99,19 +96,16 @@ func handleFormPost(c *fiber.Ctx) error {
 			err = database.UpdateGuest(guest)
 			if err != nil {
 				log.Printf("error after updating guest: %s\n", err.Error())
-				return c.JSON(fiber.Map{
-					"errorMessage": err.Error(),
-					"statusCode":   http.StatusInternalServerError,
-				})
+				return c.Status(fiber.StatusInternalServerError).
+					JSON(fiber.Map{"errorMessage": err.Error()})
 			}
 		} else {
+			guest.ID = 0
 			_, err := database.CreateGuest(guest)
 			if err != nil {
-				log.Printf("error after updating guest: %s\n", err.Error())
-				return c.JSON(fiber.Map{
-					"errorMessage": err.Error(),
-					"statusCode":   http.StatusInternalServerError,
-				})
+				log.Printf("error during guest creation: %s\n", err.Error())
+				return c.Status(fiber.StatusInternalServerError).
+					JSON(fiber.Map{"errorMessage": err.Error()})
 			}
 		}
 	}

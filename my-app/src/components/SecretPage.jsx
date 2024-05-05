@@ -22,15 +22,6 @@ export default function SecretPage({ onFormSubmit }) {
       }
       
       onFormSubmit(data);
-      /* // Remove the SendSecret div after successful submission
-      const sendSecretDiv = document.querySelector('.SendSecret');
-      if (sendSecretDiv) {
-        sendSecretDiv.remove();
-      }
-      const errorDiv = document.querySelector('.error');
-      if (errorDiv) {
-        errorDiv.remove();
-      } */
     } catch (error) {
       setErrorMessage(error.message);
     }

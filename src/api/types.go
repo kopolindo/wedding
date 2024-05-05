@@ -53,13 +53,13 @@ type (
 	}
 
 	GuestToDelete struct {
-		ID uint `json:"ID"`
+		ID uint `json:"id"`
 	}
 
 	responseGuest struct {
 		ID        int    `json:"id"`
-		FirstName string `json:"firstName"`
-		LastName  string `json:"lastName"`
+		FirstName string `json:"first_name"`
+		LastName  string `json:"last_name"`
 		Confirmed bool   `json:"confirmed"`
 		Notes     string `json:"notes"`
 	}

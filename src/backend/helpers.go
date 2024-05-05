@@ -3,7 +3,6 @@ package backend
 import (
 	"crypto/rand"
 	"encoding/csv"
-	"fmt"
 	"log"
 	"math/big"
 	"os"
@@ -49,7 +48,7 @@ func createGuestList() {
 			Confirmed: false,
 			Notes:     []byte{},
 		}
-		fmt.Println(g.FirstName, g.LastName, passphrase)
+		//fmt.Println(g.FirstName, g.LastName, passphrase)
 		GUESTS = append(GUESTS, g)
 	}
 }

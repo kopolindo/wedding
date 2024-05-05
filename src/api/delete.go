@@ -13,8 +13,12 @@ import (
 // route /:uuid
 func handleDelete(c *fiber.Ctx) error {
 	// Retrieve UUID from query parameter
-	uuidString := c.Params("uuid")
-	uuid, err := uuid.Parse(uuidString)
+	sessionID := c.Cookies("session")
+	if sessionID == "" {
+		return c.Status(fiber.StatusInternalServerError).
+			JSON(fiber.Map{"errorMessage": "Hai trovato il modo di superare il cane a tre teste! Ma non supererai me..."})
+	}
+	uuid, err := uuid.Parse(sessionID)
 	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).
 			JSON(fiber.Map{"errorMessage": err.Error()})
