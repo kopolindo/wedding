@@ -56,7 +56,7 @@ func init() {
 			log.Printf("error during db initialization: %s\n", err.Error())
 		}
 		for _, g := range GUESTS {
-			db.Debug().Where(&models.Guest{
+			db.Where(&models.Guest{
 				FirstName: g.FirstName,
 				LastName:  g.LastName,
 			}).FirstOrCreate(&g)
@@ -72,8 +72,8 @@ func CreateGuest(guest models.Guest) (uint, error) {
 	n := CountGuests(guest.UUID)
 	fmt.Printf("number of guests per UUID(%s):%d\n", guest.UUID.String(), n)
 	if n < 5 {
-		result := db.Create(&guest)
-		log.Printf("inserting guest: %v\n", guest)
+		guest.QRUUID = uuid.New()
+		result := db.Debug().Create(&guest)
 		index := guest.ID   // returns inserted data's primary key
 		err := result.Error // returns error
 

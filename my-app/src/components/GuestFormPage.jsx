@@ -6,6 +6,7 @@ const GuestFormPage = () => {
   const [guestsCount, setGuestsCount] = useState(1);
   const [guests, setGuests] = useState([{ id: '', first_name: '', last_name: '', notes: '', confirmed: false }]);
   const [prefilledGuests, setPrefilledGuests] = useState([]);
+  const [formSubmitted, setFormSubmitted] = useState(false); // New state variable
 
   useEffect(() => {
     const fetchGuests = async () => {
@@ -18,7 +19,6 @@ const GuestFormPage = () => {
         // Set all guests
         for (let index = 0; index < data.guests.length; index++) {
           const guest = data.guests[index];
-          console.log(guest);
           if(!guest.confirmed){
             guest.first_name = '';
             guest.last_name = '';
@@ -34,7 +34,8 @@ const GuestFormPage = () => {
       }
     };
     fetchGuests();
-  }, []);
+    setFormSubmitted(false);
+  }, [formSubmitted]);
 
   useEffect(() => {
     setGuestsCount(prefilledGuests.length);
@@ -100,8 +101,7 @@ const GuestFormPage = () => {
       if (!response.ok) {
         throw new Error(data.errorMessage);
       }
-  
-      console.log('Form submitted successfully');
+      setFormSubmitted(true); // Trigger fetching guests after form submission
     } catch (error) {
       console.error('Error submitting form:', error);
     }
