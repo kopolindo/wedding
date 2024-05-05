@@ -67,4 +67,13 @@ type (
 	responseGuests struct {
 		Guests []responseGuest `json:"guests"`
 	}
+
+	qrRequestPayload struct {
+		ID uint `json:"id"`
+	}
+
+	qrResponseBody struct {
+		Success bool   `json:"success"`
+		Message string `json:"message"`
+	}
 )

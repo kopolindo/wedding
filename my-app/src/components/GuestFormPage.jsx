@@ -119,6 +119,35 @@ const GuestFormPage = () => {
     setGuests(updatedGuests);
   };
 
+  const QRGen = async (index) => {
+    // Retrieve the guest information using the index
+    const guest = guests[index];
+    console.log(`generating QR code ${guest.id}`);
+    try {
+      const formData = {
+        id: guest.id
+      };
+  
+      const response = await fetch(`/api/qr`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+  
+      const data = await response.json();
+  
+      if (!response.ok) {
+        throw new Error(data.errorMessage);
+      }
+      setFormSubmitted(true); // Trigger fetching guests after form submission
+    } catch (error) {
+      console.error('Error submitting form:', error);
+    }
+
+  };
+
   function sendDelete(id) {
     const formData = { id: id };
 
@@ -198,6 +227,10 @@ const GuestFormPage = () => {
                     Cancella
                     </button>
                   )}
+                  <button className="btn btn-success" id="QRGen" type="button" onClick={() => QRGen(index)}>
+                      <i className="bi"></i>
+                      Genera QR code
+                  </button>
                   {guest.id && <input type="hidden" name={`id_${index}`} value={guest.id} />}
                 </div>
               ))}
