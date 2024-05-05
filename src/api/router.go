@@ -8,12 +8,10 @@ import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/gofiber/fiber/v2/middleware/encryptcookie"
-	"github.com/gofiber/template/html/v2"
 	"github.com/google/uuid"
 )
 
 func init() {
-	engine := html.New("./views", ".html")
 	App = fiber.New(fiber.Config{
 		Immutable:       true,
 		AppName:         "wedding",
@@ -21,7 +19,6 @@ func init() {
 		ReadBufferSize:  1024,
 		RequestMethods:  []string{"GET", "POST", "HEAD", "DELETE"},
 		ServerHeader:    "you are a curious dolphin",
-		Views:           engine,
 		WriteTimeout:    10 * time.Millisecond,
 		WriteBufferSize: 1024,
 	})
