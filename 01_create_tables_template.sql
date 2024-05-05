@@ -1,0 +1,9 @@
+CREATE TABLE IF NOT EXISTS guests (
+    ID INT AUTO_INCREMENT PRIMARY KEY,
+    first_name VARCHAR(30) NOT NULL,
+    last_name VARCHAR(30) NOT NULL,
+    UUID CHAR(36) NOT NULL,
+    secret VARCHAR(100) NOT NULL,
+    confirmed BOOLEAN,
+    notes BLOB
+);
