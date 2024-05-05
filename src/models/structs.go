@@ -11,6 +11,7 @@ type (
 		FirstName string    `gorm:"not null;type:varchar(30)" validate:"required,alphanum,min=3,max=20"`
 		LastName  string    `gorm:"not null;type:varchar(30)" validate:"required,alphanum,min=3,max=20"`
 		UUID      uuid.UUID `gorm:"not null;type:uuid"`
+		QRUUID    uuid.UUID `gorm:"not null;type:uuid;column:qruuid"`
 		Secret    string    `gorm:"not null;type:varchar(100)"`
 		Confirmed bool      `gorm:"type:bool"`
 		Notes     []byte    `gorm:"type:bytes[]" validate:"max=256"`

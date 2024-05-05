@@ -4,7 +4,6 @@ import (
 	"errors"
 	"fmt"
 	"log"
-	"wedding/src/backend"
 	"wedding/src/models"
 
 	"github.com/gofiber/fiber/v2"
@@ -50,19 +49,17 @@ func init() {
 	if isTableEmpty("guests") {
 		log.Println("table guests is empty: initializing it")
 		log.Println("initiating db from guests.csv")
+		createGuestList()
 		// Automigrate the schema, creating the users table if it doesn't exist
 		err = db.AutoMigrate(&models.Guest{})
 		if err != nil {
 			log.Printf("error during db initialization: %s\n", err.Error())
 		}
-		for _, g := range backend.GUESTS {
-			db.Where(&models.Guest{
+		for _, g := range GUESTS {
+			db.Debug().Where(&models.Guest{
 				FirstName: g.FirstName,
 				LastName:  g.LastName,
-				// This issue disappears with Go 1.22 because the loop variable is not reused.
-				// From the draft release notes: In Go 1.22, each iteration of the loop
-				// creates new variables, to avoid accidental sharing bugs.
-			}).FirstOrCreate(&g) // #nosec G601
+			}).FirstOrCreate(&g)
 		}
 	} else {
 		log.Println("table guests already initialized")

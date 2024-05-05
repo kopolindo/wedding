@@ -1,4 +1,4 @@
-package backend
+package argon
 
 import (
 	"crypto/subtle"
@@ -31,10 +31,10 @@ var (
 )
 
 /*
-generateFromPassword returns the argon2 encoded password and an error
+GenerateFromPassword returns the argon2 encoded password and an error
 input: cleartext string password
 */
-func generateFromPassword(password string) (encodedHash string, err error) {
+func GenerateFromPassword(password string) (encodedHash string, err error) {
 	// Generate a cryptographically secure random salt.
 	salt, err := generateRandomBytes(argonParams.saltLength)
 	if err != nil {
@@ -70,7 +70,7 @@ func generateFromPassword(password string) (encodedHash string, err error) {
 }
 
 /*
-comparePasswordAndHash returns a boolean for match and an error
+ComparePasswordAndHash returns a boolean for match and an error
 input: string cleartext password and argon2 encoded password
 */
 func ComparePasswordAndHash(password, encodedHash string) (match bool, err error) {

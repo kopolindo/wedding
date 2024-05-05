@@ -5,7 +5,7 @@ import (
 	"log"
 	"sync"
 	"time"
-	"wedding/src/backend"
+	"wedding/src/argon"
 	"wedding/src/database"
 	"wedding/src/models"
 
@@ -37,7 +37,7 @@ func handleSecret(c *fiber.Ctx) error {
 		wg.Add(1)
 		go func(guest models.Guest) {
 			defer wg.Done()
-			ok, err := backend.ComparePasswordAndHash(secret, guest.Secret)
+			ok, err := argon.ComparePasswordAndHash(secret, guest.Secret)
 			results <- result{guest, ok, err}
 		}(guest)
 	}
