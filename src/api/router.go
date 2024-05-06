@@ -50,7 +50,8 @@ func init() {
 	})
 	COOKIEPASSWORD := readCookiePassword()
 	App.Use(encryptcookie.New(encryptcookie.Config{
-		Key: COOKIEPASSWORD,
+		Key:    COOKIEPASSWORD,
+		Except: []string{"confirmed", "auth"},
 	}))
 	COOKIEPASSWORD = ""
 
@@ -62,4 +63,5 @@ func init() {
 	api.Post("/guest", handleFormPost)
 	api.Delete("/guest", handleDelete)
 	api.Post("/qr", handleQRPost)
+	api.Get("/confirmed", handleConfirmedGet)
 }

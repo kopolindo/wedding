@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './guestformpage.css';
 
-const GuestFormPage = () => {
+const GuestFormPage = ({ onFormSubmit }) => {
   const [errorMessage, setErrorMessage] = useState('');
   const [guestsCount, setGuestsCount] = useState(1);
   const [guests, setGuests] = useState([{ id: '', first_name: '', last_name: '', notes: '', confirmed: false }]);
@@ -102,6 +102,7 @@ const GuestFormPage = () => {
         throw new Error(data.errorMessage);
       }
       setFormSubmitted(true); // Trigger fetching guests after form submission
+      onFormSubmit(true);
     } catch (error) {
       console.error('Error submitting form:', error);
     }
@@ -117,35 +118,6 @@ const GuestFormPage = () => {
       sendDelete(id);
     }
     setGuests(updatedGuests);
-  };
-
-  const QRGen = async (index) => {
-    // Retrieve the guest information using the index
-    const guest = guests[index];
-    console.log(`generating QR code ${guest.id}`);
-    try {
-      const formData = {
-        id: guest.id
-      };
-  
-      const response = await fetch(`/api/qr`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
-      });
-  
-      const data = await response.json();
-  
-      if (!response.ok) {
-        throw new Error(data.errorMessage);
-      }
-      setFormSubmitted(true); // Trigger fetching guests after form submission
-    } catch (error) {
-      console.error('Error submitting form:', error);
-    }
-
   };
 
   function sendDelete(id) {
@@ -216,26 +188,18 @@ const GuestFormPage = () => {
                     placeholder="Allergie/intolleranze"
                     onChange={(e) => handleGuestChange(index, 'notes', e.target.value)}
                   />
-                  {index !== 0 && ( // Only render delete button if index is not 0
-                    <button className="btn btn-danger" id="DeleteRow" type="button" onClick={() => handleDeleteRow(index)}>
-                      <i className="bi bi-trash"></i>
-                      Cancella
-                    </button>
-                  )}
-                  {index === 0 && (
-                    <button className="btn ghost-button" type="button" disabled title="">
-                    Cancella
-                    </button>
-                  )}
-                  {guest.confirmed ? 
-                    <button className="btn btn-success" id="QRGen" type="button" onClick={() => QRGen(index)}>
-                        <i className="bi"></i>
-                        Genera QR code
-                    </button> :
-                    <button className="btn ghost-button" id="QRGen" type="button" disabled title="">
-                      <i className="bi"></i>
-                      Genera QR code
-                    </button>
+                  {index !== 0
+                    ? (
+                        <button className="btn btn-danger" id="DeleteRow" type="button" onClick={() => handleDeleteRow(index)}>
+                          <i className="bi bi-trash"></i>
+                          Cancella
+                        </button>
+                      )
+                    : (
+                        <button className="btn ghost-button" type="button" disabled title="">
+                          Cancella
+                        </button>
+                      )
                   }
                   {guest.id && <input type="hidden" name={`id_${index}`} value={guest.id} />}
                 </div>

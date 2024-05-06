@@ -7,30 +7,45 @@ import Home from './Home';
 import Info from './Info';
 import SecretPage from './SecretPage';
 import GuestFormPage from './GuestFormPage';
+import QR from './QR';
 
 export default function Header() {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [refresh, setRefresh] = useState(false);
-  const [uuid, setUuid] = useState(null); // State to hold data
+    const [isAuthenticated, setIsAuthenticated] = useState(false);
+    const [refresh, setRefresh] = useState(false);
+    const [uuid, setUuid] = useState(null); // State to hold data
+    const [isConfirmed, setIsConfirmed] = useState(false);
 
-  useEffect(() => {
-      // Check if authentication cookie is present
-      const authCookie = document.cookie.split(';').find(cookie => cookie.trim().startsWith('auth='));
-      if (authCookie) {
-          setIsAuthenticated(true);
-      } else {
-          setIsAuthenticated(false);
-      }
-  }, [refresh]); // Run whenever 'refresh' state changes
+    useEffect(() => {
+        setIsAuthenticated(false);
+        // Check if authentication cookie is present
+        const authCookie = document.cookie.split(';').find(cookie => cookie.trim().startsWith('auth='));
+        if(authCookie){
+            const authCookieVal = authCookie.split('=')[1];
+            if (authCookieVal) {
+                setIsAuthenticated(true);
+            }
+        }
+        const confirmedCookie = document.cookie.split(';').find(cookie => cookie.trim().startsWith('confirmed='));
+        if(confirmedCookie){
+            const confirmedCookieVal = confirmedCookie.split('=')[1];
+            if (confirmedCookieVal) {
+                setIsConfirmed(true);
+            }
+        }
+        fetch(`/api/confirmed`);
+    }, [refresh]); // Run whenever 'refresh' state changes
 
-  // Function to handle events that might change authentication status
-  const handleEventThatMightChangeAuthStatus = (d) => {
-      // Logic to handle event that might change authentication status
-      // For example, after form submission
-      // You may need to adjust this logic based on your actual implementation
-      setRefresh(prevRefresh => !prevRefresh); // Toggle 'refresh' state to trigger re-render
-      setUuid(d.uuid);
-  };
+    // If secret was submitted => take UUID from response and pass it to new GuestFormPage
+    const secretSubmitted = (d) => {
+        setRefresh(prevRefresh => !prevRefresh); // Toggle 'refresh' state to trigger re-render
+        setUuid(d.uuid);
+    };
+
+    // If guest was confirmed => render QRCode tab
+    const guestConfirmed = (d) => {
+        setRefresh(prevRefresh => !prevRefresh); // Toggle 'refresh' state to trigger re-render
+        setIsConfirmed(d);
+    };
 
     return (
         <div className='Header'>
@@ -39,13 +54,21 @@ export default function Header() {
                 <TabList>
                     <Tab>Home</Tab>
                     <Tab>Informazioni utili</Tab>
-                    {isAuthenticated ?<Tab>Form di conferma</Tab> : <Tab>Dimmi il tuo segreto e ti dirò chi sei</Tab>}
+                    {isAuthenticated
+                        ? <Tab>Form di conferma</Tab>
+                        : <Tab>Dimmi il tuo segreto e ti dirò chi sei</Tab>
+                    }
+                    {isAuthenticated && isConfirmed && <Tab>QRCode</Tab>}
                 </TabList>
                 <TabPanel><Home/></TabPanel>
                 <TabPanel><Info/></TabPanel>
                 <TabPanel>
-                    {isAuthenticated ? <GuestFormPage uuid={uuid} /> : <SecretPage onFormSubmit={handleEventThatMightChangeAuthStatus}/>}
+                    {isAuthenticated
+                        ? <GuestFormPage uuid={uuid} onFormSubmit={guestConfirmed}/>
+                        : <SecretPage onFormSubmit={secretSubmitted}/>
+                    }
                 </TabPanel>
+                {isAuthenticated && isConfirmed && <TabPanel><QR/></TabPanel>}
             </Tabs>
         </div>
     )
