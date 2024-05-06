@@ -47,11 +47,11 @@ func handleQRPost(c *fiber.Ctx) error {
 			JSON(fiber.Map{"errorMessage": "non penso proprio ragazzino"})
 	}
 
-	qruuid := guest.QRUUID.String()
+	uuidString := guest.UUID.String()
 
 	response := &qrResponseBody{
 		Success: true,
-		Message: fmt.Sprintf("qr correctly generated [%s]", qruuid),
+		Message: fmt.Sprintf("qr correctly generated [%s]", uuidString),
 	}
 
 	responseJSON, err := json.Marshal(response)

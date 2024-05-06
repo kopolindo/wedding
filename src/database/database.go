@@ -72,7 +72,6 @@ func CreateGuest(guest models.Guest) (uint, error) {
 	n := CountGuests(guest.UUID)
 	fmt.Printf("number of guests per UUID(%s):%d\n", guest.UUID.String(), n)
 	if n < 5 {
-		guest.QRUUID = uuid.New()
 		result := db.Debug().Create(&guest)
 		index := guest.ID   // returns inserted data's primary key
 		err := result.Error // returns error

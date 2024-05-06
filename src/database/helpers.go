@@ -139,7 +139,6 @@ func createGuestList() {
 			FirstName: r[0],
 			LastName:  r[1],
 			UUID:      u,
-			QRUUID:    u, // when creating the guest list guests will have the same UUID and QRUUID
 			Secret:    hash,
 			Confirmed: false,
 			Notes:     []byte{},

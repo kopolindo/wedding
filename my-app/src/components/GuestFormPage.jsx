@@ -227,10 +227,16 @@ const GuestFormPage = () => {
                     Cancella
                     </button>
                   )}
-                  <button className="btn btn-success" id="QRGen" type="button" onClick={() => QRGen(index)}>
+                  {guest.confirmed ? 
+                    <button className="btn btn-success" id="QRGen" type="button" onClick={() => QRGen(index)}>
+                        <i className="bi"></i>
+                        Genera QR code
+                    </button> :
+                    <button className="btn ghost-button" id="QRGen" type="button" disabled title="">
                       <i className="bi"></i>
                       Genera QR code
-                  </button>
+                    </button>
+                  }
                   {guest.id && <input type="hidden" name={`id_${index}`} value={guest.id} />}
                 </div>
               ))}
