@@ -37,8 +37,10 @@ func handleSecret(c *fiber.Ctx) error {
 		wg.Add(1)
 		go func(guest models.Guest) {
 			defer wg.Done()
-			ok, err := argon.ComparePasswordAndHash(secret, guest.Secret)
-			results <- result{guest, ok, err}
+			if guest.Secret != "" {
+				ok, err := argon.ComparePasswordAndHash(secret, guest.Secret)
+				results <- result{guest, ok, err}
+			}
 		}(guest)
 	}
 
