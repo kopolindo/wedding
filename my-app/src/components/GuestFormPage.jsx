@@ -81,12 +81,21 @@ const GuestFormPage = ({ onFormSubmit }) => {
   const handleSubmit = async () => {
     try {
       const formData = {
-        people: guests.map((guest, index) => ({
-          id: guest.id || index,
-          first_name: document.querySelector(`input[name=first_name_${index}]`).value,
-          last_name: document.querySelector(`input[name=last_name_${index}]`).value,
-          notes: document.querySelector(`input[name=notes_${index}]`).value,
-        })),
+        people: guests.reduce((acc, guest, index) => {
+          const firstName = document.querySelector(`input[name=first_name_${index}]`).value.trim();
+          const lastName = document.querySelector(`input[name=last_name_${index}]`).value.trim();
+          const notes = document.querySelector(`input[name=notes_${index}]`).value.trim();
+  
+          if (firstName && lastName && notes) {
+            acc.push({
+              id: guest.id || index,
+              first_name: firstName,
+              last_name: lastName,
+              notes: notes,
+            });
+          }
+          return acc;
+        }, []),
       };
   
       const response = await fetch(`/api/guest`, {
