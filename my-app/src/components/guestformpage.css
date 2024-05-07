@@ -1,42 +1,8 @@
-.GuestFormPage {
-  text-align: center;
-}
-
-.GuestFormPage-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-.GuestFormPage-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-}
-
-.GuestFormPage-link {
-  color: #61dafb;
-}
-
 .divs {
   display: flex;
   flex-direction: column;
   align-items: center;
   margin-bottom: 10px; /* Add space between rows */
-}
-
-#row {
-  display: flex;
-  align-items: center;
-}
-
-.delete-button {
-  flex-shrink: 0; /* Prevent delete button from shrinking */
-  margin-right: 10px; /* Adjust margin between delete button and input fields */
 }
 
 .ghost-button {
@@ -50,21 +16,4 @@
 .ghost-button:hover {
   background: transparent;
   color: transparent;
-}
-
-#row input {
-  margin-right: 10px; /* Adjust margin between inputs */
-}
-
-#row button {
-  margin-right: 10px; /* Adjust margin between button and inputs */
-}
-
-.input-fields {
-  display: flex;
-  flex-grow: 1; /* Allow input fields to grow and take remaining space */
-}
-
-.input-fields input {
-  margin-right: 10px; /* Adjust margin between input fields */
 }

@@ -1,0 +1,9 @@
+.Footer {
+	position: absolute;
+	bottom: 0;
+	height: 100px;
+}
+
+.Footer-link {
+    color: #61dafb;
+}

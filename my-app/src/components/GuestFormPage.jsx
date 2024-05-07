@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './guestformpage.css';
-import AlertComponent from './alert';
+import AlertComponent from './Alert';
 
 const GuestFormPage = ({ onFormSubmit }) => {
   const [errorMessage, setErrorMessage] = useState('');

@@ -1,8 +1,8 @@
-.Alert {
+.Header {
     text-align: center;
-}
-
-.Alert-header {
+  }
+  
+.Header-header {
     background-color: #282c34;
     min-height: 100vh;
     display: flex;
@@ -13,6 +13,6 @@
     color: white;
 }
 
-.Alert-link {
+.Header-link {
     color: #61dafb;
 }

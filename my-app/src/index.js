@@ -3,11 +3,16 @@ import { createRoot } from 'react-dom/client';
 import { BrowserRouter as Router} from "react-router-dom";
 
 import Body from './components/Body'
+import Header from './components/Header'
+import Layout from './components/Layout';
 
 const Routing = () => {
   return(
     <Router>
-      <Body/>
+      <Layout>
+        <Header/>
+        <Body/>
+      </Layout>
     </Router>
   )
 }

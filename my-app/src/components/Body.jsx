@@ -48,7 +48,6 @@ export default function Body() {
 
     return (
         <div className='Body'>
-            <h1>Alex e Nadia finalmente si sposano!!</h1>
             <Tabs>
                 <TabList>
                     <Tab>Home</Tab>
