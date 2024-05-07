@@ -31,8 +31,8 @@ function Home() {
     <div className="Home container">
       <div className="row">
         <div className="col-md-6">
-          <p className="text-primary">Vogliamo collezionare ogni singolo ricordo...</p>
-          <p className="text-primary">Aiutateci caricando le vostre foto della festa su questo album!</p>
+          <p className="text">Vogliamo collezionare ogni singolo ricordo...</p>
+          <p className="text">Aiutateci caricando le vostre foto della festa su questo album!</p>
           <a href="https://photos.app.goo.gl/zRJfPDHPipjQ1b3z8" className="btn btn-primary">Visualizza Album</a>
         </div>
         <div className="col-md-6">
