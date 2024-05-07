@@ -12,7 +12,7 @@ import QR from './QR';
 export default function Header() {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [refresh, setRefresh] = useState(false);
-    const [uuid, setUuid] = useState(null); // State to hold data
+    const [uuid, setUuid] = useState(null);
     const [isConfirmed, setIsConfirmed] = useState(false);
 
     useEffect(() => {
@@ -33,17 +33,16 @@ export default function Header() {
             }
         }
         fetch(`/api/confirmed`);
-    }, [refresh]); // Run whenever 'refresh' state changes
+    }, [refresh]);
 
-    // If secret was submitted => take UUID from response and pass it to new GuestFormPage
     const secretSubmitted = (d) => {
-        setRefresh(prevRefresh => !prevRefresh); // Toggle 'refresh' state to trigger re-render
+        setRefresh(prevRefresh => !prevRefresh);
         setUuid(d.uuid);
     };
 
     // If guest was confirmed => render QRCode tab
     const guestConfirmed = (d) => {
-        setRefresh(prevRefresh => !prevRefresh); // Toggle 'refresh' state to trigger re-render
+        setRefresh(prevRefresh => !prevRefresh);
         setIsConfirmed(d);
     };
 

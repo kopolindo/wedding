@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import './secretpage.css';
+import AlertComponent from './alert';
 
 export default function SecretPage({ onFormSubmit }) {
   const [secret, setSecret] = useState('');
@@ -21,27 +22,34 @@ export default function SecretPage({ onFormSubmit }) {
         throw new Error(data.errorMessage);
       }
       
-      onFormSubmit(data);
+      onFormSubmit(data);  //uuid
     } catch (error) {
       setErrorMessage(error.message);
     }
   };
 
+  const handleSecretChange = (e) => {
+    setErrorMessage('');
+    setSecret(e.target.value);
+  };
+
   return (
     <div className='SecretPage'>
-      {errorMessage && <p className='error'>{errorMessage}</p>}
+      {errorMessage && <AlertComponent message={ errorMessage }/>}
       <div className='SendSecret'>
         <h1>Parola d'ordine?</h1>
         <form className="form-group" onSubmit={ submitSecret }>
-          <input
-            type="text"
-            id="secret"
-            className="form-control"
-            value={secret}
-            onChange={(e) => setSecret(e.target.value)}
-            style={{ width: "300px", margin: "0 auto" }}
-            required
-          />
+          <div className="divs">
+            <input
+              type="text"
+              id="secret"
+              className="form-control"
+              value={secret}
+              onChange={ handleSecretChange }
+              style={{ width: "300px", margin: "0 auto" }}
+              required
+            />
+          </div>
           <button type="submit" className="btn btn-success" >Conferma</button>
         </form>
       </div>

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './guestformpage.css';
+import AlertComponent from './alert';
 
 const GuestFormPage = ({ onFormSubmit }) => {
   const [errorMessage, setErrorMessage] = useState('');
@@ -149,7 +150,7 @@ const GuestFormPage = ({ onFormSubmit }) => {
   return (
     <div className='GuestFormPage'>
       <div id="formContainer">
-      {errorMessage && <p className='error'>{errorMessage}</p>}
+      {errorMessage && <AlertComponent message={ errorMessage }/>}
         <div>
           <form className="form-group" action={`/guest`} method="post">
             <label htmlFor="guests">Numero <b>totale</b> di partecipanti:</label>
