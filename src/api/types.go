@@ -15,6 +15,9 @@ var (
 
 const (
 	COOKIEPASSWORDFILE = "../cookie-passphrase.txt"
+	SCHEMA             = "http"
+	DOMAIN             = "localhost"
+	PORT               = "3000"
 )
 
 type (

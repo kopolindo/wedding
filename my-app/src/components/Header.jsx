@@ -21,14 +21,14 @@ export default function Header() {
         const authCookie = document.cookie.split(';').find(cookie => cookie.trim().startsWith('auth='));
         if(authCookie){
             const authCookieVal = authCookie.split('=')[1];
-            if (authCookieVal) {
+            if (authCookieVal === "true") {
                 setIsAuthenticated(true);
             }
         }
         const confirmedCookie = document.cookie.split(';').find(cookie => cookie.trim().startsWith('confirmed='));
         if(confirmedCookie){
             const confirmedCookieVal = confirmedCookie.split('=')[1];
-            if (confirmedCookieVal) {
+            if (confirmedCookieVal === "true") {
                 setIsConfirmed(true);
             }
         }

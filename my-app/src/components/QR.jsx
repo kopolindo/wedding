@@ -2,46 +2,33 @@ import React, { useState, useEffect } from 'react';
 import './guestformpage.css';
 
 const QR = () => {
-  const [errorMessage, setErrorMessage] = useState('');
-  const [guestsCount, setGuestsCount] = useState(1);
-  const [guests, setGuests] = useState([{ id: '', first_name: '', last_name: '', notes: '', confirmed: false }]);
-  const [prefilledGuests, setPrefilledGuests] = useState([]);
-  const [formSubmitted, setFormSubmitted] = useState(false); // New state variable
-
-  useEffect(() => {
-    const QRGen = async (index) => {
+    const [qr,setQr] = useState('');
+    const [errorMessage,seterrorMessage] = useState('');
+    useEffect(() => {
+    const QRGen = async () => {
         // Retrieve the guest information using the index
-        const guest = guests[index];
-        console.log(`generating QR code ${guest.id}`);
+        console.log(`generating QR code`);
         try {
-            const formData = {
-            id: guest.id
-            };
-
-            const response = await fetch(`/api/qr`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(formData),
-            });
-
+            const response = await fetch(`/api/qr`);
             const data = await response.json();
-
             if (!response.ok) {
-            throw new Error(data.errorMessage);
+                seterrorMessage(data.errorMessage);
+            }else{
+                setQr(data.qrcode);
             }
         } catch (error) {
-            console.error('Error submitting form:', error);
+            console.error(error);
         }
     }
-  }, [guests]);
+    QRGen();
+    }, []);
 
-  return (
+    return (
     <div className='QR'>
-      QR here
+        {errorMessage}
+        {!errorMessage && <img src={`data:image/jpeg;base64,${qr}`} /> }
     </div>
-  );
+    );
 };
 
 export default QR;

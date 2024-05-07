@@ -1,18 +1,20 @@
 package api
 
 import (
-	"encoding/json"
+	"encoding/base64"
 	"fmt"
+	"net/url"
 	"wedding/src/database"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/google/uuid"
+	qrcode "github.com/skip2/go-qrcode"
 )
 
 // handleQrGet renders the qr generation
-// method POST
+// method GET
 // route /api/qr
-func handleQRPost(c *fiber.Ctx) error {
+func handleQRGet(c *fiber.Ctx) error {
 	sessionID := c.Cookies("session")
 	if sessionID == "" {
 		return c.Status(fiber.StatusInternalServerError).
@@ -23,42 +25,38 @@ func handleQRPost(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusInternalServerError).
 			JSON(fiber.Map{"errorMessage": err.Error()})
 	}
-
 	if !database.GuestExistsByUUID(uuid) {
 		return c.Status(fiber.StatusNotFound).
 			JSON(fiber.Map{"errorMessage": "user not found...who you really are??"})
 	}
-
-	payload := &qrRequestPayload{}
-	if err := c.BodyParser(&payload); err != nil {
-		return c.Status(fiber.StatusNotFound).
-			JSON(fiber.Map{"errorMessage": err.Error()})
-	}
-	id := payload.ID
-
-	guest, err := database.GetUserByID(id)
+	guests, err := database.GetUsersByUUID(uuid)
 	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).
 			JSON(fiber.Map{"errorMessage": err.Error()})
 	}
-
-	if guest.UUID != uuid {
-		return c.Status(fiber.StatusNotFound).
-			JSON(fiber.Map{"errorMessage": "non penso proprio ragazzino"})
+	if guests[0].Confirmed {
+		path, err := url.JoinPath("/api/guest", uuid.String())
+		if err != nil {
+			return c.Status(fiber.StatusInternalServerError).
+				JSON(fiber.Map{"errorMessage": err.Error()})
+		}
+		url := &url.URL{
+			Scheme: SCHEMA,
+			Host:   fmt.Sprintf("%s:%s", DOMAIN, PORT),
+			Path:   path,
+		}
+		var png []byte
+		png, err = qrcode.Encode(url.String(), qrcode.Medium, 256)
+		if err != nil {
+			return c.Status(fiber.StatusInternalServerError).
+				JSON(fiber.Map{"errorMessage": err.Error()})
+		}
+		sEnc := base64.StdEncoding.EncodeToString(png)
+		c.Set(fiber.HeaderContentType, fiber.MIMEApplicationJSON)
+		return c.Status(fiber.StatusOK).
+			JSON(fiber.Map{"qrcode": sEnc})
+	} else {
+		return c.Status(fiber.StatusForbidden).
+			JSON(fiber.Map{"errorMessage": "Prima confermi, poi ti do un QR code ;)"})
 	}
-
-	uuidString := guest.UUID.String()
-
-	response := &qrResponseBody{
-		Success: true,
-		Message: fmt.Sprintf("qr correctly generated [%s]", uuidString),
-	}
-
-	responseJSON, err := json.Marshal(response)
-	if err != nil {
-		return c.Status(fiber.StatusInternalServerError).
-			JSON(fiber.Map{"errorMessage": err.Error()})
-	}
-	c.Set(fiber.HeaderContentType, fiber.MIMEApplicationJSON)
-	return c.Send(responseJSON)
 }

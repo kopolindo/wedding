@@ -32,19 +32,21 @@ func handleConfirmedGet(c *fiber.Ctx) error {
 				JSON(fiber.Map{"errorMessage": e.Message})
 		}
 	}
+	// this cookie is not really important for authentication purpose
+	// it's only required for client-side rendering of "qr" page
+	// HTTPOnly is false because client-side code needs to check the presence
+	// of confirmed cookie to render the page.
+	confirmed := "false"
 	if guests[0].Confirmed {
-		// this cookie is not really important for authentication purpose
-		// it's only required for client-side rendering of "qr" page
-		// HTTPOnly is false because client-side code needs to check the presence
-		// of confirmed cookie to render the page.
-		c.Cookie(&fiber.Cookie{
-			Name:     "confirmed",
-			Value:    "true",
-			Expires:  time.Now().Add(24 * 7 * time.Hour),
-			Secure:   true,
-			HTTPOnly: false,
-			SameSite: "strict",
-		})
+		confirmed = "true"
 	}
+	c.Cookie(&fiber.Cookie{
+		Name:     "confirmed",
+		Value:    confirmed,
+		Expires:  time.Now().Add(24 * 7 * time.Hour),
+		Secure:   true,
+		HTTPOnly: false,
+		SameSite: "strict",
+	})
 	return c.SendStatus(fiber.StatusOK)
 }

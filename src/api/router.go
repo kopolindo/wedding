@@ -62,6 +62,6 @@ func init() {
 	api.Get("/guest", handleFormGet)
 	api.Post("/guest", handleFormPost)
 	api.Delete("/guest", handleDelete)
-	api.Post("/qr", handleQRPost)
+	api.Get("/qr", handleQRGet)
 	api.Get("/confirmed", handleConfirmedGet)
 }
