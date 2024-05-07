@@ -32,15 +32,17 @@ export default function SecretPage({ onFormSubmit }) {
       {errorMessage && <p className='error'>{errorMessage}</p>}
       <div className='SendSecret'>
         <h1>Parola d'ordine?</h1>
-        <form onSubmit={ submitSecret }>
+        <form className="form-group" onSubmit={ submitSecret }>
           <input
             type="text"
             id="secret"
+            className="form-control"
             value={secret}
             onChange={(e) => setSecret(e.target.value)}
+            style={{ width: "300px", margin: "0 auto" }}
             required
           />
-          <button type="submit">Conferma</button>
+          <button type="submit" className="btn btn-success" >Conferma</button>
         </form>
       </div>
     </div>
