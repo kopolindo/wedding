@@ -1,0 +1,43 @@
+.countdown-container {
+    text-align: center;
+}
+
+.countdown {
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+    background-color: #f8f8f8;
+    border-radius: 8px;
+    padding: 20px;
+    margin-top: 20px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Optionally, add styles for individual countdown elements */
+.countdown-item {
+    display: inline-block;
+    margin: 0 10px;
+}
+
+.text-container {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.text-container p {
+    font-family: Arial, sans-serif;
+    font-size: 18px;
+    color: #333;
+}
+
+.text-container a {
+    font-family: Arial, sans-serif;
+    font-size: 16px;
+    color: #3498db;
+    text-decoration: none;
+}
+
+.text-container a:hover {
+    text-decoration: underline;
+}
+  

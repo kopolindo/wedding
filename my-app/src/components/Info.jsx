@@ -4,7 +4,6 @@ import Map from './Map';
 const Info = () => {
     return(
         <div className='Info'>
-            <hr/>
             <h2>Ristorante</h2>
             <Map />
             <hr/>

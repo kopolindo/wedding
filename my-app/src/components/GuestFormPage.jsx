@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import './guestformpage.css';
-import AlertComponent from './Alert';
+import AlertComponent from './alert';
 
 const GuestFormPage = ({ onFormSubmit }) => {
   const [errorMessage, setErrorMessage] = useState('');
   const [guestsCount, setGuestsCount] = useState(1);
   const [guests, setGuests] = useState([{ id: '', first_name: '', last_name: '', notes: '', confirmed: false }]);
   const [prefilledGuests, setPrefilledGuests] = useState([]);
-  const [formSubmitted, setFormSubmitted] = useState(false); // New state variable
+  const [formSubmitted, setFormSubmitted] = useState(false);
 
   useEffect(() => {
     const fetchGuests = async () => {

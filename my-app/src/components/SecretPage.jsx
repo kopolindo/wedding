@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import AlertComponent from './Alert';
+import AlertComponent from './alert';
 
 export default function SecretPage({ onFormSubmit }) {
   const [secret, setSecret] = useState('');
