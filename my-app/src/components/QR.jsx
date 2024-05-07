@@ -6,8 +6,6 @@ const QR = () => {
     const [errorMessage,seterrorMessage] = useState('');
     useEffect(() => {
     const QRGen = async () => {
-        // Retrieve the guest information using the index
-        console.log(`generating QR code`);
         try {
             const response = await fetch(`/api/qr`);
             const data = await response.json();
@@ -26,7 +24,7 @@ const QR = () => {
     return (
     <div className='QR'>
         {errorMessage}
-        {!errorMessage && <img src={`data:image/jpeg;base64,${qr}`} /> }
+        {!errorMessage && <img src={`data:image/jpeg;base64,${qr}`} alt="" /> }
     </div>
     );
 };
