@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
-import './header.css';
+import './body.css';
 
 import Home from './Home';
 import Info from './Info';
@@ -9,7 +9,7 @@ import SecretPage from './SecretPage';
 import GuestFormPage from './GuestFormPage';
 import QR from './QR';
 
-export default function Header() {
+export default function Body() {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [refresh, setRefresh] = useState(false);
     const [uuid, setUuid] = useState(null);
@@ -47,7 +47,7 @@ export default function Header() {
     };
 
     return (
-        <div className='Header'>
+        <div className='Body'>
             <h1>Alex e Nadia finalmente si sposano!!</h1>
             <Tabs>
                 <TabList>

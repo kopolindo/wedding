@@ -18,7 +18,7 @@ const QR = () => {
             console.error(error);
         }
     }
-    QRGen();
+    QRGen(); // {SCHEMA}://{DOMAIN}:{PORT}/{UUID}
     }, []);
 
     return (

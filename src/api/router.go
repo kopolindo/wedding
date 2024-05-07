@@ -55,10 +55,16 @@ func init() {
 	}))
 	COOKIEPASSWORD = ""
 
+	// login
 	App.Post("/chisono", handleSecret)
 
-	api := App.Group("/api", authMiddleware)
+	// landing page for QR code scan: LOGIN CSRF by default
+	// there's no other way to make it easy for uncles ;)
 
+	App.Get("/:uuid", handleQRLoginGet)
+
+	// authenticated routes
+	api := App.Group("/api", authMiddleware)
 	api.Get("/guest", handleFormGet)
 	api.Post("/guest", handleFormPost)
 	api.Delete("/guest", handleDelete)

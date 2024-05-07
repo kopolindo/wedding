@@ -1,8 +1,8 @@
-.Header {
+.Body {
   text-align: center;
 }
 
-.Header-header {
+.Body-header {
   background-color: #282c34;
   min-height: 100vh;
   display: flex;
@@ -13,6 +13,6 @@
   color: white;
 }
 
-.Header-link {
+.Body-link {
   color: #61dafb;
 }

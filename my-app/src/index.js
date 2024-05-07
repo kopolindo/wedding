@@ -2,12 +2,12 @@ import React from 'react';
 import { createRoot } from 'react-dom/client';
 import { BrowserRouter as Router} from "react-router-dom";
 
-import Header from './components/Header'
+import Body from './components/Body'
 
 const Routing = () => {
   return(
     <Router>
-      <Header/>
+      <Body/>
     </Router>
   )
 }
