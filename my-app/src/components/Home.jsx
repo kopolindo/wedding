@@ -28,30 +28,51 @@ function Home() {
   }, []);
 
   return (
-<div className="Home container">
-  <div className="row justify-content-center">
-    <div className="col-md-10">
-      <div className="col-md-12">
-        <p className="text">Vogliamo collezionare ogni singolo ricordo...</p>
-        <p className="text">Aiutateci caricando le vostre foto della festa su questo album!</p>
-        <a href="https://photos.app.goo.gl/zRJfPDHPipjQ1b3z8" className="btn btn-primary">Visualizza Album</a>
+    <div className="Home container">
+      <div className="container">
+        <div className="card border-0">
+            <div className="card-header bg-primary text-white">
+                <h5 className="card-title mb-0">Countdown</h5>
+            </div>
+            <div className="card-body">
+                <p className="card-text">{countdown}</p>
+            </div>
+        </div>
       </div>
-    </div>
-  </div>
-  <hr></hr>
-  <div className="row justify-content-center">
-    <div className="col-md-10">
-      <div className="col-md-12">
-        <div className="card">
-          <div className="card-body">
-            <h5 className="card-title">Countdown</h5>
-            <p className="card-text">{countdown}</p>
+      <hr/>
+      <div className="container-fluid">
+        <div className="row">
+          <div className="container">
+            <div className="card border-0">
+              <div className="card-header bg-primary text-white">
+                <h5 className="card-title mb-0">Sharing is caring</h5>
+              </div>
+            </div>
+          </div>
+          <div className="col-sm-6 d-flex justify-content-center">
+            <div className="card border-0" style={{width: '20em'}}>
+              <div className="card-body">
+                <h5 className="card-title">Foto</h5>
+                <p className="text">Vogliamo collezionare ogni singolo ricordo...</p>
+                <p className="text">Aiutateci caricando le vostre foto della festa su questo album!</p>
+                <a href="https://photos.app.goo.gl/zRJfPDHPipjQ1b3z8" className="btn btn-primary">Visualizza Album</a>
+              </div>
+            </div>
+          </div>
+          <div className="col-sm-6 d-flex justify-content-center">
+            <div className="card border-0" style={{width: '20em'}}>
+              <div className="card-body">
+                <h5 className="card-title">Jukebox</h5>
+                <p className="text">Let's play some music!!</p>
+                <p className="text">Aggiungete qui le vostre canzoni e vediamo se riusciamo a farvi sentire qualcosa di bello!</p>
+                <a href="https://photos.app.goo.gl/zRJfPDHPipjQ1b3z8" className="btn btn-primary">Visualizza Playlist</a>
+              </div>
+            </div>
           </div>
         </div>
       </div>
+
     </div>
-  </div>
-</div>
 );
 }
 

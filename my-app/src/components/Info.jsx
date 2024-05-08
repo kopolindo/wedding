@@ -8,7 +8,7 @@ const Info = () => {
             <Map />
             <hr/>
             <div className="container">
-                <div className="card">
+                <div className="card border-0">
                     <div className="card-header bg-primary text-white">
                         <h5 className="card-title mb-0"><Clock className="mr-2" /> Orario</h5>
                     </div>

@@ -6,7 +6,7 @@ const Map = () => {
     const KEY = process.env.REACT_APP_GMAPS_API_KEY
     return (
         <div className="container">
-            <Card>
+            <Card className='border-0'>
                 <Card.Header className="bg-primary text-white">
                     <Card.Title className="mb-0"><GeoAltFill/> Ristorante</Card.Title>
                 </Card.Header>
