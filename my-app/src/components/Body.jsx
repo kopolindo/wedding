@@ -47,27 +47,45 @@ export default function Body() {
     };
 
     return (
-        <div className='Body'>
-            <Tabs>
-                <TabList>
-                    <Tab>Home</Tab>
-                    <Tab>Informazioni utili</Tab>
-                    {isAuthenticated
-                        ? <Tab>Form di conferma</Tab>
-                        : <Tab>Dimmi il tuo segreto e ti dirò chi sei</Tab>
-                    }
-                    {isAuthenticated && isConfirmed && <Tab>QRCode</Tab>}
-                </TabList>
-                <TabPanel><Home/></TabPanel>
-                <TabPanel><Info/></TabPanel>
-                <TabPanel>
-                    {isAuthenticated
-                        ? <GuestFormPage uuid={uuid} onFormSubmit={guestConfirmed}/>
-                        : <SecretPage onFormSubmit={secretSubmitted}/>
-                    }
-                </TabPanel>
-                {isAuthenticated && isConfirmed && <TabPanel><QR/></TabPanel>}
-            </Tabs>
+        <div className="container">
+            <div className="row justify-content-center">
+                <div className="col-lg-8">
+                    <div className="Body">
+                        <Tabs defaultActiveKey="home">
+                            <TabList className="nav nav-tabs">
+                                <Tab className="nav-item nav-link">Home</Tab>
+                                <Tab className="nav-item nav-link">Informazioni utili</Tab>
+                                {isAuthenticated ? (
+                                    <Tab className="nav-item nav-link">Form di conferma</Tab>
+                                ) : (
+                                    <Tab className="nav-item nav-link">Dimmi il tuo segreto e ti dirò chi sei</Tab>
+                                )}
+                                {isAuthenticated && isConfirmed && (
+                                    <Tab className="nav-item nav-link">QRCode</Tab>
+                                )}
+                            </TabList>
+                            <TabPanel>
+                                <Home />
+                            </TabPanel>
+                            <TabPanel>
+                                <Info />
+                            </TabPanel>
+                            <TabPanel>
+                                {isAuthenticated ? (
+                                    <GuestFormPage uuid={uuid} onFormSubmit={guestConfirmed} />
+                                ) : (
+                                    <SecretPage onFormSubmit={secretSubmitted} />
+                                )}
+                            </TabPanel>
+                            {isAuthenticated && isConfirmed && (
+                                <TabPanel>
+                                    <QR />
+                                </TabPanel>
+                            )}
+                        </Tabs>
+                    </div>
+                </div>
+            </div>
         </div>
     )
 }

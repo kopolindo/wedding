@@ -15,8 +15,6 @@ const Map = () => {
                         <iframe
                             className="embed-responsive-item"
                             title="restaurant"
-                            width="600"
-                            height="450"
                             loading="lazy"
                             allowFullScreen
                             referrerPolicy="no-referrer-when-downgrade"

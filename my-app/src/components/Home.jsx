@@ -28,24 +28,31 @@ function Home() {
   }, []);
 
   return (
-    <div className="Home container">
-      <div className="row">
-        <div className="col-md-6">
-          <p className="text">Vogliamo collezionare ogni singolo ricordo...</p>
-          <p className="text">Aiutateci caricando le vostre foto della festa su questo album!</p>
-          <a href="https://photos.app.goo.gl/zRJfPDHPipjQ1b3z8" className="btn btn-primary">Visualizza Album</a>
-        </div>
-        <div className="col-md-6">
-          <div className="card">
-            <div className="card-body">
-              <h5 className="card-title">Countdown</h5>
-              <p className="card-text">{countdown}</p>
-            </div>
+<div className="Home container">
+  <div className="row justify-content-center">
+    <div className="col-md-10">
+      <div className="col-md-12">
+        <p className="text">Vogliamo collezionare ogni singolo ricordo...</p>
+        <p className="text">Aiutateci caricando le vostre foto della festa su questo album!</p>
+        <a href="https://photos.app.goo.gl/zRJfPDHPipjQ1b3z8" className="btn btn-primary">Visualizza Album</a>
+      </div>
+    </div>
+  </div>
+  <hr></hr>
+  <div className="row justify-content-center">
+    <div className="col-md-10">
+      <div className="col-md-12">
+        <div className="card">
+          <div className="card-body">
+            <h5 className="card-title">Countdown</h5>
+            <p className="card-text">{countdown}</p>
           </div>
         </div>
       </div>
     </div>
-  );
+  </div>
+</div>
+);
 }
 
 export default Home;
