@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
+import { Redirect, useParams } from 'react-router-dom';
 import 'react-tabs/style/react-tabs.css';
 import './body.css';
 
@@ -46,12 +47,14 @@ export default function Body() {
         setIsConfirmed(d);
     };
 
+    const { uuidParam } = useParams();
+    
     return (
         <div className="container">
             <div className="row justify-content-center">
                 <div className="col-lg-8">
                     <div className="Body">
-                        <Tabs defaultActiveKey="home">
+                        <Tabs defaultActiveKey={uuidParam ? "form" : "home"}>
                             <TabList className="nav nav-tabs">
                                 <Tab className="nav-item nav-link">Home</Tab>
                                 <Tab className="nav-item nav-link">Informazioni utili</Tab>
@@ -72,7 +75,7 @@ export default function Body() {
                             </TabPanel>
                             <TabPanel>
                                 {isAuthenticated ? (
-                                    <GuestFormPage uuid={uuid} onFormSubmit={guestConfirmed} />
+                                    <GuestFormPage uuid={uuidParam} onFormSubmit={guestConfirmed} />
                                 ) : (
                                     <SecretPage onFormSubmit={secretSubmitted} />
                                 )}
@@ -82,6 +85,7 @@ export default function Body() {
                                     <QR />
                                 </TabPanel>
                             )}
+                            {uuidParam && <Redirect to={`/:${uuidParam}`} />}
                         </Tabs>
                     </div>
                 </div>

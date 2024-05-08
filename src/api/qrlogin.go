@@ -13,6 +13,7 @@ import (
 // method GET
 // route /:uuid
 func handleQRLoginGet(c *fiber.Ctx) error {
+	log.Debug("HIT IT!!")
 	uuidString := c.Params("uuid")
 	log.Debug(uuidString)
 	u, err := uuid.Parse(uuidString)

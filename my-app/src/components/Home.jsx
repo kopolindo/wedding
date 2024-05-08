@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-function Home() {
+function Home({ albumLink, title, description }) {
   const [countdown, setCountdown] = useState('');
 
   useEffect(() => {
@@ -25,6 +25,17 @@ function Home() {
 
     // Clean up the interval when the component unmounts
     return () => clearInterval(intervalId);
+  }, []);
+
+  useEffect(() => {
+    const script = document.createElement('script');
+    script.src = 'https://cdn.jsdelivr.net/npm/publicalbum@latest/embed-ui.min.js';
+    script.async = true;
+    document.body.appendChild(script);
+
+    return () => {
+      document.body.removeChild(script);
+    };
   }, []);
 
   return (
@@ -65,7 +76,34 @@ function Home() {
                 <h5 className="card-title">Jukebox</h5>
                 <p className="text">Let's play some music!!</p>
                 <p className="text">Aggiungete qui le vostre canzoni e vediamo se riusciamo a farvi sentire qualcosa di bello!</p>
-                <a href="https://photos.app.goo.gl/zRJfPDHPipjQ1b3z8" className="btn btn-primary">Visualizza Playlist</a>
+                <a href="https://open.spotify.com/playlist/3BEJVi97rLZCB7XgKF4dqX?si=6f8229ee4ec74982&pt=89435809e1ad5fb15750c98f4dc5950d" className="btn btn-primary">Visualizza Playlist</a>
+              </div>
+            </div>
+          </div>
+          <div className="col-sm-6 d-flex justify-content-center">
+            <div className="card border-0" style={{width: '20em'}}>
+              <div className="card-body">
+                <div className="pa-carousel-widget" style={{ width: '100%', display: 'none' }}
+                  data-link={albumLink}
+                  data-title={title}
+                  data-description={description}>
+                  <object data="https://lh3.googleusercontent.com/pw/AP1GczOIhJ-HGKw6soEHl7uOHmWEwG95EKRrE-MmQ0Q-ltqmbDDAT_Kh2hEv9SKRs3lkbAoTC2XkefKLBmu00--iQcAbOMkirbZi-S-uE2DQXn9Uvp79P-Be=w1920-h1080"></object>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="col-sm-6 d-flex justify-content-center">
+            <div className="card border-0" style={{width: '20em'}}>
+              <div className="card-body">
+                <iframe
+                  title="Spotify Playlist"
+                  src="https://open.spotify.com/embed/playlist/3BEJVi97rLZCB7XgKF4dqX?utm_source=generator"
+                  width="100%"
+                  height="152"
+                  allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+                  allowFullScreen
+                  loading="lazy"
+                ></iframe>
               </div>
             </div>
           </div>
