@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
+import { Carousel } from 'react-responsive-carousel';
+import 'react-responsive-carousel/lib/styles/carousel.min.css';
 
-function Home({ albumLink, title, description }) {
+function Home() {
   const [countdown, setCountdown] = useState('');
 
   useEffect(() => {
@@ -25,17 +27,6 @@ function Home({ albumLink, title, description }) {
 
     // Clean up the interval when the component unmounts
     return () => clearInterval(intervalId);
-  }, []);
-
-  useEffect(() => {
-    const script = document.createElement('script');
-    script.src = 'https://cdn.jsdelivr.net/npm/publicalbum@latest/embed-ui.min.js';
-    script.async = true;
-    document.body.appendChild(script);
-
-    return () => {
-      document.body.removeChild(script);
-    };
   }, []);
 
   return (
@@ -83,12 +74,17 @@ function Home({ albumLink, title, description }) {
           <div className="col-sm-6 d-flex justify-content-center">
             <div className="card border-0" style={{width: '20em'}}>
               <div className="card-body">
-                <div className="pa-carousel-widget" style={{ width: '100%', display: 'none' }}
-                  data-link={albumLink}
-                  data-title={title}
-                  data-description={description}>
-                  <object data="https://lh3.googleusercontent.com/pw/AP1GczOIhJ-HGKw6soEHl7uOHmWEwG95EKRrE-MmQ0Q-ltqmbDDAT_Kh2hEv9SKRs3lkbAoTC2XkefKLBmu00--iQcAbOMkirbZi-S-uE2DQXn9Uvp79P-Be=w1920-h1080"></object>
-                </div>
+                <Carousel showArrows={true} showThumbs={false}>
+                  <div>
+                    <img src="https://lh3.googleusercontent.com/pw/AP1GczMPHPGNg2iVAdJin4hTxIhwG3Xpi8cGVJ7mTc5XhtPeLcXhHnax7YDffODRcmh-0KD5sDmS0zwDhBxcy8kPytzHQntWMpTZ2oUjulK4FdbkUdMehof8wFaDRIzwY-t-4hzqXgFUla4lMpBu3E-TgeX2aw=w871-h490-s-no-gm?authuser=0" alt="photo1"/>
+                  </div>
+                  <div>
+                    <img src="https://lh3.googleusercontent.com/pw/AP1GczMPHPGNg2iVAdJin4hTxIhwG3Xpi8cGVJ7mTc5XhtPeLcXhHnax7YDffODRcmh-0KD5sDmS0zwDhBxcy8kPytzHQntWMpTZ2oUjulK4FdbkUdMehof8wFaDRIzwY-t-4hzqXgFUla4lMpBu3E-TgeX2aw=w871-h490-s-no-gm?authuser=0" alt="photo2"/>
+                  </div>
+                  <div>
+                    <img src="https://lh3.googleusercontent.com/pw/AP1GczMPHPGNg2iVAdJin4hTxIhwG3Xpi8cGVJ7mTc5XhtPeLcXhHnax7YDffODRcmh-0KD5sDmS0zwDhBxcy8kPytzHQntWMpTZ2oUjulK4FdbkUdMehof8wFaDRIzwY-t-4hzqXgFUla4lMpBu3E-TgeX2aw=w871-h490-s-no-gm?authuser=0" alt="photo3"/>
+                  </div>
+                </Carousel>
               </div>
             </div>
           </div>

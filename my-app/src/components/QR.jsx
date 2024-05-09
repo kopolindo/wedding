@@ -31,7 +31,9 @@ const QR = () => {
                         <h5 className="card-title mb-0">Smistamento</h5>
                     </div>
                     <div className="card-body">
-                        <p className="card-text">Presentati allo smistamento con questo codice 🪄 </p>
+                        <p className="card-text">
+                            Il giorno della cerimonia presentati allo smistamento con questo codice 🪄
+                        </p>
                         {!errorMessage && <img src={`data:image/jpeg;base64,${qr}`} alt="" /> }
                     </div>
                 </div>

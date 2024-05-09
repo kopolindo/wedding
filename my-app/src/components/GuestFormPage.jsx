@@ -158,82 +158,94 @@ const GuestFormPage = ({ onFormSubmit }) => {
 
   return (
     <div className='GuestFormPage'>
-      <div id="formContainer">
-      {errorMessage && <AlertComponent message={ errorMessage }/>}
-        <div>
-          <form className="form-group" action={`/guest`} method="post">
-            <label htmlFor="guests">Numero <b>totale</b> di partecipanti:</label>
-            <input
-              type="number"
-              className="form-control"
-              style={{ width: "100px", margin: "0 auto" }}
-              id="guests"
-              name="guests"
-              min="1"
-              max="5"
-              value={guestsCount}
-              onChange={handleGuestsCountChange}
-              required
-            />
-            <br />
-            <div className="divs">
-                {guests.map((guest, index) => (
-              <div class="row">
-                    <div class="col">
-                      <input
-                        type="text"
-                        className="form-control"
-                        name={`first_name_${index}`}
-                        value={guest.first_name}
-                        placeholder={guest.confirmed ? '' : 'Nome'}
-                        onChange={(e) => handleGuestChange(index, 'first_name', e.target.value)}
-                      />
+      <div className="container">
+                <div className="card border-0">
+                    <div className="card-header bg-primary text-white">
+                        <h5 className="card-title mb-0">
+                          Ehy! Chi siete? Cosa Fate? Cosa Portate? Dove andate?
+                          <br/>
+                          Sì ma quanti siete??
+                        </h5>
                     </div>
-                    <div class="col">
-                      <input
-                        type="text"
-                        className="form-control"
-                        name={`last_name_${index}`}
-                        value={guest.last_name}
-                        placeholder="Cognome"
-                        onChange={(e) => handleGuestChange(index, 'last_name', e.target.value)}
-                      />
-                    </div>
-                    <div class="col">
-                      <input
-                        type="text"
-                        className="form-control"
-                        name={`notes_${index}`}
-                        value={guest.notes}
-                        placeholder="Allergie/intolleranze"
-                        onChange={(e) => handleGuestChange(index, 'notes', e.target.value)}
-                      />
-                    </div>
-                    {index !== 0
-                      ? (
-                          <div class="col">
-                            <button className="btn btn-danger" id="DeleteRow" type="button" onClick={() => handleDeleteRow(index)}>
-                              <i className="bi bi-trash"></i>
-                              Cancella
-                            </button>
+                    <div className="card-body">
+                      <div id="formContainer">
+                        {errorMessage && <AlertComponent message={ errorMessage }/>}
+                          <div>
+                            <form className="form-group" action={`/guest`} method="post">
+                              <input
+                                type="number"
+                                className="form-control"
+                                style={{ width: "100px", margin: "0 auto" }}
+                                id="guests"
+                                name="guests"
+                                min="1"
+                                max="5"
+                                value={guestsCount}
+                                onChange={handleGuestsCountChange}
+                                required
+                              />
+                              <br />
+                              <div className="divs">
+                                  {guests.map((guest, index) => (
+                                <div className="row">
+                                      <div className="col" id="first_name">
+                                        <input
+                                          type="text"
+                                          className="form-control"
+                                          name={`first_name_${index}`}
+                                          value={guest.first_name}
+                                          placeholder={guest.confirmed ? '' : 'Nome'}
+                                          onChange={(e) => handleGuestChange(index, 'first_name', e.target.value)}
+                                        />
+                                      </div>
+                                      <div className="col" id="last_name">
+                                        <input
+                                          type="text"
+                                          className="form-control"
+                                          name={`last_name_${index}`}
+                                          value={guest.last_name}
+                                          placeholder="Cognome"
+                                          onChange={(e) => handleGuestChange(index, 'last_name', e.target.value)}
+                                        />
+                                      </div>
+                                      <div className="col" id="notes">
+                                        <input
+                                          type="text"
+                                          className="form-control"
+                                          name={`notes_${index}`}
+                                          value={guest.notes}
+                                          placeholder="Allergie/intolleranze"
+                                          onChange={(e) => handleGuestChange(index, 'notes', e.target.value)}
+                                        />
+                                      </div>
+                                      {index !== 0
+                                        ? (
+                                            <div className="col" id="delete_row">
+                                              <button className="btn btn-danger" id="DeleteRow" type="button" onClick={() => handleDeleteRow(index)}>
+                                                <i className="bi bi-trash"></i>
+                                                Cancella
+                                              </button>
+                                            </div>
+                                          )
+                                        : (
+                                            <div className="col" id="ghost_delete">
+                                              <button className="btn ghost-button" type="button" disabled title="">
+                                                Cancella
+                                              </button>
+                                            </div>
+                                          )
+                                      }
+                                      {guest.id && <input type="hidden" name={`id_${index}`} value={guest.id} />}
+                                </div>
+                                  ))}
+                              </div>
+                              <button type="button" className="btn btn-success" onClick={handleSubmit}>Conferma</button>
+                            </form>
                           </div>
-                        )
-                      : (
-                          <div class="col">
-                            <button className="btn ghost-button" type="button" disabled title="">
-                              Cancella
-                            </button>
-                          </div>
-                        )
-                    }
-                    {guest.id && <input type="hidden" name={`id_${index}`} value={guest.id} />}
-              </div>
-                ))}
+                        </div>
+                    </div>
+                </div>
             </div>
-            <button type="button" className="btn btn-success" onClick={handleSubmit}>Conferma</button>
-          </form>
-        </div>
-      </div>
     </div>
   );
 };
