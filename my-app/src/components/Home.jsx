@@ -72,25 +72,22 @@ function Home() {
           <div className="col-sm-6 d-flex justify-content-center">
             <div className="card border-0" style={{width: '20em'}}>
               <div className="card-body">
-                <div id="carouselExample" class="carousel slide">
-                  <div class="carousel-inner">
-                    <div class="carousel-item active">
-                      <img src="https://lh3.googleusercontent.com/pw/AP1GczMPHPGNg2iVAdJin4hTxIhwG3Xpi8cGVJ7mTc5XhtPeLcXhHnax7YDffODRcmh-0KD5sDmS0zwDhBxcy8kPytzHQntWMpTZ2oUjulK4FdbkUdMehof8wFaDRIzwY-t-4hzqXgFUla4lMpBu3E-TgeX2aw=w871-h490-s-no-gm?authuser=0" class="d-block w-100" alt="first"/>
+                <div id="carousel" className="carousel slide carousel-fade" data-bs-ride="ride">
+                  <div className="carousel-inner">
+                    <div className="carousel-item active">
+                      <img src="https://lh3.googleusercontent.com/pw/AP1GczMPHPGNg2iVAdJin4hTxIhwG3Xpi8cGVJ7mTc5XhtPeLcXhHnax7YDffODRcmh-0KD5sDmS0zwDhBxcy8kPytzHQntWMpTZ2oUjulK4FdbkUdMehof8wFaDRIzwY-t-4hzqXgFUla4lMpBu3E-TgeX2aw=w871-h490-s-no-gm?authuser=0" className="d-block w-100" alt="first"/>
                     </div>
-                    <div class="carousel-item">
-                      <img src="https://lh3.googleusercontent.com/pw/AP1GczMPHPGNg2iVAdJin4hTxIhwG3Xpi8cGVJ7mTc5XhtPeLcXhHnax7YDffODRcmh-0KD5sDmS0zwDhBxcy8kPytzHQntWMpTZ2oUjulK4FdbkUdMehof8wFaDRIzwY-t-4hzqXgFUla4lMpBu3E-TgeX2aw=w871-h490-s-no-gm?authuser=0" class="d-block w-100" alt="second"/>
-                    </div>
-                    <div class="carousel-item">
-                      <img src="https://lh3.googleusercontent.com/pw/AP1GczMPHPGNg2iVAdJin4hTxIhwG3Xpi8cGVJ7mTc5XhtPeLcXhHnax7YDffODRcmh-0KD5sDmS0zwDhBxcy8kPytzHQntWMpTZ2oUjulK4FdbkUdMehof8wFaDRIzwY-t-4hzqXgFUla4lMpBu3E-TgeX2aw=w871-h490-s-no-gm?authuser=0" class="d-block w-100" alt="third"/>
+                    <div className="carousel-item">
+                      <img src="https://lh3.googleusercontent.com/pw/AP1GczOxNPSvaYN25UMTDrljCJcwhk-_Na7Ya8w2WXV3b8iJqLeeN2__vWZ_0wjn08ZIxUI5l3j1IBOuuxJ9IGG2tRRdUs-wRrBZY1GFAGQVyC25gJHNXWjjyImfCGaX462yEmzrIhWhts9XqncFA6hy5vhmPw=w871-h490-s-no-gm?authuser=0" className="d-block w-100" alt="second"/>
                     </div>
                   </div>
-                  <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
-                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                    <span class="visually-hidden">Previous</span>
+                  <button className="carousel-control-prev" type="button" data-bs-target="#carousel" data-bs-slide="prev">
+                    <span className="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span className="visually-hidden">Previous</span>
                   </button>
-                  <button class="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next">
-                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                    <span class="visually-hidden">Next</span>
+                  <button className="carousel-control-next" type="button" data-bs-target="#carousel" data-bs-slide="next">
+                    <span className="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span className="visually-hidden">Next</span>
                   </button>
                 </div>
               </div>
