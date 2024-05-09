@@ -1,6 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { Carousel } from 'react-responsive-carousel';
-import 'react-responsive-carousel/lib/styles/carousel.min.css';
 
 function Home() {
   const [countdown, setCountdown] = useState('');
@@ -74,17 +72,27 @@ function Home() {
           <div className="col-sm-6 d-flex justify-content-center">
             <div className="card border-0" style={{width: '20em'}}>
               <div className="card-body">
-                <Carousel showArrows={true} showThumbs={false}>
-                  <div>
-                    <img src="https://lh3.googleusercontent.com/pw/AP1GczMPHPGNg2iVAdJin4hTxIhwG3Xpi8cGVJ7mTc5XhtPeLcXhHnax7YDffODRcmh-0KD5sDmS0zwDhBxcy8kPytzHQntWMpTZ2oUjulK4FdbkUdMehof8wFaDRIzwY-t-4hzqXgFUla4lMpBu3E-TgeX2aw=w871-h490-s-no-gm?authuser=0" alt="photo1"/>
+                <div id="carouselExample" class="carousel slide">
+                  <div class="carousel-inner">
+                    <div class="carousel-item active">
+                      <img src="https://lh3.googleusercontent.com/pw/AP1GczMPHPGNg2iVAdJin4hTxIhwG3Xpi8cGVJ7mTc5XhtPeLcXhHnax7YDffODRcmh-0KD5sDmS0zwDhBxcy8kPytzHQntWMpTZ2oUjulK4FdbkUdMehof8wFaDRIzwY-t-4hzqXgFUla4lMpBu3E-TgeX2aw=w871-h490-s-no-gm?authuser=0" class="d-block w-100" alt="first"/>
+                    </div>
+                    <div class="carousel-item">
+                      <img src="https://lh3.googleusercontent.com/pw/AP1GczMPHPGNg2iVAdJin4hTxIhwG3Xpi8cGVJ7mTc5XhtPeLcXhHnax7YDffODRcmh-0KD5sDmS0zwDhBxcy8kPytzHQntWMpTZ2oUjulK4FdbkUdMehof8wFaDRIzwY-t-4hzqXgFUla4lMpBu3E-TgeX2aw=w871-h490-s-no-gm?authuser=0" class="d-block w-100" alt="second"/>
+                    </div>
+                    <div class="carousel-item">
+                      <img src="https://lh3.googleusercontent.com/pw/AP1GczMPHPGNg2iVAdJin4hTxIhwG3Xpi8cGVJ7mTc5XhtPeLcXhHnax7YDffODRcmh-0KD5sDmS0zwDhBxcy8kPytzHQntWMpTZ2oUjulK4FdbkUdMehof8wFaDRIzwY-t-4hzqXgFUla4lMpBu3E-TgeX2aw=w871-h490-s-no-gm?authuser=0" class="d-block w-100" alt="third"/>
+                    </div>
                   </div>
-                  <div>
-                    <img src="https://lh3.googleusercontent.com/pw/AP1GczMPHPGNg2iVAdJin4hTxIhwG3Xpi8cGVJ7mTc5XhtPeLcXhHnax7YDffODRcmh-0KD5sDmS0zwDhBxcy8kPytzHQntWMpTZ2oUjulK4FdbkUdMehof8wFaDRIzwY-t-4hzqXgFUla4lMpBu3E-TgeX2aw=w871-h490-s-no-gm?authuser=0" alt="photo2"/>
-                  </div>
-                  <div>
-                    <img src="https://lh3.googleusercontent.com/pw/AP1GczMPHPGNg2iVAdJin4hTxIhwG3Xpi8cGVJ7mTc5XhtPeLcXhHnax7YDffODRcmh-0KD5sDmS0zwDhBxcy8kPytzHQntWMpTZ2oUjulK4FdbkUdMehof8wFaDRIzwY-t-4hzqXgFUla4lMpBu3E-TgeX2aw=w871-h490-s-no-gm?authuser=0" alt="photo3"/>
-                  </div>
-                </Carousel>
+                  <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Previous</span>
+                  </button>
+                  <button class="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Next</span>
+                  </button>
+                </div>
               </div>
             </div>
           </div>
