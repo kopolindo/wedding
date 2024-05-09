@@ -61,7 +61,7 @@ func init() {
 	// landing page for QR code scan: LOGIN CSRF by default
 	// there's no other way to make it easy for uncles ;)
 
-	App.Get("/:uuid", handleQRLoginGet)
+	App.Get("/guest/:uuid", handleQRLoginGet)
 
 	// authenticated routes
 	api := App.Group("/api", authMiddleware)

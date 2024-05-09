@@ -36,7 +36,7 @@ func handleQRGet(c *fiber.Ctx) error {
 			JSON(fiber.Map{"errorMessage": err.Error()})
 	}
 	if guests[0].Confirmed {
-		path, err := url.JoinPath("/", uuid.String()) // {SCHEMA}://{DOMAIN}:{PORT}/{UUID}
+		path, err := url.JoinPath("/guest/", uuid.String()) // {SCHEMA}://{DOMAIN}:{PORT}/{UUID}
 		if err != nil {
 			return c.Status(fiber.StatusInternalServerError).
 				JSON(fiber.Map{"errorMessage": err.Error()})
