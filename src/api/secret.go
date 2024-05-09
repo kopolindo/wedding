@@ -87,6 +87,12 @@ func handleSecret(c *fiber.Ctx) error {
 				HTTPOnly: false,
 				SameSite: "strict",
 			})
+			cookie, err := confirmedCookie(uuid)
+			if err != nil {
+				return c.Status(fiber.StatusInternalServerError).
+					JSON(fiber.Map{"errorMessage": err.Error()})
+			}
+			c.Cookie(&cookie)
 			log.Println(time.Since(start).Milliseconds())
 			c.Set(fiber.HeaderContentType, fiber.MIMEApplicationJSON)
 			return c.Send(responseJSON)

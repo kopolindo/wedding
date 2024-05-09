@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import './guestformpage.css';
 import AlertComponent from './alert';
 
-const GuestFormPage = ({ onFormSubmit }) => {
+const GuestFormPage = ({ data }) => {
   const [errorMessage, setErrorMessage] = useState('');
   const [guestsCount, setGuestsCount] = useState(1);
   const [guests, setGuests] = useState([{ id: '', first_name: '', last_name: '', notes: '', confirmed: false }]);
@@ -111,8 +111,7 @@ const GuestFormPage = ({ onFormSubmit }) => {
       if (!response.ok) {
         throw new Error(data.errorMessage);
       }
-      setFormSubmitted(true); // Trigger fetching guests after form submission
-      onFormSubmit(true);
+      setFormSubmitted(true);
     } catch (error) {
       console.error('Error submitting form:', error);
     }
@@ -187,7 +186,7 @@ const GuestFormPage = ({ onFormSubmit }) => {
                               <br />
                               <div className="divs">
                                   {guests.map((guest, index) => (
-                                <div className="row">
+                                    <div className="row">
                                       <div className="col" id="first_name">
                                         <input
                                           type="text"
@@ -229,14 +228,14 @@ const GuestFormPage = ({ onFormSubmit }) => {
                                           )
                                         : (
                                             <div className="col" id="ghost_delete">
-                                              <button className="btn ghost-button" type="button" disabled title="">
+                                              <button className="btn ghost-button" style={{color: "transparent"}} type="button" disabled title="">
                                                 Cancella
                                               </button>
                                             </div>
                                           )
                                       }
                                       {guest.id && <input type="hidden" name={`id_${index}`} value={guest.id} />}
-                                </div>
+                                    </div>
                                   ))}
                               </div>
                               <button type="button" className="btn btn-success" onClick={handleSubmit}>Conferma</button>

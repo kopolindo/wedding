@@ -69,5 +69,4 @@ func init() {
 	api.Post("/guest", handleFormPost)
 	api.Delete("/guest", handleDelete)
 	api.Get("/qr", handleQRGet)
-	api.Get("/confirmed", handleConfirmedGet)
 }

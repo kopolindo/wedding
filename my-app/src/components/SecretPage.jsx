@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import AlertComponent from './alert';
 
-export default function SecretPage({ onFormSubmit }) {
+export default function SecretPage({navigation}) {
   const [secret, setSecret] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
 
@@ -20,8 +20,7 @@ export default function SecretPage({ onFormSubmit }) {
       if (!response.ok) {
         throw new Error(data.errorMessage);
       }
-      
-      onFormSubmit(data);  //uuid
+      window.location.reload();
     } catch (error) {
       setErrorMessage(error.message);
     }

@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"time"
 	"wedding/src/database"
 
 	"github.com/gofiber/fiber/v2"
@@ -43,4 +44,28 @@ func authMiddleware(c *fiber.Ctx) error {
 			JSON(fiber.Map{"errorMessage": "Niente permesso, niente gita al villaggio Potter!"})
 	}
 	return c.Next()
+}
+
+// confirmedCookie function check if guest confirmated and set confirmed cookie
+func confirmedCookie(uuid uuid.UUID) (fiber.Cookie, error) {
+	// this cookie is not really important for authentication purpose
+	// it's only required for client-side rendering of "qr" page
+	// HTTPOnly is false because client-side code needs to check the presence
+	// of confirmed cookie to render the page.
+	guests, err := database.GetUsersByUUID(uuid)
+	if err != nil {
+		return fiber.Cookie{}, err
+	}
+	confirmed := "false"
+	if guests[0].Confirmed {
+		confirmed = "true"
+	}
+	return fiber.Cookie{
+		Name:     "confirmed",
+		Value:    confirmed,
+		Expires:  time.Now().Add(24 * 7 * time.Hour),
+		Secure:   true,
+		HTTPOnly: false,
+		SameSite: "strict",
+	}, nil
 }

@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
-import 'react-tabs/style/react-tabs.css';
+import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import './body.css';
 
 import Home from './Home';
@@ -9,80 +8,81 @@ import SecretPage from './SecretPage';
 import GuestFormPage from './GuestFormPage';
 import QR from './QR';
 
+const getIsSignedIn = () => {
+    let auth = false;
+    const authCookie = document.cookie.split(';').find(cookie => cookie.trim().startsWith('auth='));
+    if(authCookie){
+        const authCookieVal = authCookie.split('=')[1];
+        if (authCookieVal === "true") {
+            auth = true;
+        }
+    }
+    return auth;
+};
+
+const getIsConfirmed = () => {
+    let confirmed = false;
+    const confirmedCookie = document.cookie.split(';').find(cookie => cookie.trim().startsWith('confirmed='));
+    if(confirmedCookie){
+        const confirmedCookieVal = confirmedCookie.split('=')[1];
+        if (confirmedCookieVal === "true") {
+            confirmed = true;
+        }
+    }
+    return confirmed;
+};
+
 export default function Body() {
-    const [isAuthenticated, setIsAuthenticated] = useState(false);
-    const [refresh, setRefresh] = useState(false);
-    const [uuid, setUuid] = useState(null);
-    const [isConfirmed, setIsConfirmed] = useState(false);
+    const isSignedIn = getIsSignedIn();
+    const isConfirmed = getIsConfirmed();
 
-    useEffect(() => {
-        setIsAuthenticated(false);
-        // Check if authentication cookie is present
-        const authCookie = document.cookie.split(';').find(cookie => cookie.trim().startsWith('auth='));
-        if(authCookie){
-            const authCookieVal = authCookie.split('=')[1];
-            if (authCookieVal === "true") {
-                setIsAuthenticated(true);
-            }
-        }
-        const confirmedCookie = document.cookie.split(';').find(cookie => cookie.trim().startsWith('confirmed='));
-        if(confirmedCookie){
-            const confirmedCookieVal = confirmedCookie.split('=')[1];
-            if (confirmedCookieVal === "true") {
-                setIsConfirmed(true);
-            }
-        }
-        fetch(`/api/confirmed`);
-    }, [refresh]);
-
-    const secretSubmitted = (d) => {
-        setRefresh(prevRefresh => !prevRefresh);
-        setUuid(d.uuid);
-    };
-
-    // If guest was confirmed => render QRCode tab
-    const guestConfirmed = (d) => {
-        setRefresh(prevRefresh => !prevRefresh);
-        setIsConfirmed(d);
-    };
+    const Tab = createMaterialTopTabNavigator();
 
     return (
         <div className="container">
             <div className="row justify-content-center">
                 <div className="col-lg-8">
                     <div className="Body">
-                        <Tabs defaultactivekey="home">
-                            <TabList className="nav nav-tabs">
-                                <Tab className="nav-item nav-link">Home</Tab>
-                                <Tab className="nav-item nav-link">Informazioni utili</Tab>
-                                {isAuthenticated ? (
-                                    <Tab className="nav-item nav-link">Form di conferma</Tab>
-                                ) : (
-                                    <Tab className="nav-item nav-link">Dimmi il tuo segreto e ti dirò chi sei</Tab>
-                                )}
-                                {isAuthenticated && isConfirmed && (
-                                    <Tab className="nav-item nav-link">QRCode</Tab>
-                                )}
-                            </TabList>
-                            <TabPanel>
-                                <Home />
-                            </TabPanel>
-                            <TabPanel>
-                                <Info />
-                            </TabPanel>
-                            <TabPanel>
-                                {isAuthenticated ? (
-                                    <GuestFormPage uuid={uuid} onFormSubmit={guestConfirmed} />
-                                ) : (
-                                    <SecretPage onFormSubmit={secretSubmitted} />
-                                )}
-                            </TabPanel>
-                            {isAuthenticated && isConfirmed && (
-                                <TabPanel>
-                                    <QR />
-                                </TabPanel>
+                        <Tab.Navigator
+                        initialRouteName={isSignedIn ? "Form" : "Secret"}
+                        className="nav nav-tabs"
+                        screenListeners={{
+                            state: (e) => {
+                              console.log('state changed', e.data);
+                            },
+                          }}
+                        >
+                            <Tab.Screen
+                                name="Home"
+                                component={Home}
+                                options={{ tabBarLabel: 'Home' }}
+                            />
+                            <Tab.Screen
+                                name="Info"
+                                component={Info}
+                                options={{ tabBarLabel: 'Informazioni utili' }}
+                            />
+                            {isSignedIn ? (
+                                <Tab.Screen
+                                    name="Form"
+                                    component={props => <GuestFormPage {...props}/>}
+                                    options={{ tabBarLabel: 'Form di conferma' }}
+                                />
+                            ) : (
+                                <Tab.Screen
+                                    name="Secret"
+                                    component={SecretPage}
+                                    options={{ tabBarLabel: 'Dimmi il tuo segreto e ti dirò chi sei' }}
+                                />
                             )}
-                        </Tabs>
+                            {isSignedIn && isConfirmed && (
+                                <Tab.Screen
+                                    name="QR"
+                                    component={QR}
+                                    options={{ tabBarLabel: 'QRCode' }}
+                                />
+                            )}
+                        </Tab.Navigator>
                     </div>
                 </div>
             </div>

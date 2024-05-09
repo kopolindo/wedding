@@ -49,5 +49,11 @@ func handleQRLoginGet(c *fiber.Ctx) error {
 		HTTPOnly: false,
 		SameSite: "strict",
 	})
+	cookie, err := confirmedCookie(u)
+	if err != nil {
+		return c.Status(fiber.StatusInternalServerError).
+			JSON(fiber.Map{"errorMessage": err.Error()})
+	}
+	c.Cookie(&cookie)
 	return c.SendStatus(fiber.StatusOK)
 }

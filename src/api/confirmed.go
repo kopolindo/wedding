@@ -1,10 +1,6 @@
 package api
 
 import (
-	"errors"
-	"time"
-	"wedding/src/database"
-
 	"github.com/gofiber/fiber/v2"
 	"github.com/google/uuid"
 )
@@ -24,29 +20,11 @@ func handleConfirmedGet(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusInternalServerError).
 			JSON(fiber.Map{"errorMessage": err.Error()})
 	}
-	guests, err := database.GetUsersByUUID(uuid)
+	cookie, err := confirmedCookie(uuid)
 	if err != nil {
-		var e *fiber.Error
-		if errors.As(err, &e) {
-			return c.Status(e.Code).
-				JSON(fiber.Map{"errorMessage": e.Message})
-		}
+		return c.Status(fiber.StatusInternalServerError).
+			JSON(fiber.Map{"errorMessage": err.Error()})
 	}
-	// this cookie is not really important for authentication purpose
-	// it's only required for client-side rendering of "qr" page
-	// HTTPOnly is false because client-side code needs to check the presence
-	// of confirmed cookie to render the page.
-	confirmed := "false"
-	if guests[0].Confirmed {
-		confirmed = "true"
-	}
-	c.Cookie(&fiber.Cookie{
-		Name:     "confirmed",
-		Value:    confirmed,
-		Expires:  time.Now().Add(24 * 7 * time.Hour),
-		Secure:   true,
-		HTTPOnly: false,
-		SameSite: "strict",
-	})
+	c.Cookie(&cookie)
 	return c.SendStatus(fiber.StatusOK)
 }

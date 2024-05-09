@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"strings"
+	"time"
 	"wedding/src/database"
 	"wedding/src/models"
 
@@ -108,6 +109,16 @@ func handleFormPost(c *fiber.Ctx) error {
 					JSON(fiber.Map{"errorMessage": err.Error()})
 			}
 		}
+	}
+	if c.Cookies("confirmed") == "" {
+		c.Cookie(&fiber.Cookie{
+			Name:     "confirmed",
+			Value:    "true",
+			Expires:  time.Now().Add(24 * 7 * time.Hour),
+			Secure:   true,
+			HTTPOnly: false,
+			SameSite: "strict",
+		})
 	}
 	return c.Status(fiber.StatusOK).
 		JSON(fiber.Map{"status": "ok"})
