@@ -75,10 +75,10 @@ function Home() {
                 <div id="carousel" className="carousel slide carousel-fade" data-bs-ride="ride">
                   <div className="carousel-inner">
                     <div className="carousel-item active">
-                      <img src="https://lh3.googleusercontent.com/pw/AP1GczMPHPGNg2iVAdJin4hTxIhwG3Xpi8cGVJ7mTc5XhtPeLcXhHnax7YDffODRcmh-0KD5sDmS0zwDhBxcy8kPytzHQntWMpTZ2oUjulK4FdbkUdMehof8wFaDRIzwY-t-4hzqXgFUla4lMpBu3E-TgeX2aw=w871-h490-s-no-gm?authuser=0" className="d-block w-100" alt="first"/>
+                      <img src="https://lh3.googleusercontent.com/pw/AP1GczOxNPSvaYN25UMTDrljCJcwhk-_Na7Ya8w2WXV3b8iJqLeeN2__vWZ_0wjn08ZIxUI5l3j1IBOuuxJ9IGG2tRRdUs-wRrBZY1GFAGQVyC25gJHNXWjjyImfCGaX462yEmzrIhWhts9XqncFA6hy5vhmPw=w871-h490-s-no-gm?authuser=0" className="d-block w-100" alt="first"/>
                     </div>
                     <div className="carousel-item">
-                      <img src="https://lh3.googleusercontent.com/pw/AP1GczOxNPSvaYN25UMTDrljCJcwhk-_Na7Ya8w2WXV3b8iJqLeeN2__vWZ_0wjn08ZIxUI5l3j1IBOuuxJ9IGG2tRRdUs-wRrBZY1GFAGQVyC25gJHNXWjjyImfCGaX462yEmzrIhWhts9XqncFA6hy5vhmPw=w871-h490-s-no-gm?authuser=0" className="d-block w-100" alt="second"/>
+                      <img src="https://lh3.googleusercontent.com/pw/AP1GczMPHPGNg2iVAdJin4hTxIhwG3Xpi8cGVJ7mTc5XhtPeLcXhHnax7YDffODRcmh-0KD5sDmS0zwDhBxcy8kPytzHQntWMpTZ2oUjulK4FdbkUdMehof8wFaDRIzwY-t-4hzqXgFUla4lMpBu3E-TgeX2aw=w871-h490-s-no-gm?authuser=0" className="d-block w-100" alt="second"/>
                     </div>
                   </div>
                   <button className="carousel-control-prev" type="button" data-bs-target="#carousel" data-bs-slide="prev">

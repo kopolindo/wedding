@@ -13,7 +13,7 @@ export default function LoginViaUuid() {
             if (!response.ok) {
                 throw new Error("Failed to get guest");
             }
-            return response.json();
+            fetch(`/api/confirmed`);
         })
         .then()
         .catch(error => {

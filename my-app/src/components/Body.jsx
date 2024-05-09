@@ -51,7 +51,7 @@ export default function Body() {
             <div className="row justify-content-center">
                 <div className="col-lg-8">
                     <div className="Body">
-                        <Tabs defaultActiveKey="home">
+                        <Tabs defaultactivekey="home">
                             <TabList className="nav nav-tabs">
                                 <Tab className="nav-item nav-link">Home</Tab>
                                 <Tab className="nav-item nav-link">Informazioni utili</Tab>

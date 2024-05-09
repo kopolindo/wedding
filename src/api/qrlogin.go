@@ -49,5 +49,5 @@ func handleQRLoginGet(c *fiber.Ctx) error {
 		HTTPOnly: false,
 		SameSite: "strict",
 	})
-	return c.Redirect("/api/guest")
+	return c.SendStatus(fiber.StatusOK)
 }
