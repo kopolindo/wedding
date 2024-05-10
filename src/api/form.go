@@ -2,7 +2,6 @@ package api
 
 import (
 	"encoding/json"
-	"log"
 	"wedding/src/database"
 
 	"github.com/gofiber/fiber/v2"
@@ -18,7 +17,6 @@ func handleFormGet(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusInternalServerError).
 			JSON(fiber.Map{"errorMessage": "Hai trovato il modo di superare il cane a tre teste! Ma non supererai me..."})
 	}
-	log.Println(sessionID)
 	uuid, err := uuid.Parse(sessionID)
 	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).

@@ -2,7 +2,6 @@ package api
 
 import (
 	"encoding/json"
-	"log"
 	"sync"
 	"time"
 	"wedding/src/argon"
@@ -16,7 +15,6 @@ import (
 // method POST
 // route /secret
 func handleSecret(c *fiber.Ctx) error {
-	start := time.Now()
 	// Parse form data
 	payload := &secretRequestPayload{}
 	if err := c.BodyParser(&payload); err != nil {
@@ -93,12 +91,10 @@ func handleSecret(c *fiber.Ctx) error {
 					JSON(fiber.Map{"errorMessage": err.Error()})
 			}
 			c.Cookie(&cookie)
-			log.Println(time.Since(start).Milliseconds())
 			c.Set(fiber.HeaderContentType, fiber.MIMEApplicationJSON)
 			return c.Send(responseJSON)
 		}
 	}
-	log.Println(time.Since(start).Milliseconds())
 	return c.Status(fiber.StatusNotFound).
 		JSON(fiber.Map{"errorMessage": "Parola d'ordine sbagliata. Neville vai a chiamare Hermione e riprova"})
 }

@@ -70,9 +70,8 @@ func init() {
 // returns index (uint) and error
 func CreateGuest(guest models.Guest) (uint, error) {
 	n := CountGuests(guest.UUID)
-	fmt.Printf("number of guests per UUID(%s):%d\n", guest.UUID.String(), n)
 	if n < 5 {
-		result := db.Debug().Create(&guest)
+		result := db.Create(&guest)
 		index := guest.ID   // returns inserted data's primary key
 		err := result.Error // returns error
 
@@ -87,7 +86,7 @@ func CreateGuest(guest models.Guest) (uint, error) {
 // GuestExists function returns true if guest exists, false otherwise
 func GuestExists(id uint, u uuid.UUID) bool {
 	guest := models.Guest{}
-	result := db.Debug().First(&guest, "id = ? AND uuid = ?", id, u)
+	result := db.First(&guest, "id = ? AND uuid = ?", id, u)
 	return result.Error == nil
 }
 
@@ -124,7 +123,7 @@ func UpdateGuest(update models.Guest) error {
 		Updates(models.Guest{
 			FirstName: update.FirstName,
 			LastName:  update.LastName,
-			Confirmed: update.Confirmed,
+			Confirmed: true,
 			Notes:     update.Notes,
 		})
 	err := result.Error // returns error
@@ -137,7 +136,7 @@ func UpdateGuest(update models.Guest) error {
 // GetUsersByUUID function returns guests slice given a UUID
 func GetUsersByUUID(u uuid.UUID) ([]models.Guest, error) {
 	var guests []models.Guest
-	result := db.Debug().Find(&guests, &models.Guest{
+	result := db.Find(&guests, &models.Guest{
 		UUID: u,
 	})
 	if result.Error != nil && errors.Is(result.Error, gorm.ErrRecordNotFound) {
@@ -149,7 +148,7 @@ func GetUsersByUUID(u uuid.UUID) ([]models.Guest, error) {
 // GetUserByID function returns guests slice given a UUID
 func GetUserByID(id uint) (models.Guest, error) {
 	var guest models.Guest
-	result := db.Debug().First(&guest, &models.Guest{
+	result := db.First(&guest, &models.Guest{
 		ID: id,
 	})
 	if result.Error != nil && errors.Is(result.Error, gorm.ErrRecordNotFound) {
@@ -165,7 +164,7 @@ func DeleteGuest(id uint, u uuid.UUID) error {
 		if n := CountGuests(u); n == 1 {
 			return fiber.NewError(fiber.StatusForbidden, "you can't delete the last user")
 		}
-		result := db.Debug().Delete(&guest, "id = ? AND uuid = ?", id, u)
+		result := db.Delete(&guest, "id = ? AND uuid = ?", id, u)
 		return result.Error
 	} else {
 		return fiber.NewError(fiber.StatusNotFound, "user not found")
@@ -174,6 +173,6 @@ func DeleteGuest(id uint, u uuid.UUID) error {
 
 func GetAllUsers() models.Guests {
 	guests := &models.Guests{}
-	db.Debug().Find(guests)
+	db.Find(guests)
 	return *guests
 }

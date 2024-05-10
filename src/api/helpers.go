@@ -26,14 +26,12 @@ func authMiddleware(c *fiber.Ctx) error {
 	// Check if the session cookie exists
 	sessionID := c.Cookies("session")
 	if sessionID != "" {
-		log.Printf("found session cookie: %s\n", sessionID)
 		u, err := uuid.Parse(sessionID)
 		if err != nil {
 			return c.Status(fiber.StatusForbidden).
 				JSON(fiber.Map{"errorMessage": fmt.Sprintf("RON SI E' SPACCATO! %s", err.Error())})
 		}
 		if database.GuestExistsByUUID(u) {
-			log.Println("UUID is correctly formatted and a user with such UUID exists")
 			c.Locals("isAuthenticated", true)
 		} else {
 			return c.Status(fiber.StatusForbidden).

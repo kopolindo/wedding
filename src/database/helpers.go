@@ -3,7 +3,6 @@ package database
 import (
 	"bufio"
 	"encoding/csv"
-	"fmt"
 	"log"
 	"os"
 	"strconv"
@@ -113,6 +112,7 @@ func isTableEmpty(table string) bool {
 
 // createGuestList read the list of guest names (only per group) and stores it in GUESTS
 func createGuestList() {
+	var guests Guests
 	// open file
 	f, err := os.Open(guestsfile)
 	if err != nil {
@@ -143,7 +143,48 @@ func createGuestList() {
 			Confirmed: false,
 			Notes:     []byte{},
 		}
-		fmt.Println(g.FirstName, g.LastName, passphrase)
+		guest := &Guest{
+			FirstName:  g.FirstName,
+			LastName:   g.LastName,
+			Passphrase: passphrase,
+			UUID:       u.String(),
+		}
+		guests = append(guests, *guest)
 		GUESTS = append(GUESTS, g)
 	}
+	writeToCsv(&guests)
+}
+
+// Define a struct to hold your data
+type Guest struct {
+	FirstName  string
+	LastName   string
+	Passphrase string
+	UUID       string
+}
+
+type Guests []Guest
+
+func writeToCsv(guests *Guests) {
+	file, err := os.Create("created_guest.csv")
+	if err != nil {
+		log.Println("CSV file creation error:", err.Error())
+	}
+	defer file.Close()
+
+	writer := csv.NewWriter(file)
+	defer writer.Flush()
+
+	err = writer.Write([]string{"First Name", "Last Name", "UUID", "Passphrase"})
+	if err != nil {
+		panic(err)
+	}
+
+	for _, guest := range *guests {
+		err = writer.Write([]string{guest.FirstName, guest.LastName, guest.UUID, guest.Passphrase})
+		if err != nil {
+			log.Println("writing error:", err.Error())
+		}
+	}
+
 }

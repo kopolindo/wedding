@@ -5,7 +5,6 @@ import (
 	"wedding/src/database"
 
 	"github.com/gofiber/fiber/v2"
-	"github.com/gofiber/fiber/v2/log"
 	"github.com/google/uuid"
 )
 
@@ -13,9 +12,7 @@ import (
 // method GET
 // route /:uuid
 func handleQRLoginGet(c *fiber.Ctx) error {
-	log.Debug("HIT IT!!")
 	uuidString := c.Params("uuid")
-	log.Debug(uuidString)
 	u, err := uuid.Parse(uuidString)
 	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).
@@ -25,7 +22,6 @@ func handleQRLoginGet(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusNotFound).
 			JSON(fiber.Map{"errorMessage": "user not found...who you really are??"})
 	}
-	log.Debug("user", uuidString, "exists. Setting cookies")
 
 	c.Cookie(&fiber.Cookie{
 		Name:     "session",

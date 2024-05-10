@@ -112,9 +112,26 @@ const GuestFormPage = ({ data }) => {
         throw new Error(data.errorMessage);
       }
       setFormSubmitted(true);
+/*       const isConfirmed = getIsConfirmed();
+      console.log("isConfirmed "+isConfirmed)
+      if(!isConfirmed){
+        window.location.reload();
+      } */
     } catch (error) {
       console.error('Error submitting form:', error);
     }
+  };
+
+  const getIsConfirmed = () => {
+    let confirmed = false;
+    const confirmedCookie = document.cookie.split(';').find(cookie => cookie.trim().startsWith('confirmed='));
+    if(confirmedCookie){
+        const confirmedCookieVal = confirmedCookie.split('=')[1];
+        if (confirmedCookieVal === "true") {
+            confirmed = true;
+        }
+    }
+    return confirmed;
   };
   
 
