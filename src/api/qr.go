@@ -2,12 +2,9 @@ package api
 
 import (
 	"encoding/base64"
-	"fmt"
-	"net/url"
 	"wedding/src/database"
 
 	"github.com/gofiber/fiber/v2"
-	"github.com/gofiber/fiber/v2/log"
 	"github.com/google/uuid"
 	qrcode "github.com/skip2/go-qrcode"
 )
@@ -36,19 +33,8 @@ func handleQRGet(c *fiber.Ctx) error {
 			JSON(fiber.Map{"errorMessage": err.Error()})
 	}
 	if guests[0].Confirmed {
-		path, err := url.JoinPath("/guest/", uuid.String()) // {SCHEMA}://{DOMAIN}:{PORT}/{UUID}
-		if err != nil {
-			return c.Status(fiber.StatusInternalServerError).
-				JSON(fiber.Map{"errorMessage": err.Error()})
-		}
-		url := &url.URL{
-			Scheme: SCHEMA,
-			Host:   fmt.Sprintf("%s:%s", DOMAIN, PORT),
-			Path:   path,
-		}
 		var png []byte
-		log.Debug(url.String())
-		png, err = qrcode.Encode(url.String(), qrcode.Medium, 256)
+		png, err = qrcode.Encode(uuid.String(), qrcode.Medium, 256)
 		if err != nil {
 			return c.Status(fiber.StatusInternalServerError).
 				JSON(fiber.Map{"errorMessage": err.Error()})
