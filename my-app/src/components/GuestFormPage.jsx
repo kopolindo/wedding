@@ -86,7 +86,7 @@ const GuestFormPage = ({ data }) => {
           const lastName = document.querySelector(`input[name=last_name_${index}]`).value.trim();
           const notes = document.querySelector(`input[name=notes_${index}]`).value.trim();
   
-          if (firstName && lastName && notes) {
+          if (firstName && lastName) {
             acc.push({
               id: guest.id || index,
               first_name: firstName,
