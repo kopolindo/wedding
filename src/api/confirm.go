@@ -58,7 +58,6 @@ func handleFormPost(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusInternalServerError).
 			JSON(fiber.Map{"errorMessage": err.Error()})
 	}
-	log.Printf("[DEBUG]data input: %v", data)
 
 	var guests []models.Guest
 	// Create guest struct from parsed data
@@ -73,7 +72,6 @@ func handleFormPost(c *fiber.Ctx) error {
 		}
 		// Validation
 		if errs := myValidator.Validate(&guest); len(errs) > 0 && errs[0].Error {
-			log.Printf("[DEBUG]validation error: %s", err.Error())
 			errMsgs := make([]string, 0)
 
 			for _, err := range errs {
@@ -95,14 +93,12 @@ func handleFormPost(c *fiber.Ctx) error {
 
 	for _, guest := range guests {
 		if database.GuestExists(guest.ID, guest.UUID) {
-			log.Println("[DEBUG]Updating user")
 			err = database.UpdateGuest(guest)
 			if err != nil {
 				log.Printf("error after updating guest: %s\n", err.Error())
 				return c.Status(fiber.StatusInternalServerError).
 					JSON(fiber.Map{"errorMessage": err.Error()})
 			}
-			log.Println("[DEBUG]Setting cookie confirmed as true b/c updating")
 			c.Cookie(&fiber.Cookie{
 				Name:     "confirmed",
 				Value:    "true",
@@ -113,7 +109,6 @@ func handleFormPost(c *fiber.Ctx) error {
 			})
 		} else {
 			guest.ID = 0
-			log.Println("[DEBUG]Creating user")
 			_, err := database.CreateGuest(guest)
 			if err != nil {
 				log.Printf("error during guest creation: %s\n", err.Error())

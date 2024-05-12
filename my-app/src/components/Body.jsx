@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import './body.css';
 
@@ -32,9 +32,24 @@ const getIsConfirmed = () => {
     return confirmed;
 };
 
+const delay = ms => new Promise(
+    resolve => setTimeout(resolve, ms)
+  );
+
 export default function Body() {
+    const [isConfirmed, setIsConfirmed] = useState(false);
+
+    const handleSubmitFromGuestFormPage = async(confirmedStatus) => {
+        await delay(500);
+        if(confirmedStatus==="true" || getIsConfirmed()){
+            setIsConfirmed(true);
+        }
+    }
+
     const isSignedIn = getIsSignedIn();
-    const isConfirmed = getIsConfirmed();
+    if(getIsConfirmed() && !isConfirmed){
+        setIsConfirmed(true);
+    }
 
     const Tab = createMaterialTopTabNavigator();
 
@@ -46,11 +61,6 @@ export default function Body() {
                         <Tab.Navigator
                         initialRouteName={isSignedIn ? "Form" : "Secret"}
                         className="nav nav-tabs"
-                        screenListeners={{
-                            state: (e) => {
-                              console.log('state changed', e.data);
-                            },
-                          }}
                         >
                             <Tab.Screen
                                 name="Home"
@@ -65,7 +75,11 @@ export default function Body() {
                             {isSignedIn ? (
                                 <Tab.Screen
                                     name="Form"
-                                    component={props => <GuestFormPage {...props}/>}
+                                    component={props =>
+                                        <GuestFormPage 
+                                            handleSubmitFromGuestFormPage={handleSubmitFromGuestFormPage}
+                                        />
+                                    }
                                     options={{ tabBarLabel: 'Form di conferma' }}
                                 />
                             ) : (

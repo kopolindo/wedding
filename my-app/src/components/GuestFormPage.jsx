@@ -2,12 +2,13 @@ import React, { useState, useEffect } from 'react';
 import './guestformpage.css';
 import AlertComponent from './alert';
 
-const GuestFormPage = ({ data }) => {
+export default function GuestFormPage ({handleSubmitFromGuestFormPage}) {
   const [errorMessage, setErrorMessage] = useState('');
   const [guestsCount, setGuestsCount] = useState(1);
   const [guests, setGuests] = useState([{ id: '', first_name: '', last_name: '', notes: '', confirmed: false }]);
   const [prefilledGuests, setPrefilledGuests] = useState([]);
   const [formSubmitted, setFormSubmitted] = useState(false);
+  const [isConfirmed, setIsConfirmed] = useState(false);
 
   useEffect(() => {
     const fetchGuests = async () => {
@@ -78,7 +79,7 @@ const GuestFormPage = ({ data }) => {
     }
   };
 
-  const handleSubmit = async () => {
+  const handleSubmit =  () => {
     try {
       const formData = {
         people: guests.reduce((acc, guest, index) => {
@@ -98,42 +99,32 @@ const GuestFormPage = ({ data }) => {
         }, []),
       };
   
-      const response = await fetch(`/api/guest`, {
+      fetch(`/api/guest`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(formData),
-      });
-  
-      const data = await response.json();
-  
-      if (!response.ok) {
-        throw new Error(data.errorMessage);
-      }
-      setFormSubmitted(true);
-/*       const isConfirmed = getIsConfirmed();
-      console.log("isConfirmed "+isConfirmed)
-      if(!isConfirmed){
-        window.location.reload();
-      } */
+      }).then(response => {
+        if (!response.ok) {
+          throw new Error('Failed to submit form');
+        }
+        var confirmedCookie = document.cookie.split(';').find(cookie => cookie.trim().startsWith('confirmed='));
+        
+        if (confirmedCookie) {
+          var confirmedValue = confirmedCookie.split('=')[1];
+          if(confirmedValue==="true"){
+            setIsConfirmed(true)
+          }else{
+            setIsConfirmed(false)
+          }
+        }
+        setFormSubmitted(true);
+      })
     } catch (error) {
       console.error('Error submitting form:', error);
     }
-  };
-
-  const getIsConfirmed = () => {
-    let confirmed = false;
-    const confirmedCookie = document.cookie.split(';').find(cookie => cookie.trim().startsWith('confirmed='));
-    if(confirmedCookie){
-        const confirmedCookieVal = confirmedCookie.split('=')[1];
-        if (confirmedCookieVal === "true") {
-            confirmed = true;
-        }
-    }
-    return confirmed;
-  };
-  
+  };  
 
   const handleDeleteRow = (index) => {
     const idInput = document.querySelector(`input[name=id_${index}]`);
@@ -255,7 +246,15 @@ const GuestFormPage = ({ data }) => {
                                     </div>
                                   ))}
                               </div>
-                              <button type="button" className="btn btn-success" onClick={handleSubmit}>Conferma</button>
+                              <button
+                                type="button"
+                                className="btn btn-success"
+                                onClick={() => {
+                                    handleSubmit();
+                                    handleSubmitFromGuestFormPage(isConfirmed)
+                                  }
+                                }
+                              >Conferma</button>
                             </form>
                           </div>
                         </div>
@@ -265,5 +264,3 @@ const GuestFormPage = ({ data }) => {
     </div>
   );
 };
-
-export default GuestFormPage;

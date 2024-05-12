@@ -10,7 +10,7 @@ import (
 
 // HandleForm renders the form page
 // method GET
-// route /guest
+// route /api/guest
 func handleFormGet(c *fiber.Ctx) error {
 	sessionID := c.Cookies("session")
 	if sessionID == "" {
@@ -49,6 +49,12 @@ func handleFormGet(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusInternalServerError).
 			JSON(fiber.Map{"errorMessage": err.Error()})
 	}
+	cookie, err := confirmedCookie(uuid)
+	if err != nil {
+		return c.Status(fiber.StatusInternalServerError).
+			JSON(fiber.Map{"errorMessage": err.Error()})
+	}
+	c.Cookie(&cookie)
 	c.Set(fiber.HeaderContentType, fiber.MIMEApplicationJSON)
 	return c.Send(guestsJSON)
 }
