@@ -34,3 +34,11 @@ John,Doe
 
 5. Run the DB
 `docker compose -f "compose.yml" up -d --build`
+
+# Roadmap
+
+- [x] logging
+- [ ] more pictures of us
+- [ ] IBAN
+- [ ] monitoring
+- [ ] reverse proxy
