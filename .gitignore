@@ -8,3 +8,5 @@ passphrase-generator-dictionary.txt
 cookie-passphrase.txt
 keyfile.key
 keyfile.pub
+src/logs.json
+src/logs.log

@@ -2,10 +2,10 @@ package api
 
 import (
 	"fmt"
-	"log"
 	"strings"
 	"time"
 	"wedding/src/database"
+	"wedding/src/log"
 	"wedding/src/models"
 
 	"github.com/go-playground/validator/v10"
@@ -54,7 +54,7 @@ func handleFormPost(c *fiber.Ctx) error {
 	data := new(JSONConfirmationForm)
 
 	if err := c.BodyParser(data); err != nil {
-		log.Printf("error during JSON parsing: %s\n", err.Error())
+		log.Errorf("error during JSON parsing: %s\n", err.Error())
 		return c.Status(fiber.StatusInternalServerError).
 			JSON(fiber.Map{"errorMessage": err.Error()})
 	}
@@ -95,7 +95,7 @@ func handleFormPost(c *fiber.Ctx) error {
 		if database.GuestExists(guest.ID, guest.UUID) {
 			err = database.UpdateGuest(guest)
 			if err != nil {
-				log.Printf("error after updating guest: %s\n", err.Error())
+				log.Errorf("error after updating guest: %s\n", err.Error())
 				return c.Status(fiber.StatusInternalServerError).
 					JSON(fiber.Map{"errorMessage": err.Error()})
 			}
@@ -111,7 +111,7 @@ func handleFormPost(c *fiber.Ctx) error {
 			guest.ID = 0
 			_, err := database.CreateGuest(guest)
 			if err != nil {
-				log.Printf("error during guest creation: %s\n", err.Error())
+				log.Errorf("error during guest creation: %s\n", err.Error())
 				return c.Status(fiber.StatusInternalServerError).
 					JSON(fiber.Map{"errorMessage": err.Error()})
 			}

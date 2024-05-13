@@ -2,10 +2,10 @@ package api
 
 import (
 	"fmt"
-	"log"
 	"os"
 	"time"
 	"wedding/src/database"
+	"wedding/src/log"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/google/uuid"
@@ -15,7 +15,7 @@ import (
 func readCookiePassword() string {
 	content, err := os.ReadFile(COOKIEPASSWORDFILE)
 	if err != nil {
-		log.Fatalf("Error reading password file. %s\n", err.Error())
+		log.Errorf("Error reading password file. %s\n", err.Error())
 		return ""
 	}
 	return string(content)

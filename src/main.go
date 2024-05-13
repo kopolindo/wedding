@@ -1,10 +1,24 @@
 package main
 
 import (
-	"log"
+	"flag"
+	"log/slog"
 	"wedding/src/api"
+	"wedding/src/log"
 )
 
+var (
+	debugFlag = flag.Bool("debug", false, "Debug messages enabled")
+)
+
+func init() {
+	flag.Parse()
+	if *debugFlag {
+		log.SetSlogLevel(slog.LevelDebug)
+	}
+}
+
 func main() {
-	log.Fatal(api.App.Listen(":8080"))
+	log.Debugf("debug enabled")
+	log.Error(api.App.Listen(":8080"))
 }
