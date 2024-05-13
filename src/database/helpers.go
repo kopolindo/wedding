@@ -3,11 +3,11 @@ package database
 import (
 	"bufio"
 	"encoding/csv"
-	"log"
 	"os"
 	"strconv"
 	"strings"
 	"wedding/src/argon"
+	"wedding/src/log"
 	"wedding/src/models"
 
 	"github.com/google/uuid"
@@ -31,7 +31,7 @@ const (
 func readDictionary() ([]string, error) {
 	file, err := os.Open(FILENAME)
 	if err != nil {
-		log.Printf("error during opening dictionary file: %s\n", err.Error())
+		log.Errorf("error during opening dictionary file: %s\n", err.Error())
 		return nil, err
 	}
 	defer file.Close()
@@ -45,7 +45,7 @@ func readDictionary() ([]string, error) {
 		}
 	}
 	if err := scanner.Err(); err != nil {
-		log.Printf("error during scanning of the dictionary file content: %s\n", err.Error())
+		log.Errorf("error during scanning of the dictionary file content: %s\n", err.Error())
 		return nil, err
 	}
 	return dictionary, nil
@@ -83,7 +83,7 @@ func generatePassphrase(dictionary []string) (string, int) {
 func readUserPassword() {
 	content, err := os.ReadFile(USERPASSWORDFILE)
 	if err != nil {
-		log.Fatalf("Error reading password file. %s\n", err.Error())
+		log.Errorf("Error reading password file. %s\n", err.Error())
 		return
 	}
 	USERPASSWORD = string(content)
@@ -98,7 +98,7 @@ func isTableEmpty(table string) bool {
 	guests := &[]models.Guest{}
 	result := db.Table(table).Find(guests)
 	if result.Error != nil {
-		log.Printf(
+		log.Errorf(
 			"error while checking if table %s is empty (%s)\n",
 			table,
 			result.Error.Error(),
@@ -116,23 +116,23 @@ func createGuestList() {
 	// open file
 	f, err := os.Open(guestsfile)
 	if err != nil {
-		log.Fatalf("error during file opening: %s\n", err.Error())
+		log.Errorf("error during file opening: %s\n", err.Error())
 	}
 	// create csv reader
 	r := csv.NewReader(f)
 	records, err := r.ReadAll()
 	if err != nil {
-		log.Fatal(err)
+		log.Errorf(err.Error())
 	}
 	dictionary, err := readDictionary()
 	if err != nil {
-		log.Fatal(err.Error())
+		log.Errorf(err.Error())
 	}
 	for _, r := range records {
 		passphrase, _ := generatePassphrase(dictionary)
 		hash, err := argon.GenerateFromPassword(passphrase)
 		if err != nil {
-			log.Printf("error during argon2 password generation: %s\n", err.Error())
+			log.Errorf("error during argon2 password generation: %s\n", err.Error())
 		}
 		u := uuid.New()
 		g := models.Guest{
@@ -168,7 +168,7 @@ type Guests []Guest
 func writeToCsv(guests *Guests) {
 	file, err := os.Create("created_guest.csv")
 	if err != nil {
-		log.Println("CSV file creation error:", err.Error())
+		log.Errorf("CSV file creation error:", err.Error())
 	}
 	defer file.Close()
 
@@ -183,7 +183,7 @@ func writeToCsv(guests *Guests) {
 	for _, guest := range *guests {
 		err = writer.Write([]string{guest.FirstName, guest.LastName, guest.UUID, guest.Passphrase})
 		if err != nil {
-			log.Println("writing error:", err.Error())
+			log.Errorf("writing error:", err.Error())
 		}
 	}
 

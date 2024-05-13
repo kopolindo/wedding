@@ -3,7 +3,7 @@ package database
 import (
 	"errors"
 	"fmt"
-	"log"
+	"wedding/src/log"
 	"wedding/src/models"
 
 	"github.com/gofiber/fiber/v2"
@@ -47,13 +47,13 @@ func init() {
 	//defer db.Close()
 
 	if isTableEmpty("guests") {
-		log.Println("table guests is empty: initializing it")
-		log.Println("initiating db from guests.csv")
+		log.Infof("table guests is empty: initializing it")
+		log.Infof("initiating db from guests.csv")
 		createGuestList()
 		// Automigrate the schema, creating the users table if it doesn't exist
 		err = db.AutoMigrate(&models.Guest{})
 		if err != nil {
-			log.Printf("error during db initialization: %s\n", err.Error())
+			log.Errorf("error during db initialization: %s\n", err.Error())
 		}
 		for _, g := range GUESTS {
 			db.Where(&models.Guest{
@@ -62,7 +62,7 @@ func init() {
 			}).FirstOrCreate(&g)
 		}
 	} else {
-		log.Println("table guests already initialized")
+		log.Infof("table guests already initialized")
 	}
 }
 

@@ -2,8 +2,8 @@ package argon
 
 import (
 	"crypto/rand"
-	"log"
 	"math/big"
+	"wedding/src/log"
 )
 
 /*
@@ -31,7 +31,7 @@ output int64 the random value
 func RandomInt(max int64) int64 {
 	randomIndexBigInt, err := rand.Int(rand.Reader, big.NewInt(max))
 	if err != nil {
-		log.Printf("error during random int generation: %s\n", err.Error())
+		log.Errorf("error during random int generation: %s\n", err.Error())
 	}
 	return randomIndexBigInt.Int64()
 }
