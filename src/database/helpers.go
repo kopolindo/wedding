@@ -183,7 +183,7 @@ func writeToCsv(guests *Guests) {
 	for _, guest := range *guests {
 		err = writer.Write([]string{guest.FirstName, guest.LastName, guest.UUID, guest.Passphrase})
 		if err != nil {
-			log.Errorf("writing error:", err.Error())
+			log.Errorf("writing error: %s", err.Error())
 		}
 	}
 
