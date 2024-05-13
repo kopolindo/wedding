@@ -55,7 +55,6 @@ func init() {
 }
 
 func SetSlogLevel(level slog.Level) {
-	fmt.Println(level)
 	logLevel.Set(level)
 }
 func GetSlogLevel() slog.Level {
@@ -84,7 +83,6 @@ func Infof(format string, a ...any) {
 }
 
 func Debugf(format string, a ...any) {
-	fmt.Println("printing debug message")
 	errorMessage := fmt.Sprintf(format, a...)
 	textLogger.Debug(errorMessage)
 	jsonLogger.Debug(errorMessage)
