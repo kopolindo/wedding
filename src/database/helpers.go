@@ -168,7 +168,7 @@ type Guests []Guest
 func writeToCsv(guests *Guests) {
 	file, err := os.Create("created_guest.csv")
 	if err != nil {
-		log.Errorf("CSV file creation error:", err.Error())
+		log.Errorf("CSV file creation error: %s", err.Error())
 	}
 	defer file.Close()
 
