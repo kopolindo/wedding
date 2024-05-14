@@ -38,7 +38,7 @@ John,Doe
 # Roadmap
 
 - [x] logging
-- [ ] more pictures of us
-- [ ] IBAN
+- [x] more pictures of us
+- [x] IBAN
 - [ ] monitoring
 - [ ] reverse proxy
