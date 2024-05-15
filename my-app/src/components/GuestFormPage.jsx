@@ -192,9 +192,9 @@ export default function GuestFormPage ({handleSubmitFromGuestFormPage}) {
                                 required
                               />
                               <br />
-                              <div className="divs">
+                              <div className="divs g-1 input-group mb-3">
                                   {guests.map((guest, index) => (
-                                    <div className="row">
+                                    <div className="row g-1">
                                       <div className="col" id="first_name">
                                         <input
                                           type="text"
@@ -228,7 +228,7 @@ export default function GuestFormPage ({handleSubmitFromGuestFormPage}) {
                                       {index !== 0
                                         ? (
                                             <div className="col" id="delete_row">
-                                              <button className="btn btn-danger" id="DeleteRow" type="button" onClick={() => handleDeleteRow(index)}>
+                                              <button className="btn btn-danger text-nowrap" id="DeleteRow" type="button" onClick={() => handleDeleteRow(index)}>
                                                 <i className="bi bi-trash"></i>
                                                 Cancella
                                               </button>
@@ -236,7 +236,7 @@ export default function GuestFormPage ({handleSubmitFromGuestFormPage}) {
                                           )
                                         : (
                                             <div className="col" id="ghost_delete">
-                                              <button className="btn ghost-button" style={{color: "transparent"}} type="button" disabled title="">
+                                              <button className="btn ghost-button text-nowrap" style={{color: "transparent"}} type="button" disabled title="">
                                                 Cancella
                                               </button>
                                             </div>

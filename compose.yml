@@ -20,6 +20,16 @@ services:
     ports:
       - 3306:3306
     restart: unless-stopped
+  nginx:
+    image: andrewnk/alpine-nginx-modsec
+    container_name: nginx
+    ports:
+      - 80:80
+    volumes:
+      - app:/usr/share/nginx/html
+
+volumes:
+  app:
 
 secrets:
    password_db:
