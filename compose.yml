@@ -29,6 +29,11 @@ services:
       - app:/usr/share/nginx/html
       - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf
       - ./nginx/modsecurity.conf:/etc/nginx/modsec/modsecurity.conf
+      - ./nginx/html/403.html:/usr/share/nginx/html/403.html
+      - ./nginx/html/404.html:/usr/share/nginx/html/404.html
+      - ./nginx/html/50x.html:/usr/share/nginx/html/50x.html
+      - ./nginx/html/50x.html:/usr/share/nginx/html/50x.html
+      - ./nginx/html/nonono.gif:/usr/share/nginx/html/nonono.gif
     restart: unless-stopped
 
 volumes:
