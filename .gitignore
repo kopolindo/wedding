@@ -10,3 +10,5 @@ keyfile.key
 keyfile.pub
 src/logs.json
 src/logs.log
+nginx/logs/access.log
+nginx/logs/error.log

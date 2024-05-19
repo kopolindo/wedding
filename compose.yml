@@ -26,18 +26,16 @@ services:
     ports:
       - 80:80
     volumes:
-      - app:/usr/share/nginx/html
-      - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
       - ./nginx/modsecurity.conf:/etc/nginx/modsec/modsecurity.conf
-      - ./nginx/html/403.html:/usr/share/nginx/html/403.html
-      - ./nginx/html/404.html:/usr/share/nginx/html/404.html
-      - ./nginx/html/50x.html:/usr/share/nginx/html/50x.html
-      - ./nginx/html/50x.html:/usr/share/nginx/html/50x.html
-      - ./nginx/html/nonono.gif:/usr/share/nginx/html/nonono.gif
+      - ./nginx/errors/403.html:/usr/share/nginx/errors/403.html
+      - ./nginx/errors/404.html:/usr/share/nginx/errors/404.html
+      - ./nginx/errors/50x.html:/usr/share/nginx/errors/50x.html
+      - ./nginx/errors/50x.html:/usr/share/nginx/errors/50x.html
+      - ./nginx/errors/nonono.gif:/usr/share/nginx/errors/nonono.gif
+      - ./nginx/logs/:/var/log/nginx/
     restart: unless-stopped
-
-volumes:
-  app:
 
 secrets:
    password_db:
