@@ -15,7 +15,7 @@ func handleQRLoginGet(c *fiber.Ctx) error {
 	uuidString := c.Params("uuid")
 	u, err := uuid.Parse(uuidString)
 	if err != nil {
-		return c.Status(fiber.StatusInternalServerError).
+		return c.Status(fiber.StatusBadRequest).
 			JSON(fiber.Map{"errorMessage": err.Error()})
 	}
 	if !database.GuestExistsByUUID(u) {
