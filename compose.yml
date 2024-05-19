@@ -32,8 +32,7 @@ services:
       - ./nginx/errors/403.html:/usr/share/nginx/errors/403.html
       - ./nginx/errors/404.html:/usr/share/nginx/errors/404.html
       - ./nginx/errors/50x.html:/usr/share/nginx/errors/50x.html
-      - ./nginx/errors/50x.html:/usr/share/nginx/errors/50x.html
-      - ./nginx/errors/nonono.gif:/usr/share/nginx/errors/nonono.gif
+      - ./nginx/errors/5xx.html:/usr/share/nginx/errors/5xx.html
       - ./nginx/logs/:/var/log/nginx/
     restart: unless-stopped
 
