@@ -13,7 +13,8 @@ export default function SecretPage({navigation}) {
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ secret })
+        body: JSON.stringify({ 
+          secret })
       });
       if (response.status === 403) {
         throw new Error('PROTEGO!!');
