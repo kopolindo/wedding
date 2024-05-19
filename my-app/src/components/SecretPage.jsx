@@ -15,6 +15,9 @@ export default function SecretPage({navigation}) {
         },
         body: JSON.stringify({ secret })
       });
+      if (response.status === 403) {
+        throw new Error('PROTEGO!!');
+      }
       const data = await response.json();
       
       if (!response.ok) {
