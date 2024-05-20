@@ -31,8 +31,13 @@ func init() {
 	if err != nil {
 		log.Fatalf("error during slog initialization: %s\n", err.Error())
 	}
-	loggerFilePath := filepath.Join(root, loggerFileName)
-	jsonLoggerFilePath := filepath.Join(root, jsonLoggerFileName)
+	logDir := filepath.Join(root, "backend-logs")
+	err = ensureDir(logDir)
+	if err != nil {
+		log.Println("error during directory creation")
+	}
+	loggerFilePath := filepath.Join(logDir, loggerFileName)
+	jsonLoggerFilePath := filepath.Join(logDir, jsonLoggerFileName)
 	loggerFile, err := os.OpenFile(loggerFilePath, os.O_CREATE|os.O_APPEND, 0600)
 	if err != nil {
 		log.Println("error during log file creation/opening")

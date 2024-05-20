@@ -8,7 +8,6 @@ passphrase-generator-dictionary.txt
 cookie-passphrase.txt
 keyfile.key
 keyfile.pub
-backend/logs.json
-backend/logs.log
+backend/backend-logs/
 nginx/logs/access.log
 nginx/logs/error.log
