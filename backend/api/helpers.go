@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"os"
 	"time"
-	"wedding/src/database"
-	"wedding/src/log"
+	"wedding/backend/database"
+	"wedding/backend/log"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/google/uuid"

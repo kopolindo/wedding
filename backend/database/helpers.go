@@ -6,9 +6,9 @@ import (
 	"os"
 	"strconv"
 	"strings"
-	"wedding/src/argon"
-	"wedding/src/log"
-	"wedding/src/models"
+	"wedding/backend/argon"
+	"wedding/backend/log"
+	"wedding/backend/models"
 
 	"github.com/google/uuid"
 	"github.com/trustelem/zxcvbn"
@@ -21,8 +21,8 @@ var (
 )
 
 const (
-	guestsfile    string = "../guests.csv"
-	FILENAME      string = "../passphrase-generator-dictionary.txt"
+	guestsfile    string = "./guests.csv"
+	FILENAME      string = "./passphrase-generator-dictionary.txt"
 	MINSCORE      int    = 3
 	PASSPHRASELEN int    = 2
 )

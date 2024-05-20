@@ -106,6 +106,10 @@ export default function GuestFormPage ({handleSubmitFromGuestFormPage}) {
         },
         body: JSON.stringify(formData),
       }).then(response => {
+        if (response.status === 403) {
+          setErrorMessage('PROTEGO!!');
+          return;
+        }
         if (!response.ok) {
           throw new Error('Failed to submit form');
         }

@@ -2,7 +2,7 @@ package api
 
 import (
 	"time"
-	"wedding/src/database"
+	"wedding/backend/database"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/google/uuid"

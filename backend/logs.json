@@ -15,3 +15,9 @@
 {"time":"2024-05-19T12:40:31.6839944+02:00","level":"INFO","msg":"table guests is empty: initializing it"}
 {"time":"2024-05-19T12:40:31.6844943+02:00","level":"INFO","msg":"initiating db from guests.csv"}
 {"time":"2024-05-19T12:40:33.6951685+02:00","level":"ERROR","msg":"error during db initialization: Error 1060 (42S21): Duplicate column name 'id'\n"}
+{"time":"2024-05-20T22:08:23.3018192+02:00","level":"INFO","msg":"table guests is empty: initializing it"}
+{"time":"2024-05-20T22:08:23.3018192+02:00","level":"INFO","msg":"initiating db from guests.csv"}
+{"time":"2024-05-20T22:08:25.4463332+02:00","level":"ERROR","msg":"error during db initialization: Error 1060 (42S21): Duplicate column name 'id'\n"}
+{"time":"2024-05-20T22:16:31.9539614+02:00","level":"INFO","msg":"table guests is empty: initializing it"}
+{"time":"2024-05-20T22:16:31.9539614+02:00","level":"INFO","msg":"initiating db from guests.csv"}
+{"time":"2024-05-20T22:16:34.6598829+02:00","level":"ERROR","msg":"error during db initialization: Error 1060 (42S21): Duplicate column name 'id'\n"}

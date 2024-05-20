@@ -3,8 +3,8 @@ package main
 import (
 	"flag"
 	"log/slog"
-	"wedding/src/api"
-	"wedding/src/log"
+	"wedding/backend/api"
+	"wedding/backend/log"
 )
 
 var (

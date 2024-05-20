@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"strings"
 	"time"
-	"wedding/src/database"
-	"wedding/src/log"
-	"wedding/src/models"
+	"wedding/backend/database"
+	"wedding/backend/log"
+	"wedding/backend/models"
 
 	"github.com/go-playground/validator/v10"
 	"github.com/gofiber/fiber/v2"

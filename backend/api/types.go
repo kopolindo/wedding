@@ -14,7 +14,7 @@ var (
 )
 
 const (
-	COOKIEPASSWORDFILE = "../cookie-passphrase.txt"
+	COOKIEPASSWORDFILE = "./cookie-passphrase.txt"
 	SCHEMA             = "http"
 	DOMAIN             = "localhost"
 	PORT               = "3000"
