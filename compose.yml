@@ -97,6 +97,8 @@ services:
       dockerfile: backend.dockerfile
     secrets:
        - password_db
+    volumes:
+      - ./backend-logs/backend-logs
     ports:
       - "8080:8080"
 

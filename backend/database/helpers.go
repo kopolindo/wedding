@@ -209,3 +209,24 @@ func writeToCsv(guests *Guests) {
 	}
 
 }
+
+// runningInDocker checks if application is running in docker container
+// returns true if running in docker, false otherwise
+func runningInDocker() bool {
+	file, err := os.Open("/proc/1/cgroup")
+	if err != nil {
+		log.Errorf("Error: %s", err.Error())
+		return false
+	}
+	defer file.Close()
+
+	scanner := bufio.NewScanner(file)
+	for scanner.Scan() {
+		line := scanner.Text()
+		if strings.Contains(line, "docker") || strings.Contains(line, "docker-") {
+			return true
+		}
+	}
+
+	return false
+}

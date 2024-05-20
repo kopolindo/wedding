@@ -29,13 +29,17 @@ const (
 )
 
 func init() {
+	var dbHost string = ADDRESS
+	if runningInDocker() {
+		dbHost = "mariadb"
+	}
 	var err error
 	readUserPassword()
 	DSN := fmt.Sprintf(
 		DSNFORMAT,
 		USER,
 		USERPASSWORD,
-		ADDRESS,
+		dbHost,
 		PORT,
 		DBNAME,
 	)
