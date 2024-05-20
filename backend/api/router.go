@@ -3,7 +3,7 @@ package api
 import (
 	"fmt"
 	"time"
-	"wedding/backend/database"
+	"wedding/database"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"

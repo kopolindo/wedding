@@ -6,9 +6,9 @@ import (
 	"os"
 	"strconv"
 	"strings"
-	"wedding/backend/argon"
-	"wedding/backend/log"
-	"wedding/backend/models"
+	"wedding/argon"
+	"wedding/log"
+	"wedding/models"
 
 	"github.com/google/uuid"
 	"github.com/trustelem/zxcvbn"

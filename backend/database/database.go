@@ -3,8 +3,8 @@ package database
 import (
 	"errors"
 	"fmt"
-	"wedding/backend/log"
-	"wedding/backend/models"
+	"wedding/log"
+	"wedding/models"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/google/uuid"

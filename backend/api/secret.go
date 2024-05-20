@@ -4,9 +4,9 @@ import (
 	"encoding/json"
 	"sync"
 	"time"
-	"wedding/backend/argon"
-	"wedding/backend/database"
-	"wedding/backend/models"
+	"wedding/argon"
+	"wedding/database"
+	"wedding/models"
 
 	"github.com/gofiber/fiber/v2"
 )

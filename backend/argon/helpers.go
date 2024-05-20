@@ -3,7 +3,7 @@ package argon
 import (
 	"crypto/rand"
 	"math/big"
-	"wedding/backend/log"
+	"wedding/log"
 )
 
 /*

@@ -2,7 +2,7 @@ package api
 
 import (
 	"encoding/base64"
-	"wedding/backend/database"
+	"wedding/database"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/google/uuid"
