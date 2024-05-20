@@ -79,14 +79,35 @@ func generatePassphrase(dictionary []string) (string, int) {
 	return strings.Join(passphrase, "-"), score
 }
 
+// fileExists returns true if file exists, false otherwise
+func fileExists(filename string) bool {
+	info, err := os.Stat(filename)
+	if os.IsNotExist(err) {
+		return false
+	}
+	return err == nil && !info.IsDir()
+}
+
 // readUserPassword initializes USERPASSWORD variable with content of USERPASSWORDFILE
 func readUserPassword() {
-	content, err := os.ReadFile(USERPASSWORDFILE)
-	if err != nil {
-		log.Errorf("Error reading password file. %s\n", err.Error())
+	if fileExists(USERPASSWORDFILE) {
+		content, err := os.ReadFile(USERPASSWORDFILE)
+		if err != nil {
+			log.Errorf("Error reading password file. %s\n", err.Error())
+			return
+		}
+		USERPASSWORD = string(content)
 		return
 	}
-	USERPASSWORD = string(content)
+	if fileExists(USERPASSWORDFILEDOCKER) {
+		content, err := os.ReadFile(USERPASSWORDFILEDOCKER)
+		if err != nil {
+			log.Errorf("Error reading password file. %s\n", err.Error())
+			return
+		}
+		USERPASSWORD = string(content)
+		return
+	}
 }
 
 /*

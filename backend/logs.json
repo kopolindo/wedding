@@ -21,3 +21,5 @@
 {"time":"2024-05-20T22:16:31.9539614+02:00","level":"INFO","msg":"table guests is empty: initializing it"}
 {"time":"2024-05-20T22:16:31.9539614+02:00","level":"INFO","msg":"initiating db from guests.csv"}
 {"time":"2024-05-20T22:16:34.6598829+02:00","level":"ERROR","msg":"error during db initialization: Error 1060 (42S21): Duplicate column name 'id'\n"}
+{"time":"2024-05-20T22:33:46.8748142+02:00","level":"INFO","msg":"table guests already initialized"}
+{"time":"2024-05-20T22:35:19.1283629+02:00","level":"INFO","msg":"table guests already initialized"}
