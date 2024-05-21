@@ -11,3 +11,6 @@ keyfile.pub
 backend/backend-logs/
 nginx/logs/access.log
 nginx/logs/error.log
+nginx/var/**
+nginx/var/log/modsec_audit.json
+.gitignore
