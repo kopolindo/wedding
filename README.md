@@ -41,4 +41,4 @@ John,Doe
 - [x] more pictures of us
 - [x] IBAN
 - [ ] monitoring
-- [ ] reverse proxy
+- [x] reverse proxy
