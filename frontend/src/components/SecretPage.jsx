@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import AlertComponent from './alert';
+import BASE_URL from '../config';
 
 export default function SecretPage({navigation}) {
   const [secret, setSecret] = useState('');
@@ -8,7 +9,7 @@ export default function SecretPage({navigation}) {
   const submitSecret = async (event) => {
     event.preventDefault();
     try {
-      const response = await fetch('/chisono', {
+      const response = await fetch(`${BASE_URL}/chisono`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'

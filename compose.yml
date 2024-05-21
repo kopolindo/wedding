@@ -105,6 +105,13 @@ services:
     ports:
       - "8080:8080"
     restart: unless-stopped
+  frontend:
+    build:
+      context: .
+      dockerfile: frontend.dockerfile
+    ports:
+      - "3000:3000"
+    restart: unless-stopped
   mariadb:
     image: mariadb:latest
     container_name: mariadb

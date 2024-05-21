@@ -25,9 +25,10 @@ func init() {
 
 	// Define CORS options
 	corsConfig := cors.New(cors.Config{
-		AllowOrigins: "http://localhost:3000", // Allow requests from localhost:3000
-		AllowMethods: "GET,POST,PUT,DELETE",   // Allow specified HTTP methods
-		AllowHeaders: "*",                     // Allow any headers
+		AllowOrigins:     "http://frontend:3000", // Allow requests from localhost:3000
+		AllowMethods:     "GET,POST,PUT,DELETE",  // Allow specified HTTP methods
+		AllowHeaders:     "*",                    // Allow any headers
+		AllowCredentials: true,
 	})
 
 	// Use CORS middleware with the specified options

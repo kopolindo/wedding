@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import BASE_URL from '../config';
 
 const getIsSignedIn = () => {
     let auth = false;
@@ -23,7 +24,7 @@ export default function LoginViaUuid() {
         if (isSignedIn) {
             window.location = "/";
         } else if (!fetchAttempted) { // Check if fetch is not attempted yet
-            fetch(`/guest/${uuid}`)
+            fetch(`${BASE_URL}/guest/${uuid}`)
                 .then(response => {
                     if (!response.ok) {
                         throw new Error("Failed to get guest");
