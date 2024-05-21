@@ -21,18 +21,30 @@ var (
 )
 
 const (
-	guestsfile    string = "./guests.csv"
-	FILENAME      string = "./passphrase-generator-dictionary.txt"
-	MINSCORE      int    = 3
-	PASSPHRASELEN int    = 2
+	GUESTSFILE       string = "../backend-io/guests.csv"
+	GUESTSFILEDOCKER string = "/app/io/guests.csv"
+	DICT             string = "../backend-io/passphrase-generator-dictionary.txt"
+	DICTDOCKER       string = "/app/io/passphrase-generator-dictionary.txt"
+	MINSCORE         int    = 3
+	PASSPHRASELEN    int    = 2
 )
 
 // readDictionary reads the dictionary file and returns a slice of words
 func readDictionary() ([]string, error) {
-	file, err := os.Open(FILENAME)
-	if err != nil {
-		log.Errorf("error during opening dictionary file: %s\n", err.Error())
-		return nil, err
+	var file *os.File
+	var err error
+	if runningInDocker() {
+		file, err = os.Open(DICTDOCKER)
+		if err != nil {
+			log.Errorf("error during opening dictionary file: %s\n", err.Error())
+			return nil, err
+		}
+	} else {
+		file, err = os.Open(DICT)
+		if err != nil {
+			log.Errorf("error during opening dictionary file: %s\n", err.Error())
+			return nil, err
+		}
 	}
 	defer file.Close()
 
@@ -134,10 +146,18 @@ func isTableEmpty(table string) bool {
 // createGuestList read the list of guest names (only per group) and stores it in GUESTS
 func createGuestList() {
 	var guests Guests
-	// open file
-	f, err := os.Open(guestsfile)
-	if err != nil {
-		log.Errorf("error during file opening: %s\n", err.Error())
+	var f *os.File
+	var err error
+	if runningInDocker() {
+		f, err = os.Open(GUESTSFILEDOCKER)
+		if err != nil {
+			log.Errorf("error during file opening: %s\n", err.Error())
+		}
+	} else {
+		f, err = os.Open(GUESTSFILE)
+		if err != nil {
+			log.Errorf("error during file opening: %s\n", err.Error())
+		}
 	}
 	// create csv reader
 	r := csv.NewReader(f)
@@ -187,7 +207,7 @@ type Guest struct {
 type Guests []Guest
 
 func writeToCsv(guests *Guests) {
-	file, err := os.Create("created_guest.csv")
+	file, err := os.Create("/app/io/created_guests.csv")
 	if err != nil {
 		log.Errorf("CSV file creation error: %s", err.Error())
 	}

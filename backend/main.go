@@ -20,5 +20,6 @@ func init() {
 
 func main() {
 	log.Debugf("debug enabled")
+	log.Infof("starting server")
 	log.Error(api.App.Listen(":8080"))
 }

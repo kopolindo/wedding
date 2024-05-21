@@ -97,11 +97,14 @@ services:
       dockerfile: backend.dockerfile
     secrets:
        - password_db
+       - cookie_passphrase
     volumes:
-      - ./backend-logs:/backend-logs
+      - logs:/tmp/backend
+      - ./logs/backend:/tmp/backend
+      - ./backend-io/:/app/io/
     ports:
       - "8080:8080"
-
+    restart: unless-stopped
   mariadb:
     image: mariadb:latest
     container_name: mariadb
@@ -146,9 +149,12 @@ networks:
 
 volumes:
   elasticsearch:
+  logs:
 
 secrets:
-   password_db:
-     file: password_db.txt
-   password_db_root:
-     file: password_db_root.txt
+  password_db:
+    file: password_db.txt
+  password_db_root:
+    file: password_db_root.txt
+  cookie_passphrase:
+    file: cookie-passphrase.txt

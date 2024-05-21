@@ -1,8 +1,10 @@
 package api
 
 import (
+	"bufio"
 	"fmt"
 	"os"
+	"strings"
 	"time"
 	"wedding/database"
 	"wedding/log"
@@ -13,12 +15,21 @@ import (
 
 // readCookiePassword initializes COOKIEPASSWORD variable with content of COOKIEPASSWORDFILE
 func readCookiePassword() string {
-	content, err := os.ReadFile(COOKIEPASSWORDFILE)
-	if err != nil {
-		log.Errorf("Error reading password file. %s\n", err.Error())
-		return ""
+	if runningInDocker() {
+		content, err := os.ReadFile(COOKIEPASSWORDFILEDOCKER)
+		if err != nil {
+			log.Errorf("Error reading password file. %s\n", err.Error())
+			return ""
+		}
+		return string(content)
+	} else {
+		content, err := os.ReadFile(COOKIEPASSWORDFILE)
+		if err != nil {
+			log.Errorf("Error reading password file. %s\n", err.Error())
+			return ""
+		}
+		return string(content)
 	}
-	return string(content)
 }
 
 func authMiddleware(c *fiber.Ctx) error {
@@ -66,4 +77,25 @@ func confirmedCookie(uuid uuid.UUID) (fiber.Cookie, error) {
 		HTTPOnly: false,
 		SameSite: "strict",
 	}, nil
+}
+
+// runningInDocker checks if application is running in docker container
+// returns true if running in docker, false otherwise
+func runningInDocker() bool {
+	file, err := os.Open("/proc/1/cgroup")
+	if err != nil {
+		log.Errorf("Error: %s", err.Error())
+		return false
+	}
+	defer file.Close()
+
+	scanner := bufio.NewScanner(file)
+	for scanner.Scan() {
+		line := scanner.Text()
+		if strings.Contains(line, "docker") || strings.Contains(line, "docker-") {
+			return true
+		}
+	}
+
+	return false
 }

@@ -19,32 +19,38 @@ var (
 )
 
 const (
-	loggerFileName     string = "logs.log"
-	jsonLoggerFileName string = "logs.json"
+	loggerFileName     string = "backend-logs.log"
+	jsonLoggerFileName string = "backend-logs.json"
+	LOGDIRDOCKER       string = "/tmp/backend"
+	LOGDIR             string = "../backend-logs"
 )
 
 func init() {
 	slogHandlerOptions = &slog.HandlerOptions{}
 	logLevel = &slog.LevelVar{} // INFO
-
-	root, err := os.Getwd()
-	if err != nil {
-		log.Fatalf("error during slog initialization: %s\n", err.Error())
-	}
-	logDir := filepath.Join(root, "backend-logs")
-	err = ensureDir(logDir)
-	if err != nil {
-		log.Println("error during directory creation")
+	var logDir string
+	if runningInDocker() {
+		err := ensureDir(LOGDIRDOCKER)
+		if err != nil {
+			log.Println("error during directory creation")
+		}
+		logDir = LOGDIRDOCKER
+	} else {
+		err := ensureDir(LOGDIR)
+		if err != nil {
+			log.Println("error during directory creation")
+		}
+		logDir = LOGDIR
 	}
 	loggerFilePath := filepath.Join(logDir, loggerFileName)
 	jsonLoggerFilePath := filepath.Join(logDir, jsonLoggerFileName)
 	loggerFile, err := os.OpenFile(loggerFilePath, os.O_CREATE|os.O_APPEND, 0600)
 	if err != nil {
-		log.Println("error during log file creation/opening")
+		log.Println("error during log file creation/opening:", err.Error())
 	}
 	jsonLoggerFile, err := os.OpenFile(jsonLoggerFilePath, os.O_CREATE|os.O_APPEND, 0600)
 	if err != nil {
-		log.Println("error during log file creation/opening")
+		log.Println("error during log file creation/opening:", err.Error())
 	}
 
 	slogHandlerOptions.Level = logLevel

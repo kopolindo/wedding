@@ -14,10 +14,10 @@ var (
 )
 
 const (
-	COOKIEPASSWORDFILE = "./cookie-passphrase.txt"
-	SCHEMA             = "http"
-	DOMAIN             = "localhost"
-	PORT               = "3000"
+	COOKIEPASSWORDFILE       = "./cookie-passphrase.txt"
+	COOKIEPASSWORDFILEDOCKER = "/run/secrets/cookie_passphrase"
+	SCHEMA                   = "http"
+	DOMAIN                   = "localhost"
 )
 
 type (
