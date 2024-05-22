@@ -6,7 +6,6 @@ import (
 	"wedding/database"
 
 	"github.com/gofiber/fiber/v2"
-	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/gofiber/fiber/v2/middleware/encryptcookie"
 	"github.com/google/uuid"
 )
@@ -23,16 +22,16 @@ func init() {
 		WriteBufferSize: 1024,
 	})
 
-	// Define CORS options
-	corsConfig := cors.New(cors.Config{
-		AllowOrigins:     "http://frontend:3000", // Allow requests from localhost:3000
-		AllowMethods:     "GET,POST,PUT,DELETE",  // Allow specified HTTP methods
-		AllowHeaders:     "*",                    // Allow any headers
-		AllowCredentials: true,
-	})
+	/* 	// Define CORS options
+	   	corsConfig := cors.New(cors.Config{
+	   		AllowOrigins:     "http://frontend:3000", // Allow requests from localhost:3000
+	   		AllowMethods:     "GET,POST,PUT,DELETE",  // Allow specified HTTP methods
+	   		AllowHeaders:     "*",                    // Allow any headers
+	   		AllowCredentials: true,
+	   	})
 
-	// Use CORS middleware with the specified options
-	App.Use(corsConfig)
+	   	// Use CORS middleware with the specified options
+	   	App.Use(corsConfig) */
 
 	App.Use("/guest/:uuid", func(c *fiber.Ctx) error {
 		// Retrieve UUID from query parameter

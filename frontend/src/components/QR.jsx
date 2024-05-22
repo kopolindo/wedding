@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import AlertComponent from './alert';
 import './guestformpage.css';
-import BASE_URL from '../config';
 
 const QR = () => {
     const [qr,setQr] = useState('');
@@ -9,7 +8,7 @@ const QR = () => {
     useEffect(() => {
     const QRGen = async () => {
         try {
-            const response = await fetch(`${BASE_URL}z/api/qr`);
+            const response = await fetch('/api/qr');
             const data = await response.json();
             if (!response.ok) {
                 seterrorMessage(data.errorMessage);
