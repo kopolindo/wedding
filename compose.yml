@@ -155,6 +155,7 @@ services:
       - ./nginx/errors/5xx.html:/usr/share/nginx/errors/5xx.html
       - ./nginx/logs/:/var/log/nginx/
       - ./nginx/var/log/:/var/log/
+      - ./nginx/modsecurity/crs-setup.conf:/usr/local/owasp-modsecurity-crs/crs-setup.conf
       - frontend:/app/frontend/build
     restart: unless-stopped
 
