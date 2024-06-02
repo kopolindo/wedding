@@ -35,10 +35,44 @@ John,Doe
 5. Run the DB
 `docker compose -f "compose.yml" up -d --build`
 
+# Notes
+
+For modsecurity ensure that you use CRUD API setting in `/usr/local/owasp-modsecurity-crs/crs-setup.conf`
+
+```yaml
+# -- [[ HTTP Policy Settings ]] ------------------------------------------------
+#
+# This section defines your policies for the HTTP protocol, such as:
+# - allowed HTTP versions, HTTP methods, allowed request Content-Types
+# - forbidden file extensions (e.g. .bak, .sql) and request headers (e.g. Proxy)
+#
+# These variables are used in the following rule files:
+# - REQUEST-911-METHOD-ENFORCEMENT.conf
+# - REQUEST-912-DOS-PROTECTION.conf
+# - REQUEST-920-PROTOCOL-ENFORCEMENT.conf
+
+# HTTP methods that a client is allowed to use.
+# Default: GET HEAD POST OPTIONS
+# Example: for RESTful APIs, add the following methods: PUT PATCH DELETE
+# Example: for WebDAV, add the following methods: CHECKOUT COPY DELETE LOCK
+#          MERGE MKACTIVITY MKCOL MOVE PROPFIND PROPPATCH PUT UNLOCK
+# Uncomment this rule to change the default.
+SecAction \
+ "id:900200,\
+  phase:1,\
+  nolog,\
+  pass,\
+  t:none,\
+  setvar:'tx.allowed_methods=GET HEAD POST OPTIONS DELETE'"
+```
+
 # Roadmap
 
 - [x] logging
 - [x] more pictures of us
 - [x] IBAN
-- [ ] monitoring
+- [x] monitoring
 - [x] reverse proxy
+- [x] calendar events
+- [x] dockerized
+- [x] modsecurity
