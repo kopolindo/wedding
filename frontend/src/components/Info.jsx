@@ -8,7 +8,7 @@ const Info = () => {
         title: 'Matrimonio Alex&Nadia',
         description: 'Il lungo viaggio inizia dalla Franciacorta',
         location: 'Via Campiani, 9, 25060 Collebeato BS',
-        start: '2024-09-26 12:00:00 +0100',
+        start: '2024-09-26T10:00:00.000Z',
         duration: [10, 'hour'],
     };
 
