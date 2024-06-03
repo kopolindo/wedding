@@ -12,12 +12,15 @@ Static webpage to keep track of guest invitations
 
 1. Create the docker instance for MariaDB.  
 In the root of the repository there is file `01_create_tables_template.sql`.  
-Copy/move this file to `wedding/mariadb/data/init-db/` (if folder does not exist create it).
+Copy/move this file to `mariadb/data/init-db/` (if folder does not exist create it).
 
-> Caveat! The compose file will create a mounted volume in `wedding/mariadb/data/` folder.
+> Caveat! The compose file will create a mounted volume in `mariadb/data/` folder.
 Every time you need to start from scratch delete the volumes or that folder content.
 
-2. Create a CSV file named `guests.csv` holding the guests list in the root of the repository (`wedding/guests.csv`)
+2. Create a CSV file named `guests.csv` holding the guests list in the IO folder of the backend (`backend-io/guests.csv`).
+In this same folder it will be created a CSV file with user passwords.
+
+> #security: I know that this should not be done. But it's a good threashold, I need to save those passwords to help the guests that for some reason have difficulties.
 
 ```.csv
 Mario,Rossi
@@ -26,13 +29,23 @@ John,Doe
 ```
 
 3. Create password files in the root of the repository
-    - `wedding/password_db_root.txt`
-    - `wedding/password_db.txt`
-    - `wedding/cookie_passphrase.txt`
+    - `password_db_root.txt`
+    - `password_db.txt`
+    - `cookie_passphrase.txt`
+Copy the `cookie_passphrase.txt` file also to the `backend/` folder.
 
-4. Create the wordlist, named `wedding/passphrase-generator-dictionary.txt`, for passphrase generator in the root of the repository
+4. Create the wordlist, named `backend-io/passphrase-generator-dictionary.txt`, for passphrase generator.
 
-5. Run the DB
+5. In `frontend/` folder create an environment file (`frontend/.env`) and put the Google Maps API key in it.
+
+```
+REACT_APP_GMAPS_API_KEY=SECRET
+```
+
+6. Run the setup for elk
+`docker compose -f "compose.yml" up -d --build setup`
+
+7. Run everything else
 `docker compose -f "compose.yml" up -d --build`
 
 # Notes
