@@ -1,11 +1,3 @@
-# Stage 1: Build the Go binary
-FROM golang:1.22.4 as builder
-WORKDIR /app
-COPY backend .
-RUN go mod download
-RUN go build -o /server .
-
-# Stage 2: Copy the binary to a smaller image
 FROM alpine:latest
 RUN apk update
 RUN apk add --no-cache libc6-compat
@@ -25,6 +17,6 @@ RUN chmod -R 755 /var/log/backend
 
 USER pi
 WORKDIR /app
-COPY --from=builder /server /app/server
+COPY releases/server_arm64 /app/server
 EXPOSE 8080
 ENTRYPOINT [ "./server", "-debug" ]
