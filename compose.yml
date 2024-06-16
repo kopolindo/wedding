@@ -105,7 +105,6 @@ services:
        - password_db
        - cookie_passphrase
     volumes:
-      - logs:/tmp/backend
       - ./logs/backend:/tmp/backend
       - ./backend-io/:/app/io/
     ports:
