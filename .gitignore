@@ -11,3 +11,4 @@ keyfile.pub
 nginx/var/**
 logs/**
 .gitignore
+wedding.7z
