@@ -109,6 +109,8 @@ services:
       - ./backend-io/:/app/io/
     ports:
       - "8080:8080"
+    networks:
+      - stack
     depends_on:
       - mariadb
     restart: unless-stopped
@@ -141,6 +143,8 @@ services:
       - ./mariadb/my.cnf:/etc/mysql/my.cnf:ro
     ports:
       - 3306:3306
+    networks:
+      - stack
     restart: unless-stopped
   nginx:
     image: andrewnk/alpine-nginx-modsec
@@ -164,10 +168,14 @@ services:
       - ./logs/nginx/:/var/log/nginx/
       - ./logs/nginx/var/log/:/var/log/
       - frontend:/app/frontend/build
+    networks:
+      - stack
     restart: unless-stopped
 
 networks:
   elk:
+    driver: bridge
+  stack:
     driver: bridge
 
 volumes:
