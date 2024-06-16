@@ -17,6 +17,6 @@ RUN chmod -R 755 /var/log/backend
 
 USER pi
 WORKDIR /app
-COPY releases/server_arm64 /app/server
+COPY ./releases/server_arm64 /app/server
 EXPOSE 8080
 ENTRYPOINT [ "./server", "-debug" ]
