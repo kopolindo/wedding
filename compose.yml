@@ -123,7 +123,9 @@ services:
     volumes:
       - frontend:/app/build
   mariadb:
-    image: mariadb:latest
+    build:
+      context: .
+      dockerfile: mariadb.dockerfile
     container_name: mariadb
     environment:
       - PUID=1000
