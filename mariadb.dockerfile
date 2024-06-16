@@ -1,2 +1,2 @@
 FROM mariadb:latest
-COPY ./mariadb/my.cnf /etc/
+COPY ./mariadb/my.cnf /etc/mysql/
