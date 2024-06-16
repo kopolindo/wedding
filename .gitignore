@@ -13,3 +13,4 @@ logs/**
 .gitignore
 wedding.7z
 wedding.tar
+releases/**
