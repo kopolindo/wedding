@@ -21,7 +21,7 @@ var (
 const (
 	loggerFileName     string = "backend-logs.log"
 	jsonLoggerFileName string = "backend-logs.json"
-	LOGDIRDOCKER       string = "/tmp/backend"
+	LOGDIRDOCKER       string = "/var/log/backend"
 	LOGDIR             string = "../backend-logs"
 )
 
