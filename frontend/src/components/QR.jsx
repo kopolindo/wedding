@@ -8,7 +8,7 @@ const QR = () => {
     useEffect(() => {
     const QRGen = async () => {
         try {
-            const response = await fetch(`/api/qr`);
+            const response = await fetch('/api/qr');
             const data = await response.json();
             if (!response.ok) {
                 seterrorMessage(data.errorMessage);

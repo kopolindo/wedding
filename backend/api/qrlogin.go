@@ -51,5 +51,6 @@ func handleQRLoginGet(c *fiber.Ctx) error {
 			JSON(fiber.Map{"errorMessage": err.Error()})
 	}
 	c.Cookie(&cookie)
-	return c.SendStatus(fiber.StatusOK)
+	return c.Redirect("/")
+	//return c.SendStatus(fiber.StatusOK)
 }

@@ -1,12 +1,9 @@
 package log
 
 import (
-	"bufio"
 	"fmt"
 	"os"
 	"strings"
-
-	"github.com/gofiber/fiber/v2/log"
 )
 
 // dirExists checks if directory exists, return true if exists, false otherwise
@@ -37,23 +34,9 @@ func ensureDir(dirname string) error {
 	return nil
 }
 
-// runningInDocker checks if application is running in docker container
+// runningInDocker checks if the system is running inside a Docker build environment.
 // returns true if running in docker, false otherwise
 func runningInDocker() bool {
-	file, err := os.Open("/proc/1/cgroup")
-	if err != nil {
-		log.Errorf("Error: %s", err.Error())
-		return false
-	}
-	defer file.Close()
-
-	scanner := bufio.NewScanner(file)
-	for scanner.Scan() {
-		line := scanner.Text()
-		if strings.Contains(line, "docker") || strings.Contains(line, "docker-") {
-			return true
-		}
-	}
-
-	return false
+	container := os.Getenv("CONTAINER")
+	return strings.ToLower(container) == "true"
 }

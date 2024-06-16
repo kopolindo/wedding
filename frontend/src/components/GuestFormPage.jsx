@@ -13,7 +13,7 @@ export default function GuestFormPage ({handleSubmitFromGuestFormPage}) {
   useEffect(() => {
     const fetchGuests = async () => {
       try {
-        const response = await fetch(`/api/guest`);
+        const response = await fetch('/api/guest');
         const data = await response.json();
         if (!response.ok) {
           throw new Error(data.errorMessage);
@@ -99,7 +99,7 @@ export default function GuestFormPage ({handleSubmitFromGuestFormPage}) {
         }, []),
       };
   
-      fetch(`/api/guest`, {
+      fetch('/api/guest', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -145,7 +145,7 @@ export default function GuestFormPage ({handleSubmitFromGuestFormPage}) {
     const formData = { id: id };
 
     return new Promise((resolve, reject) => {
-        fetch("/api/guest", {
+        fetch('/api/guest', {
             method: "DELETE",
             headers: {
                 "Content-Type": "application/json"
