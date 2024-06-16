@@ -95,6 +95,14 @@ services:
     build:
       context: .
       dockerfile: backend.dockerfile
+      args:
+        GID: ${GID}
+        UID: ${UID}
+    environment:
+      - CONTAINER=true
+      - GID=${GID}
+      - UID=${UID}
+    tty: true
     secrets:
        - password_db
        - cookie_passphrase
@@ -126,6 +134,7 @@ services:
       - MARIADB_USER=user #not a secret
       - MARIADB_PASSWORD_FILE=/run/secrets/password_db
       - MARIADB_ROOT_PASSWORD_FILE=/run/secrets/password_db_root
+      - MARIADB_AUTO_UPGRADE=1
     secrets:
        - password_db_root
        - password_db
@@ -154,6 +163,7 @@ services:
       - ./nginx/errors/404.html:/usr/share/nginx/errors/404.html
       - ./nginx/errors/50x.html:/usr/share/nginx/errors/50x.html
       - ./nginx/errors/5xx.html:/usr/share/nginx/errors/5xx.html
+      - ./frontend/public/images:/usr/share/nginx/images
       - ./logs/nginx/:/var/log/nginx/
       - ./logs/nginx/var/log/:/var/log/
       - frontend:/app/frontend/build
