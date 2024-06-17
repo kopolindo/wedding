@@ -1,7 +1,6 @@
 package api
 
 import (
-	"bufio"
 	"fmt"
 	"os"
 	"strings"
@@ -79,23 +78,9 @@ func confirmedCookie(uuid uuid.UUID) (fiber.Cookie, error) {
 	}, nil
 }
 
-// runningInDocker checks if application is running in docker container
+// runningInDocker checks if the system is running inside a Docker build environment.
 // returns true if running in docker, false otherwise
 func runningInDocker() bool {
-	file, err := os.Open("/proc/1/cgroup")
-	if err != nil {
-		log.Errorf("Error: %s", err.Error())
-		return false
-	}
-	defer file.Close()
-
-	scanner := bufio.NewScanner(file)
-	for scanner.Scan() {
-		line := scanner.Text()
-		if strings.Contains(line, "docker") || strings.Contains(line, "docker-") {
-			return true
-		}
-	}
-
-	return false
+	container := os.Getenv("CONTAINER")
+	return strings.ToLower(container) == "true"
 }
