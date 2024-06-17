@@ -141,6 +141,8 @@ services:
        - password_db
     volumes:
       - ./mariadb/data:/config
+      - ./mariadb/init-db:/docker-entrypoint-initdb.d:ro
+      - ./mariadb/my.cnf:/etc/mysql/my.cnf:ro
     ports:
       - 3306:3306
     networks:

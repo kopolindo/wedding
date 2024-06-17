@@ -35,6 +35,7 @@ func init() {
 	}
 	var err error
 	readUserPassword()
+	USERPASSWORD = urlencode(USERPASSWORD)
 	DSN := fmt.Sprintf(
 		DSNFORMAT,
 		USER,
@@ -43,11 +44,12 @@ func init() {
 		PORT,
 		DBNAME,
 	)
+	fmt.Printf("Connection string: %s\n", DSN)
 
 	// Establish a connection to the MySQL database
 	db, err = gorm.Open(mysql.Open(DSN))
 	if err != nil {
-		panic("failed to connect database")
+		log.Errorf("failed to connect database: %s\n", err.Error())
 	}
 	//defer db.Close()
 

@@ -3,6 +3,7 @@ package database
 import (
 	"bufio"
 	"encoding/csv"
+	"net/url"
 	"os"
 	"strconv"
 	"strings"
@@ -230,23 +231,13 @@ func writeToCsv(guests *Guests) {
 
 }
 
-// runningInDocker checks if application is running in docker container
+// runningInDocker checks if the system is running inside a Docker build environment.
 // returns true if running in docker, false otherwise
 func runningInDocker() bool {
-	file, err := os.Open("/proc/1/cgroup")
-	if err != nil {
-		log.Errorf("Error: %s", err.Error())
-		return false
-	}
-	defer file.Close()
+	container := os.Getenv("CONTAINER")
+	return strings.ToLower(container) == "true"
+}
 
-	scanner := bufio.NewScanner(file)
-	for scanner.Scan() {
-		line := scanner.Text()
-		if strings.Contains(line, "docker") || strings.Contains(line, "docker-") {
-			return true
-		}
-	}
-
-	return false
+func urlencode(str string) string {
+	return url.QueryEscape(str)
 }
