@@ -44,7 +44,6 @@ func init() {
 		PORT,
 		DBNAME,
 	)
-	fmt.Printf("Connection string: %s\n", DSN)
 
 	// Establish a connection to the MySQL database
 	db, err = gorm.Open(mysql.Open(DSN))
