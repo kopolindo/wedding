@@ -62,6 +62,7 @@ const Info = () => {
                         Vogliamo quindi semplificarvi la vita e risparmiare al contempo un sacco di carta ;)</p>
                         <p><i>#SaveTheEarth</i></p>
                         <p align="justify">Se volete potete aiutarci nei primi passi della nostra nuova avventura!<br/>
+                        Intestatario: Alex Conti<br/>
                         IBAN: IT69R0301503200000002893665</p>
                     </div>
                 </div>
