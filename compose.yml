@@ -28,8 +28,6 @@ services:
     build:
       context: .
       dockerfile: frontend.dockerfile
-    ports:
-      - "3000:3000"
     volumes:
       - frontend:/app/build
   mariadb:
