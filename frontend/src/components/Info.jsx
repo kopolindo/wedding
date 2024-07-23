@@ -45,6 +45,7 @@ const Info = () => {
                     <div className="card-body">
                         <div className="col d-flex justify-content-center">   
                             <p align="left">
+                                Ore 11.30: Accoglienza<br/>
                                 Ore 12.00: Inizio cerimonia<br/>
                                 Ore 12.45: Inizio divertimento🤘
                             </p>
