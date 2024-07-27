@@ -15,7 +15,7 @@ services:
        - password_db
        - cookie_passphrase
     volumes:
-      - ./logs/backend:/tmp/backend
+      - ./logs/backend:/tmp/logs
       - ./backend-io/:/app/io/
     ports:
       - "8080:8080"
