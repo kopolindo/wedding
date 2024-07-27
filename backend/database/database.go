@@ -151,6 +151,25 @@ func GetUsersByUUID(u uuid.UUID) ([]models.Guest, error) {
 	return guests, nil
 }
 
+// GetMainUserByUUID function returns first and last name of main user given the UUID
+func GetMainUserByUUID(u uuid.UUID) (firstName string, lastName string, err error) {
+	var guest models.Guest
+	result := db.First(&guest, &models.Guest{
+		UUID: u,
+	})
+	if result.Error != nil && errors.Is(result.Error, gorm.ErrRecordNotFound) {
+		err = fmt.Errorf("user not found")
+		return "", "", err
+	}
+	if guest.FirstName != "" {
+		firstName = guest.FirstName
+	}
+	if guest.LastName != "" {
+		lastName = guest.LastName
+	}
+	return firstName, lastName, nil
+}
+
 // GetUserByID function returns guests slice given a UUID
 func GetUserByID(id uint) (models.Guest, error) {
 	var guest models.Guest
