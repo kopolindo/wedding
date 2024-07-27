@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './guestformpage.css';
-import { AlertComponent, SuccessAlertComponent } from './alert';
+import { AlertComponent, SuccessAlertComponent } from './alert';  
+import InputNumber from 'rc-input-number';
 
 export default function GuestFormPage ({handleSubmitFromGuestFormPage}) {
   const [errorMessage, setErrorMessage] = useState('');
@@ -195,6 +196,18 @@ export default function GuestFormPage ({handleSubmitFromGuestFormPage}) {
                                 name="guests"
                                 min="1"
                                 max="5"
+                                value={guestsCount}
+                                onChange={handleGuestsCountChange}
+                                required
+                              />
+                              <InputNumber
+                                defaultValue={1}
+                                step={1}
+                                min={1}
+                                max={5}
+                                controls={true}
+                                id="guests"
+                                name="guests"
                                 value={guestsCount}
                                 onChange={handleGuestsCountChange}
                                 required
