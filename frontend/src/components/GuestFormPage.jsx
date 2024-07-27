@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import './guestformpage.css';
-import AlertComponent from './alert';
+import { AlertComponent, SuccessAlertComponent } from './alert';
 
 export default function GuestFormPage ({handleSubmitFromGuestFormPage}) {
   const [errorMessage, setErrorMessage] = useState('');
+  const [okMessage, setOkMessage] = useState('');
   const [guestsCount, setGuestsCount] = useState(1);
   const [guests, setGuests] = useState([{ id: '', first_name: '', last_name: '', notes: '', confirmed: false }]);
   const [prefilledGuests, setPrefilledGuests] = useState([]);
@@ -113,6 +114,8 @@ export default function GuestFormPage ({handleSubmitFromGuestFormPage}) {
         if (!response.ok) {
           throw new Error('Failed to submit form');
         }
+        console.log("test");
+        setOkMessage("Grazie per aver confermato!");
         var confirmedCookie = document.cookie.split(';').find(cookie => cookie.trim().startsWith('confirmed='));
         
         if (confirmedCookie) {
@@ -175,12 +178,13 @@ export default function GuestFormPage ({handleSubmitFromGuestFormPage}) {
                         <h5 className="card-title mb-0">
                           Ehy! Chi siete? Cosa Fate? Cosa Portate? Dove andate?
                           <br/>
-                          Sì ma quanti siete??
+                          Sì ma quanti siete???
                         </h5>
                     </div>
                     <div className="card-body">
                       <div id="formContainer">
                         {errorMessage && <AlertComponent message={ errorMessage }/>}
+                        {okMessage && <SuccessAlertComponent message={ okMessage }/>}
                           <div>
                             <form className="form-group" action={`/guest`} method="post">
                               <input

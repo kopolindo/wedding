@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import AlertComponent from './alert';
+import {AlertComponent} from './alert';
 import './guestformpage.css';
 
 const QR = () => {

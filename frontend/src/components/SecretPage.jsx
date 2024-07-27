@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import AlertComponent from './alert';
+import {AlertComponent} from './alert';
 
 export default function SecretPage({navigation}) {
   const [secret, setSecret] = useState('');
