@@ -8,7 +8,7 @@ import (
 )
 
 var (
-	debugFlag = flag.Bool("debug", false, "Debug messages enabled")
+	debugFlag = flag.Bool("debug", true, "Debug messages enabled")
 )
 
 func init() {
@@ -19,6 +19,7 @@ func init() {
 }
 
 func main() {
+	log.Infof("v1.0")
 	log.Debugf("debug enabled")
 	log.Infof("starting server")
 	log.Error(api.App.Listen(":8080"))
