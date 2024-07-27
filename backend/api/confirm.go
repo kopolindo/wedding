@@ -18,7 +18,14 @@ type ValidationErrorJSON struct {
 		FailedField string `json:"failed_field"`
 		Tag         string `json:"tag"`
 		Value       string `json:"value"`
+		Message     string `json:"message"`
 	} `json:"errors"`
+}
+
+var FieldsMapping = map[string]string{
+	"FirstName": "Nome",
+	"LastName":  "Cognome",
+	"Note":      "Notes",
 }
 
 func (v XValidator) Validate(data interface{}) []ErrorResponse {
@@ -90,19 +97,30 @@ func handleFormPost(c *fiber.Ctx) error {
 			var validationErrorJSON ValidationErrorJSON
 
 			for _, err := range errs {
+				var message string
+				switch err.Tag {
+				case "min":
+					message = fmt.Sprintf("Il campo %s deve avere una lunghezza minima di 3 caratteri", FieldsMapping[err.FailedField])
+				case "max":
+					message = fmt.Sprintf("Il campo %s deve avere una lunghezza massima di 20 caratteri", FieldsMapping[err.FailedField])
+				case "ascii":
+					message = fmt.Sprintf("Il campo %s può contenere solo caratteri ASCII validi", FieldsMapping[err.FailedField])
+				case "required":
+					message = fmt.Sprintf("Il campo %s è necessario", FieldsMapping[err.FailedField])
+				default:
+					message = fmt.Sprintf("Il campo %s presenta una non conformità imprevista: tag: %s, error: %s", FieldsMapping[err.FailedField], err.Tag, err.Value)
+				}
 				validationErrorJSON.Errors = append(validationErrorJSON.Errors, struct {
 					FailedField string `json:"failed_field"`
 					Tag         string `json:"tag"`
 					Value       string `json:"value"`
+					Message     string `json:"message"`
 				}{
 					FailedField: err.FailedField,
 					Tag:         err.Tag,
 					Value:       fmt.Sprintf("%s", err.Value),
+					Message:     message,
 				})
-			}
-
-			for _, err := range validationErrorJSON.Errors {
-				log.Errorf("validation error: [%s]: '%v' needs to implement '%s'", err.FailedField, err.Value, err.Tag)
 			}
 
 			errorJSON, err := json.Marshal(validationErrorJSON)
@@ -113,7 +131,8 @@ func handleFormPost(c *fiber.Ctx) error {
 					Message: "Internal Server Error",
 				}
 			}
-
+			log.Errorf(string(errorJSON))
+			c.Set("Content-Type", "application/json")
 			return &fiber.Error{
 				Code:    fiber.ErrBadRequest.Code,
 				Message: string(errorJSON),
