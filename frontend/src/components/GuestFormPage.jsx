@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './guestformpage.css';
-import { AlertComponent, SuccessAlertComponent } from './alert';  
-import InputNumber from 'rc-input-number';
+import { AlertComponent, SuccessAlertComponent } from './alert';
+import InputSpinner from 'react-bootstrap-input-spinner';
 
 export default function GuestFormPage ({handleSubmitFromGuestFormPage}) {
   const [errorMessage, setErrorMessage] = useState('');
@@ -188,7 +188,21 @@ export default function GuestFormPage ({handleSubmitFromGuestFormPage}) {
                         {okMessage && <SuccessAlertComponent message={ okMessage }/>}
                           <div>
                             <form className="form-group" action={`/guest`} method="post">
-                              <input
+                              <div className='divs' style={{ width: "170px", margin: "0 auto" }}>
+                                <InputSpinner
+                                  type={'int'}
+                                  max={5}
+                                  min={1}
+                                  step={1}
+                                  value={guestsCount}
+                                  onChange={handleGuestsCountChange}
+                                  onIncrease={(e)=>console.log("increasing")}
+                                  onDecrease={(e)=>console.log("decreasing")}
+                                  variant={'primary'}
+                                  size="sm"
+                                />
+                              </div>
+{/*                               <input
                                 type="number"
                                 className="form-control"
                                 style={{ width: "100px", margin: "0 auto" }}
@@ -199,19 +213,7 @@ export default function GuestFormPage ({handleSubmitFromGuestFormPage}) {
                                 value={guestsCount}
                                 onChange={handleGuestsCountChange}
                                 required
-                              />
-                              <InputNumber
-                                defaultValue={1}
-                                step={1}
-                                min={1}
-                                max={5}
-                                controls={true}
-                                id="guests"
-                                name="guests"
-                                value={guestsCount}
-                                onChange={handleGuestsCountChange}
-                                required
-                              />
+                              /> */}
                               <br />
                               <div className="divs g-1 input-group mb-3">
                                   {guests.map((guest, index) => (
