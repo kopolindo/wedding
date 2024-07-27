@@ -55,8 +55,9 @@ export default function GuestFormPage ({handleSubmitFromGuestFormPage}) {
   };
 
   const handleGuestsCountChange = (event) => {
+    console.log(`event: ${event}`);
     setErrorMessage("");
-    const count = parseInt(event.target.value, 10);
+    const count = parseInt(event, 10);
     if (!isNaN(count)) {
       if (count < 6) {
         setGuestsCount(count);
@@ -191,6 +192,9 @@ export default function GuestFormPage ({handleSubmitFromGuestFormPage}) {
                               <div className='divs' style={{ width: "170px", margin: "0 auto" }}>
                                 <InputSpinner
                                   type={'int'}
+                                  id="guests"
+                                  name="guests"
+                                  required
                                   max={5}
                                   min={1}
                                   step={1}
@@ -225,7 +229,7 @@ export default function GuestFormPage ({handleSubmitFromGuestFormPage}) {
                                           name={`first_name_${index}`}
                                           value={guest.first_name}
                                           placeholder={guest.confirmed ? '' : 'Nome'}
-                                          onChange={(e) => handleGuestChange(index, 'first_name', e.target.value)}
+                                          onChange={(e) => {console.log(`first_name event: ${e}`);handleGuestChange(index, 'first_name', e.target.value)}}
                                         />
                                       </div>
                                       <div className="col" id="last_name">
@@ -235,7 +239,7 @@ export default function GuestFormPage ({handleSubmitFromGuestFormPage}) {
                                           name={`last_name_${index}`}
                                           value={guest.last_name}
                                           placeholder="Cognome"
-                                          onChange={(e) => handleGuestChange(index, 'last_name', e.target.value)}
+                                          onChange={(e) => {console.log(`last_name event: ${e}`);handleGuestChange(index, 'last_name', e.target.value)}}
                                         />
                                       </div>
                                       <div className="col" id="notes">
@@ -245,7 +249,7 @@ export default function GuestFormPage ({handleSubmitFromGuestFormPage}) {
                                           name={`notes_${index}`}
                                           value={guest.notes}
                                           placeholder="Allergie/intolleranze"
-                                          onChange={(e) => handleGuestChange(index, 'notes', e.target.value)}
+                                          onChange={(e) => {console.log(`notes event: ${e}`);handleGuestChange(index, 'notes', e.target.value)}}
                                         />
                                       </div>
                                       {index !== 0

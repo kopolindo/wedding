@@ -15,6 +15,7 @@
     "react": "^18.2.0",
     "react-bootstrap": "^2.10.2",
     "react-bootstrap-icons": "^1.11.4",
+    "react-bootstrap-input-spinner": "^1.0.2",
     "react-dom": "^18.2.0",
     "react-native": "^0.74.1",
     "react-native-pager-view": "^6.3.1",
