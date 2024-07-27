@@ -3,6 +3,7 @@ package api
 import (
 	"encoding/json"
 	"wedding/database"
+	"wedding/log"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/google/uuid"
@@ -28,6 +29,12 @@ func handleFormGet(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusInternalServerError).
 			JSON(fiber.Map{"errorMessage": err.Error()})
 	}
+
+	firstName, lastName, err := database.GetMainUserByUUID(uuid)
+	if err != nil {
+		log.Errorf("error while getting main user by uuid (%s): %s", uuid, err.Error())
+	}
+	log.Debugf("hi user %s %s (%s)\n", firstName, lastName, uuid)
 
 	//var guestMapSlice []map[string]interface{}
 	var respGuests []responseGuest
