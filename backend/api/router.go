@@ -15,7 +15,7 @@ func init() {
 		Immutable:       true,
 		AppName:         "wedding",
 		ReadTimeout:     10 * time.Millisecond,
-		ReadBufferSize:  1024,
+		ReadBufferSize:  4096,
 		RequestMethods:  []string{"GET", "POST", "HEAD", "DELETE"},
 		ServerHeader:    "you are a curious dolphin",
 		WriteTimeout:    10 * time.Millisecond,
