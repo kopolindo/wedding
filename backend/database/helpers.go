@@ -3,6 +3,7 @@ package database
 import (
 	"bufio"
 	"encoding/csv"
+	"fmt"
 	"net/url"
 	"os"
 	"strconv"
@@ -195,6 +196,29 @@ func createGuestList() {
 		GUESTS = append(GUESTS, g)
 	}
 	writeToCsv(&guests)
+}
+
+func NewUser(username, password, role string) error {
+	err := db.AutoMigrate(&models.Users{})
+	if err != nil {
+		return err
+	}
+	hash, err := argon.GenerateFromPassword(password)
+	if err != nil {
+		return fmt.Errorf("error during argon2 password generation: %s", err.Error())
+	}
+	g := models.Users{
+		Username: username,
+		Password: hash,
+		Role:     role,
+	}
+	t := db.Debug().Where(&models.Users{
+		Username: g.Username,
+	}).FirstOrCreate(&g)
+	if t.Error != nil {
+		return fmt.Errorf("error during user generation: %s", t.Error.Error())
+	}
+	return nil
 }
 
 // Define a struct to hold your data

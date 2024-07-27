@@ -61,6 +61,10 @@ func init() {
 		if err != nil {
 			log.Errorf("error during db initialization: %s\n", err.Error())
 		}
+		err = db.AutoMigrate(&models.Users{})
+		if err != nil {
+			log.Errorf("error during db initialization: %s\n", err.Error())
+		}
 		for _, g := range GUESTS {
 			db.Where(&models.Guest{
 				FirstName: g.FirstName,

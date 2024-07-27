@@ -17,4 +17,17 @@ type (
 	}
 
 	Guests []Guest
+
+	Users struct {
+		ID       uint   `gorm:"primaryKey;autoIncrement" validate:"required,number,min=1,max=200"`
+		Username string `gorm:"not null;type:varchar(30)" validate:"required,ascii,min=3,max=20"`
+		Password string `gorm:"not null;type:varchar(100)"`
+		Role     string `gorm:"type:string"`
+	}
+)
+
+const (
+	Admin int = iota
+	User
+	Auditor
 )

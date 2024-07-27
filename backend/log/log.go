@@ -21,13 +21,14 @@ var (
 const (
 	loggerFileName     string = "backend-logs.log"
 	jsonLoggerFileName string = "backend-logs.json"
+	LOGDIRHOST         string = "./logs/"
 	LOGDIRDOCKER       string = "/tmp/logs"
 )
 
 func printFolderDetails(folderPath string) {
 	fileInfo, err := os.Stat(folderPath)
 	if err != nil {
-		log.Fatalf("Error retrieving folder info: %v", err)
+		log.Fatalf("Error retrieving folder (%s) info: %v", folderPath, err)
 	}
 
 	// Type assertion to get the underlying data structure.
@@ -69,11 +70,22 @@ func printWhoAmI() {
 }
 
 func init() {
-	printWhoAmI()
-	printFolderDetails(LOGDIRDOCKER)
+	//printWhoAmI()
+	var dir string
+	if runningInDocker() {
+		dir = LOGDIRDOCKER
+	} else {
+		cwd, err := os.Getwd()
+		if err != nil {
+			log.Fatalf("Failed to get cwd: %v", err)
+		}
+		dir = filepath.Join(cwd, LOGDIRHOST)
+		ensureDir(dir)
+	}
+	//printFolderDetails(dir)
 	slogHandlerOptions = &slog.HandlerOptions{}
 	logLevel = &slog.LevelVar{} // INFO
-	logFilePath := filepath.Join(LOGDIRDOCKER, loggerFileName)
+	logFilePath := filepath.Join(dir, loggerFileName)
 	logFile, err := os.OpenFile(logFilePath, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
 	if err != nil {
 		log.Fatalf("Failed to open log file: %v", err)
