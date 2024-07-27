@@ -42,7 +42,9 @@ export default function GuestFormPage ({handleSubmitFromGuestFormPage}) {
   }, [formSubmitted]);
 
   useEffect(() => {
+    console.log(`setting prefilled guests: ${prefilledGuests.length}`);
     setGuestsCount(prefilledGuests.length);
+    console.log(`set prefilled guests: ${guestsCount}`);
     setGuests(prefilledGuests);
   }, [prefilledGuests]);
 
@@ -200,8 +202,6 @@ export default function GuestFormPage ({handleSubmitFromGuestFormPage}) {
                                   step={1}
                                   value={guestsCount}
                                   onChange={handleGuestsCountChange}
-                                  onIncrease={(e)=>console.log("increasing")}
-                                  onDecrease={(e)=>console.log("decreasing")}
                                   variant={'primary'}
                                   size="sm"
                                 />
