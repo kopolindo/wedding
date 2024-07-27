@@ -115,6 +115,16 @@ export default function GuestFormPage ({handleSubmitFromGuestFormPage}) {
           setErrorMessage('PROTEGO!!');
           return;
         }
+        if (response.status === 400) {
+          return response.json().then(data => {
+            if (data.errors && Array.isArray(data.errors)) {
+              const errorMessages = data.errors.map(error => error.message).join(' e ');
+              setErrorMessage(errorMessages);
+            } else {
+              throw new Error('Invalid error format received');
+            }
+          });
+        }
         if (!response.ok) {
           throw new Error('Failed to submit form');
         }
