@@ -16,3 +16,6 @@ wedding.tar
 releases/**
 backend.dockerfile.bak
 frontend/package.json
+node_modules
+package-lock.json
+package.json
