@@ -44,7 +44,7 @@ func handleFormGet(c *fiber.Ctx) error {
 			FirstName: guest.FirstName,
 			LastName:  guest.LastName,
 			Confirmed: guest.Confirmed,
-			Notes:     string(guest.Notes), // Convert []byte to string
+			Notes:     guest.Notes,
 		}
 		respGuests = append(respGuests, respGuest)
 	}

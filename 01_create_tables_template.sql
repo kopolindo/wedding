@@ -5,5 +5,5 @@ CREATE TABLE IF NOT EXISTS guests (
     UUID CHAR(36) NOT NULL,
     secret VARCHAR(100) NOT NULL,
     confirmed BOOLEAN,
-    notes BLOB
+    notes VARCHAR(100)
 );

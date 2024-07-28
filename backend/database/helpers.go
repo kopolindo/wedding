@@ -184,7 +184,7 @@ func createGuestList() {
 			UUID:      u,
 			Secret:    hash,
 			Confirmed: false,
-			Notes:     []byte{},
+			Notes:     "",
 		}
 		guest := &Guest{
 			FirstName:  g.FirstName,

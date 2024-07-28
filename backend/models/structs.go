@@ -13,7 +13,7 @@ type (
 		UUID      uuid.UUID `gorm:"not null;type:uuid"`
 		Secret    string    `gorm:"not null;type:varchar(100)"`
 		Confirmed bool      `gorm:"type:bool"`
-		Notes     []byte    `gorm:"type:bytes[]" validate:"omitempty,max=256"`
+		Notes     string    `gorm:"type:varchar(100)" validate:"omitempty,ascii,max=100"`
 	}
 
 	Guests []Guest

@@ -90,7 +90,7 @@ func handleFormPost(c *fiber.Ctx) error {
 			LastName:  g.LastName,
 			UUID:      uuid,
 			Confirmed: true,
-			Notes:     []byte(g.Notes),
+			Notes:     g.Notes,
 		}
 		// Validation
 		if errs := myValidator.Validate(&guest); len(errs) > 0 && errs[0].Error {
