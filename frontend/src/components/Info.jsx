@@ -2,6 +2,8 @@ import React from 'react';
 import Map from './Map';
 import { Clock, Gift } from 'react-bootstrap-icons';
 import { google, outlook, yahoo, office365, ics } from "calendar-link";
+import DropdownButton from 'react-bootstrap/DropdownButton';
+import Dropdown from 'react-bootstrap/Dropdown';
 
 const Info = () => {
     const event = {
@@ -27,19 +29,16 @@ const Info = () => {
                     <div className="card-header bg-primary text-white d-flex justify-content-center">
                         <h5 className="card-title mb-0"><Clock className="mr-2" /> Orario</h5>
                         <div className="dropdown dropend">
-                            <button
-                                type="button"
-                                className="btn btn-primary dropdown-toggle btn-sm"
-                                data-bs-toggle="dropdown"
-                                aria-expanded="false">#SaveTheDate
-                            </button>
-                            <ul className="dropdown-menu">
-                                <li><a className="dropdown-item" href={icsUrl}>Add to Apple (iCal)</a></li>
-                                <li><a className="dropdown-item" href={googleUrl}>Add to Google Calendar</a></li>
-                                <li><a className="dropdown-item" href={outlookUrl}>Add to Outlook</a></li>
-                                <li><a className="dropdown-item" href={office365Url}>Add to Office365</a></li>
-                                <li><a className="dropdown-item" href={yahooUrl}>Add to Yahoo</a></li>
-                            </ul>
+                            <DropdownButton
+                                title="#SaveTheDate"
+                                size="sm"
+                            >
+                                <Dropdown.Item href={icsUrl}>Add to Apple (iCal)</Dropdown.Item>
+                                <Dropdown.Item href={googleUrl}>Add to Google Calendar</Dropdown.Item>
+                                <Dropdown.Item href={outlookUrl}>Add to Outlook</Dropdown.Item>
+                                <Dropdown.Item href={office365Url}>Add to Office365</Dropdown.Item>
+                                <Dropdown.Item href={yahooUrl}>Add to Yahoo</Dropdown.Item>
+                            </DropdownButton>
                         </div>
                     </div>
                     <div className="card-body">
