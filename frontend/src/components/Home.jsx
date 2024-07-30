@@ -166,7 +166,7 @@ function Home() {
                 <h5 className="card-title">Jukebox</h5>
                 <p className="text">Let's play some music!!</p>
                 <p className="text">Aggiungete qui le vostre canzoni e vediamo se riusciamo a farvi sentire qualcosa di bello!</p>
-                <a href="https://open.spotify.com/playlist/3BEJVi97rLZCB7XgKF4dqX?si=6f8229ee4ec74982&pt=89435809e1ad5fb15750c98f4dc5950d" className="btn btn-primary">Visualizza Playlist</a>
+                <a href="https://open.spotify.com/playlist/3BEJVi97rLZCB7XgKF4dqX?si=1364ffa50d364267&pt=b86528901ae99229b1293bf5ca7c766b" className="btn btn-primary">Visualizza Playlist</a>
               </div>
               <iframe
                 title="Spotify Playlist"
