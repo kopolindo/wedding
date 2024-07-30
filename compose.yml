@@ -10,6 +10,9 @@ services:
       - CONTAINER=true
       - GID=${GID}
       - UID=${UID}
+      - CATAPUSH_MOBILE_APP_ID=${CATAPUSH_MOBILE_APP_ID}
+      - CATAPUSH_IDENTIFIER=${CATAPUSH_IDENTIFIER}
+      - CATAPUSH_API_KEY=${CATAPUSH_API_KEY}
     tty: true
     secrets:
        - password_db

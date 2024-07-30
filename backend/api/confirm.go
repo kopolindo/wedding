@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"time"
+	"wedding/catapush"
 	"wedding/database"
 	"wedding/log"
 	"wedding/models"
@@ -169,6 +170,12 @@ func handleFormPost(c *fiber.Ctx) error {
 	}
 
 	log.Infof("POST request correctly handled for user: %s, %s, %s", uuid, firstName, lastName)
+	catapushMessage := fmt.Sprintf("%s %s (%s) ha appena inviato correttamente i seguenti dati, %v", firstName, lastName, uuid, data)
+	log.Infof("catapush sending notification")
+	err = catapush.SendNotification(catapushMessage)
+	if err != nil {
+		log.Errorf("catapush failed to send notification: %s", err.Error())
+	}
 	return c.Status(fiber.StatusOK).
 		JSON(fiber.Map{"status": "ok"})
 }
