@@ -1,6 +1,7 @@
 package api
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
 	"time"
@@ -170,12 +171,52 @@ func handleFormPost(c *fiber.Ctx) error {
 	}
 
 	log.Infof("POST request correctly handled for user: %s, %s, %s", uuid, firstName, lastName)
-	notificationMessage := fmt.Sprintf("%s %s (%s) ha appena inviato correttamente i seguenti dati, %v", firstName, lastName, uuid, data)
+
+	// start telegram routine
+	// marshal data to actual JSON struct ([]byte)
+	jsonData, err := json.Marshal(data)
+	if err != nil {
+		log.Errorf("[telegram] error during marshalling of data: %s", err.Error())
+	}
+
+	// set parse_mode to MarkdownV2 for JSON visualization
+	telegram.TGMessage.ParseMode = "MarkdownV2"
+
+	// cast the marshalled JSON ([]byte) to string
+	prettyJsonDataString, err := prettyPrintJSON(string(jsonData))
+	jsonDataString := telegram.PrepareMarkup(prettyJsonDataString)
+	if err != nil {
+		log.Errorf("[telegram] error during prettyfication of JSON data: %s", err.Error())
+	}
+	// prepare the message
+	notificationMessage := fmt.Sprintf(
+		"%s %s \\(`%s`\\) ha appena inviato correttamente i seguenti dati:\n```json\n%s\n```",
+		firstName,
+		lastName,
+		uuid,
+		jsonDataString,
+	)
+
 	log.Infof("[telegram] sending notification")
+
+	// send message
 	err = telegram.SendNotification(notificationMessage)
 	if err != nil {
+		// log error but do not return
 		log.Errorf("[telegram] failed to send notification: %s", err.Error())
 	}
+
+	// return
 	return c.Status(fiber.StatusOK).
 		JSON(fiber.Map{"status": "ok"})
+}
+
+// Function to pretty print a JSON string
+func prettyPrintJSON(jsonStr string) (string, error) {
+	var prettyJSON bytes.Buffer
+	err := json.Indent(&prettyJSON, []byte(jsonStr), "", "  ")
+	if err != nil {
+		return "", fmt.Errorf("failed to pretty print JSON: %v", err)
+	}
+	return prettyJSON.String(), nil
 }
