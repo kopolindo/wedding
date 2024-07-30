@@ -13,6 +13,8 @@ services:
       - CATAPUSH_MOBILE_APP_ID=${CATAPUSH_MOBILE_APP_ID}
       - CATAPUSH_IDENTIFIER=${CATAPUSH_IDENTIFIER}
       - CATAPUSH_API_KEY=${CATAPUSH_API_KEY}
+      - BOT_TOKEN=${BOT_TOKEN}
+      - CHATID=${CHATID}
     tty: true
     secrets:
        - password_db

@@ -4,10 +4,10 @@ import (
 	"encoding/json"
 	"fmt"
 	"time"
-	"wedding/catapush"
 	"wedding/database"
 	"wedding/log"
 	"wedding/models"
+	"wedding/telegram"
 
 	"github.com/go-playground/validator/v10"
 	"github.com/gofiber/fiber/v2"
@@ -170,11 +170,11 @@ func handleFormPost(c *fiber.Ctx) error {
 	}
 
 	log.Infof("POST request correctly handled for user: %s, %s, %s", uuid, firstName, lastName)
-	catapushMessage := fmt.Sprintf("%s %s (%s) ha appena inviato correttamente i seguenti dati, %v", firstName, lastName, uuid, data)
-	log.Infof("catapush sending notification")
-	err = catapush.SendNotification(catapushMessage)
+	notificationMessage := fmt.Sprintf("%s %s (%s) ha appena inviato correttamente i seguenti dati, %v", firstName, lastName, uuid, data)
+	log.Infof("[telegram] sending notification")
+	err = telegram.SendNotification(notificationMessage)
 	if err != nil {
-		log.Errorf("catapush failed to send notification: %s", err.Error())
+		log.Errorf("[telegram] failed to send notification: %s", err.Error())
 	}
 	return c.Status(fiber.StatusOK).
 		JSON(fiber.Map{"status": "ok"})
