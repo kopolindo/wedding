@@ -28,6 +28,7 @@ type (
 			FirstName string `json:"first_name"`
 			LastName  string `json:"last_name"`
 			Notes     string `json:"notes"`
+			Type      int    `json:"type"`
 		} `json:"people"`
 	}
 
@@ -59,12 +60,14 @@ type (
 		ID uint `json:"id"`
 	}
 
+	// Used for security reasons. This struct does not hold the secret ;)
 	responseGuest struct {
-		ID        int    `json:"id"`
+		ID        uint   `json:"id"`
 		FirstName string `json:"first_name"`
 		LastName  string `json:"last_name"`
 		Confirmed bool   `json:"confirmed"`
 		Notes     string `json:"notes"`
+		Type      int    `json:"type"`
 	}
 
 	responseGuests struct {

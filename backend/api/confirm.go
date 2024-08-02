@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"reflect"
 	"time"
 	"wedding/database"
 	"wedding/log"
@@ -27,7 +28,8 @@ type ValidationErrorJSON struct {
 var FieldsMapping = map[string]string{
 	"FirstName": "Nome",
 	"LastName":  "Cognome",
-	"Note":      "Notes",
+	"Note":      "Note",
+	"Type":      "Età",
 }
 
 func (v XValidator) Validate(data interface{}) []ErrorResponse {
@@ -77,7 +79,7 @@ func handleFormPost(c *fiber.Ctx) error {
 
 	if err := c.BodyParser(data); err != nil {
 		log.Errorf("error during JSON parsing: %s", err.Error())
-		return c.Status(fiber.StatusInternalServerError).
+		return c.Status(fiber.ErrBadRequest.Code).
 			JSON(fiber.Map{"errorMessage": err.Error()})
 	}
 
@@ -86,6 +88,18 @@ func handleFormPost(c *fiber.Ctx) error {
 	var guests []models.Guest
 	// Create guest struct from parsed data
 	for _, g := range data.People {
+		if reflect.TypeOf(g.Type).Kind() != reflect.Int {
+			log.Errorf(
+				"Wrong TypeOfGuest (%v) provided by %s %s (%s): %s",
+				g.Type,
+				g.FirstName,
+				g.LastName,
+				uuid,
+				err.Error(),
+			)
+			return c.Status(fiber.ErrBadRequest.Code).
+				JSON(fiber.Map{"errorMessage": err.Error()})
+		}
 		guest := models.Guest{
 			ID:        g.ID,
 			FirstName: g.FirstName,
@@ -93,6 +107,7 @@ func handleFormPost(c *fiber.Ctx) error {
 			UUID:      uuid,
 			Confirmed: true,
 			Notes:     g.Notes,
+			Type:      g.Type,
 		}
 		// Validation
 		if errs := myValidator.Validate(&guest); len(errs) > 0 && errs[0].Error {

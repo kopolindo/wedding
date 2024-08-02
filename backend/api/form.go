@@ -40,11 +40,12 @@ func handleFormGet(c *fiber.Ctx) error {
 	var respGuests []responseGuest
 	for _, guest := range guests {
 		respGuest := responseGuest{
-			ID:        int(guest.ID),
+			ID:        uint(guest.ID),
 			FirstName: guest.FirstName,
 			LastName:  guest.LastName,
 			Confirmed: guest.Confirmed,
 			Notes:     guest.Notes,
+			Type:      guest.Type,
 		}
 		respGuests = append(respGuests, respGuest)
 	}

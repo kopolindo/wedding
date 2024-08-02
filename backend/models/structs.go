@@ -4,6 +4,14 @@ import (
 	"github.com/google/uuid"
 )
 
+type TypeOfGuest int
+
+const (
+	Adult TypeOfGuest = iota
+	Child
+	NewBorn
+)
+
 // Define a struct to represent your database model
 type (
 	Guest struct {
@@ -14,6 +22,7 @@ type (
 		Secret    string    `gorm:"not null;type:varchar(100)"`
 		Confirmed bool      `gorm:"type:bool"`
 		Notes     string    `gorm:"type:varchar(100)" validate:"omitempty,ascii,max=100"`
+		Type      int       `gorm:"type:int" validate:"number,min=0,max=2"`
 	}
 
 	Guests []Guest
