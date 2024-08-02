@@ -20,3 +20,7 @@
   color: transparent;
   font-size: 0.8em;
 }
+
+.hidden-button {
+  visibility: hidden; /* Hides the element but keeps its space in the layout */
+}

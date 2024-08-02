@@ -265,7 +265,7 @@ export default function GuestFormPage({ handleSubmitFromGuestFormPage }) {
                           )
                           : (
                             <Col>
-                              <Button variant="secondary" disabled>
+                              <Button className="hidden-button" variant="secondary" disabled>
                                 Cancella
                               </Button>
                             </Col>
