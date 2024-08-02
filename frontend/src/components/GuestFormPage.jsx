@@ -2,12 +2,13 @@ import React, { useState, useEffect } from 'react';
 import './guestformpage.css';
 import { AlertComponent, SuccessAlertComponent } from './alert';
 import InputSpinner from 'react-bootstrap-input-spinner';
+import { Form, Button, Row, Col } from 'react-bootstrap';
 
-export default function GuestFormPage ({handleSubmitFromGuestFormPage}) {
+export default function GuestFormPage({ handleSubmitFromGuestFormPage }) {
   const [errorMessage, setErrorMessage] = useState('');
   const [okMessage, setOkMessage] = useState('');
   const [guestsCount, setGuestsCount] = useState(1);
-  const [guests, setGuests] = useState([{ id: '', first_name: '', last_name: '', notes: '', confirmed: false }]);
+  const [guests, setGuests] = useState([{ id: '', first_name: '', last_name: '', notes: '', confirmed: false, type: 0 }]);
   const [prefilledGuests, setPrefilledGuests] = useState([]);
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [isConfirmed, setIsConfirmed] = useState(false);
@@ -20,18 +21,16 @@ export default function GuestFormPage ({handleSubmitFromGuestFormPage}) {
         if (!response.ok) {
           throw new Error(data.errorMessage);
         }
-        // Set all guests
         for (let index = 0; index < data.guests.length; index++) {
           const guest = data.guests[index];
-          if(!guest.confirmed){
+          if (!guest.confirmed) {
             guest.first_name = '';
             guest.last_name = '';
             guest.notes = '';
+            guest.type = 0; // Default to "Adult" (integer)
           }
         }
         setGuests(data.guests);
-        
-        // Filter and set only confirmed guests
         setPrefilledGuests(data.guests);
       } catch (error) {
         setErrorMessage(error.message);
@@ -42,22 +41,24 @@ export default function GuestFormPage ({handleSubmitFromGuestFormPage}) {
   }, [formSubmitted]);
 
   useEffect(() => {
-    console.log(`setting prefilled guests: ${prefilledGuests.length}`);
     setGuestsCount(prefilledGuests.length);
-    console.log(`set prefilled guests: ${guestsCount}`);
     setGuests(prefilledGuests);
   }, [prefilledGuests]);
 
   const handleGuestChange = (index, field, value) => {
     setGuests(prevGuests => {
       const updatedGuests = [...prevGuests];
-      updatedGuests[index][field] = value;
+      if (field === 'type') {
+        // Convert value to integer for type field
+        updatedGuests[index][field] = parseInt(value, 10);
+      } else {
+        updatedGuests[index][field] = value;
+      }
       return updatedGuests;
     });
   };
 
   const handleGuestsCountChange = (event) => {
-    console.log(`event: ${event}`);
     setErrorMessage("");
     const count = parseInt(event, 10);
     if (!isNaN(count)) {
@@ -66,15 +67,13 @@ export default function GuestFormPage ({handleSubmitFromGuestFormPage}) {
         setGuests(prevGuests => {
           const existingCount = prevGuests.length;
           if (count > existingCount) {
-            // Add empty rows for additional guests
             const additionalGuests = Array.from(
               { length: count - existingCount }, () => (
-                { id: '', first_name: '', last_name: '', notes: '', confirmed: '' }
+                { id: '', first_name: '', last_name: '', notes: '', confirmed: false, type: 0 } // Default type as integer
               )
             );
             return [...prevGuests, ...additionalGuests];
           } else {
-            // Remove extra rows if count is less than existing count
             return prevGuests.slice(0, count);
           }
         });
@@ -84,26 +83,28 @@ export default function GuestFormPage ({handleSubmitFromGuestFormPage}) {
     }
   };
 
-  const handleSubmit =  () => {
+  const handleSubmit = () => {
     try {
       const formData = {
         people: guests.reduce((acc, guest, index) => {
           const firstName = document.querySelector(`input[name=first_name_${index}]`).value.trim();
           const lastName = document.querySelector(`input[name=last_name_${index}]`).value.trim();
           const notes = document.querySelector(`input[name=notes_${index}]`).value.trim();
-  
+          const type = parseInt(document.querySelector(`select[name=type_${index}]`).value, 10); // Ensure type is an integer
+
           if (firstName && lastName) {
             acc.push({
               id: guest.id || index,
               first_name: firstName,
               last_name: lastName,
               notes: notes,
+              type: type
             });
           }
           return acc;
         }, []),
       };
-  
+
       fetch('/api/guest', {
         method: 'POST',
         headers: {
@@ -128,31 +129,26 @@ export default function GuestFormPage ({handleSubmitFromGuestFormPage}) {
         if (!response.ok) {
           throw new Error('Failed to submit form');
         }
-        console.log("test");
         setOkMessage("Grazie per aver confermato!");
-        var confirmedCookie = document.cookie.split(';').find(cookie => cookie.trim().startsWith('confirmed='));
-        
+        const confirmedCookie = document.cookie.split(';').find(cookie => cookie.trim().startsWith('confirmed='));
+
         if (confirmedCookie) {
-          var confirmedValue = confirmedCookie.split('=')[1];
-          if(confirmedValue==="true"){
-            setIsConfirmed(true)
-          }else{
-            setIsConfirmed(false)
-          }
+          const confirmedValue = confirmedCookie.split('=')[1];
+          setIsConfirmed(confirmedValue === "true");
         }
         setFormSubmitted(true);
       })
     } catch (error) {
       console.error('Error submitting form:', error);
     }
-  };  
+  };
 
   const handleDeleteRow = (index) => {
     const idInput = document.querySelector(`input[name=id_${index}]`);
     const id = idInput ? parseInt(idInput.value, 10) : null;
     setGuestsCount((prevCount) => prevCount - 1);
     const updatedGuests = guests.filter((_, i) => i !== index);
-    if (id !== null){
+    if (id !== null) {
       sendDelete(id);
     }
     setGuests(updatedGuests);
@@ -162,24 +158,24 @@ export default function GuestFormPage ({handleSubmitFromGuestFormPage}) {
     const formData = { id: id };
 
     return new Promise((resolve, reject) => {
-        fetch('/api/guest', {
-            method: "DELETE",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(formData)
-        })
+      fetch('/api/guest', {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(formData)
+      })
         .then(response => {
-            if (!response.ok) {
-                throw new Error("Failed to delete guest");
-            }
-            return response.json();
+          if (!response.ok) {
+            throw new Error("Failed to delete guest");
+          }
+          return response.json();
         })
         .then(data => {
-            resolve(data);
+          resolve(data);
         })
         .catch(error => {
-            reject(error.message);
+          reject(error.message);
         });
     });
   }
@@ -187,117 +183,114 @@ export default function GuestFormPage ({handleSubmitFromGuestFormPage}) {
   return (
     <div className='GuestFormPage'>
       <div className="container">
-                <div className="card border-0">
-                    <div className="card-header bg-primary text-white">
-                        <h5 className="card-title mb-0">
-                          Ehy! Chi siete? Cosa Fate? Cosa Portate? Dove andate?
-                          <br/>
-                          Sì ma quanti siete???
-                        </h5>
-                    </div>
-                    <div className="card-body">
-                      <div id="formContainer">
-                        {errorMessage && <AlertComponent message={ errorMessage }/>}
-                        {okMessage && <SuccessAlertComponent message={ okMessage }/>}
-                          <div>
-                            <form className="form-group" action={`/guest`} method="post">
-                              <div className='divs' style={{ width: "170px", margin: "0 auto" }}>
-                                <InputSpinner
-                                  type={'int'}
-                                  id="guests"
-                                  name="guests"
-                                  required
-                                  max={5}
-                                  min={1}
-                                  step={1}
-                                  value={guestsCount}
-                                  onChange={handleGuestsCountChange}
-                                  variant={'primary'}
-                                  size="sm"
-                                />
-                              </div>
-{/*                               <input
-                                type="number"
-                                className="form-control"
-                                style={{ width: "100px", margin: "0 auto" }}
-                                id="guests"
-                                name="guests"
-                                min="1"
-                                max="5"
-                                value={guestsCount}
-                                onChange={handleGuestsCountChange}
-                                required
-                              /> */}
-                              <br />
-                              <div className="divs g-1 input-group mb-3">
-                                  {guests.map((guest, index) => (
-                                    <div className="row g-1">
-                                      <div className="col" id="first_name">
-                                        <input
-                                          type="text"
-                                          className="form-control"
-                                          name={`first_name_${index}`}
-                                          value={guest.first_name}
-                                          placeholder={guest.confirmed ? '' : 'Nome'}
-                                          onChange={(e) => {console.log(`first_name event: ${e}`);handleGuestChange(index, 'first_name', e.target.value)}}
-                                        />
-                                      </div>
-                                      <div className="col" id="last_name">
-                                        <input
-                                          type="text"
-                                          className="form-control"
-                                          name={`last_name_${index}`}
-                                          value={guest.last_name}
-                                          placeholder="Cognome"
-                                          onChange={(e) => {console.log(`last_name event: ${e}`);handleGuestChange(index, 'last_name', e.target.value)}}
-                                        />
-                                      </div>
-                                      <div className="col" id="notes">
-                                        <input
-                                          type="text"
-                                          className="form-control"
-                                          name={`notes_${index}`}
-                                          value={guest.notes}
-                                          placeholder="Allergie/intolleranze"
-                                          onChange={(e) => {console.log(`notes event: ${e}`);handleGuestChange(index, 'notes', e.target.value)}}
-                                        />
-                                      </div>
-                                      {index !== 0
-                                        ? (
-                                            <div className="col" id="delete_row">
-                                              <button className="btn btn-danger text-nowrap" id="DeleteRow" type="button" onClick={() => handleDeleteRow(index)}>
-                                                <i className="bi bi-trash"></i>
-                                                Cancella
-                                              </button>
-                                            </div>
-                                          )
-                                        : (
-                                            <div className="col" id="ghost_delete">
-                                              <button className="btn ghost-button text-nowrap" style={{color: "transparent"}} type="button" disabled title="">
-                                                Cancella
-                                              </button>
-                                            </div>
-                                          )
-                                      }
-                                      {guest.id && <input type="hidden" name={`id_${index}`} value={guest.id} />}
-                                    </div>
-                                  ))}
-                              </div>
-                              <button
-                                type="button"
-                                className="btn btn-success"
-                                onClick={() => {
-                                    handleSubmit();
-                                    handleSubmitFromGuestFormPage(isConfirmed)
-                                  }
-                                }
-                              >Conferma</button>
-                            </form>
-                          </div>
-                        </div>
-                    </div>
-                </div>
+        <div className="card border-0">
+          <div className="card-header bg-primary text-white">
+            <h5 className="card-title mb-0">
+              Ehy! Chi siete? Cosa Fate? Cosa Portate? Dove andate?
+              <br />
+              Sì ma quanti siete???
+            </h5>
+          </div>
+          <div className="card-body">
+            <div id="formContainer">
+              {errorMessage && <AlertComponent message={errorMessage} />}
+              {okMessage && <SuccessAlertComponent message={okMessage} />}
+              <div>
+                <Form className="form-group">
+                  <div className='divs' style={{ width: "170px", margin: "0 auto" }}>
+                    <InputSpinner
+                      type={'int'}
+                      id="guests"
+                      name="guests"
+                      required
+                      max={5}
+                      min={1}
+                      step={1}
+                      value={guestsCount}
+                      onChange={handleGuestsCountChange}
+                      variant={'primary'}
+                      size="sm"
+                    />
+                  </div>
+                  <br />
+                  <div className="divs g-1 input-group mb-3">
+                    {guests.map((guest, index) => (
+                      <Row key={index} className="g-1">
+                        <Col>
+                          <Form.Control
+                            type="text"
+                            name={`first_name_${index}`}
+                            value={guest.first_name}
+                            placeholder={guest.confirmed ? '' : 'Nome'}
+                            onChange={(e) => handleGuestChange(index, 'first_name', e.target.value)}
+                          />
+                        </Col>
+                        <Col>
+                          <Form.Control
+                            type="text"
+                            name={`last_name_${index}`}
+                            value={guest.last_name}
+                            placeholder="Cognome"
+                            onChange={(e) => handleGuestChange(index, 'last_name', e.target.value)}
+                          />
+                        </Col>
+                        <Col>
+                          <Form.Control
+                            type="text"
+                            name={`notes_${index}`}
+                            value={guest.notes}
+                            placeholder="Allergie/intolleranze"
+                            onChange={(e) => handleGuestChange(index, 'notes', e.target.value)}
+                          />
+                        </Col>
+                        <Col>
+                          <Form.Select
+                            name={`type_${index}`}
+                            value={guest.type}
+                            onChange={(e) => handleGuestChange(index, 'type', e.target.value)}
+                          >
+                            <option value={0}>Adulto</option>
+                            <option value={1}>12 anni o meno</option>
+                            <option value={2}>3 anni o meno</option>
+                          </Form.Select>
+                        </Col>
+                        {index !== 0
+                          ? (
+                            <Col>
+                              <Button variant="danger" onClick={() => handleDeleteRow(index)}>
+                                <i className="bi bi-trash"></i>
+                                Cancella
+                              </Button>
+                            </Col>
+                          )
+                          : (
+                            <Col>
+                              <Button variant="secondary" disabled>
+                                Cancella
+                              </Button>
+                            </Col>
+                          )
+                        }
+                        {guest.id && <input type="hidden" name={`id_${index}`} value={guest.id} />}
+                      </Row>
+                    ))}
+                  </div>
+                  <Button
+                    type="button"
+                    variant="success"
+                    onClick={() => {
+                      handleSubmit();
+                      handleSubmitFromGuestFormPage(isConfirmed);
+                    }}
+                  >
+                    Conferma
+                  </Button>
+                </Form>
+              </div>
             </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
-};
+}
