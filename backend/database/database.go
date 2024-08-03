@@ -130,7 +130,7 @@ func UpdateGuest(update models.Guest) error {
 	}
 	// add select to update empty fields: https://gorm.io/docs/update.html#Update-Selected-Fields
 	result := db.Model(&models.Guest{}).
-		Select("FirstName", "LastName", "Notes", "Type").
+		Select("FirstName", "LastName", "Confirmed", "Notes", "Type").
 		Where(&models.Guest{ID: update.ID, UUID: update.UUID}).
 		Updates(models.Guest{
 			FirstName: update.FirstName,
