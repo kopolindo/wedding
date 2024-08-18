@@ -213,37 +213,42 @@ export default function GuestFormPage({ handleSubmitFromGuestFormPage }) {
                     />
                   </div>
                   <br />
-                  <div className="divs g-1 input-group mb-3">
+                  <div className="divs input-group mb-3">
                     {guests.map((guest, index) => (
-                      <Row key={index} className="g-1">
+                      <Row key={index} className="mb-4"> {/* Adjust the margin between groups */}
+                        {/* First Column: Input Fields Stacked Vertically */}
                         <Col>
+                          {/* First Name */}
                           <Form.Control
                             type="text"
                             name={`first_name_${index}`}
                             value={guest.first_name}
                             placeholder={guest.confirmed ? '' : 'Nome'}
                             onChange={(e) => handleGuestChange(index, 'first_name', e.target.value)}
+                            className="mb-2" // Space between fields within the group
                           />
-                        </Col>
-                        <Col>
+
+                          {/* Last Name */}
                           <Form.Control
                             type="text"
                             name={`last_name_${index}`}
                             value={guest.last_name}
                             placeholder="Cognome"
                             onChange={(e) => handleGuestChange(index, 'last_name', e.target.value)}
+                            className="mb-2"
                           />
-                        </Col>
-                        <Col>
+
+                          {/* Notes */}
                           <Form.Control
                             type="text"
                             name={`notes_${index}`}
                             value={guest.notes}
                             placeholder="Allergie/intolleranze"
                             onChange={(e) => handleGuestChange(index, 'notes', e.target.value)}
+                            className="mb-2"
                           />
-                        </Col>
-                        <Col>
+
+                          {/* Type */}
                           <Form.Select
                             name={`type_${index}`}
                             value={guest.type}
@@ -254,24 +259,15 @@ export default function GuestFormPage({ handleSubmitFromGuestFormPage }) {
                             <option value={2}>3 anni o meno</option>
                           </Form.Select>
                         </Col>
-                        {index !== 0
-                          ? (
-                            <Col>
-                              <Button variant="danger" onClick={() => handleDeleteRow(index)}>
-                                <i className="bi bi-trash"></i>
-                                Cancella
-                              </Button>
-                            </Col>
-                          )
-                          : (
-                            <Col>
-                              <Button className="hidden-button" variant="secondary" disabled>
-                                Cancella
-                              </Button>
-                            </Col>
-                          )
-                        }
-                        {guest.id && <input type="hidden" name={`id_${index}`} value={guest.id} />}
+
+                        {/* Second Column: Trash Button */}
+                        {index !== 0 && (
+                          <Col xs="auto" className="d-flex align-items-center ">
+                            <Button variant="danger" onClick={() => handleDeleteRow(index)}>
+                              <i className="bi bi-trash"></i> Cancella
+                            </Button>
+                          </Col>
+                        )}
                       </Row>
                     ))}
                   </div>
