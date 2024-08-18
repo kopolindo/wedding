@@ -13,7 +13,11 @@ const Layout = ({ children }) => {
 		<span className="text-muted small" style={{ fontStyle: 'italic' }}>
 			Please be gentle, if you find something report to alex89.conti@gmail.com
       <br></br>
-      Pull requests are well accepted https://github.com/kopolindo/wedding ![GitHub](https://img.shields.io/badge/github-%23121011.svg?style=for-the-badge&logo=github&logoColor=white)
+      Pull requests are well accepted
+      <br></br>
+      <a href="https://github.com/kopolindo/wedding">
+        <img src="https://img.shields.io/badge/github-%23121011.svg?style=for-the-badge&logo=github&logoColor=white"></img>
+      </a>
 		</span>
       </div>
     </footer>
