@@ -12,6 +12,8 @@ const Layout = ({ children }) => {
 		<br></br>
 		<span className="text-muted small" style={{ fontStyle: 'italic' }}>
 			Please be gentle, if you find something report to alex89.conti@gmail.com
+      <br></br>
+      Pull requests are well accepted https://github.com/kopolindo/wedding ![GitHub](https://img.shields.io/badge/github-%23121011.svg?style=for-the-badge&logo=github&logoColor=white)
 		</span>
       </div>
     </footer>
