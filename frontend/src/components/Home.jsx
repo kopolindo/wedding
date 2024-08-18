@@ -170,7 +170,7 @@ function Home() {
               </div>
               <iframe
                 title="Spotify Playlist"
-                src="https://open.spotify.com/playlist/3BEJVi97rLZCB7XgKF4dqX?si=QfQZYiePSZCoh_fC-lom9w&pt=8219ad3a4b39308c6dc73fe30b84821e"
+                src="https://open.spotify.com/embed/playlist/3BEJVi97rLZCB7XgKF4dqX?utm_source=generator"
                 width="100%"
                 height="152"
                 allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
