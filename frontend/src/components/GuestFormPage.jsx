@@ -112,6 +112,7 @@ export default function GuestFormPage({ handleSubmitFromGuestFormPage }) {
         },
         body: JSON.stringify(formData),
       }).then(response => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
         if (response.status === 403) {
           setErrorMessage('PROTEGO!!');
           return;
@@ -156,7 +157,6 @@ export default function GuestFormPage({ handleSubmitFromGuestFormPage }) {
 
   function sendDelete(id) {
     const formData = { id: id };
-
     return new Promise((resolve, reject) => {
       fetch('/api/guest', {
         method: "DELETE",
@@ -166,15 +166,18 @@ export default function GuestFormPage({ handleSubmitFromGuestFormPage }) {
         body: JSON.stringify(formData)
       })
         .then(response => {
+          window.scrollTo({ top: 0, behavior: 'smooth' });
           if (!response.ok) {
             throw new Error("Failed to delete guest");
           }
+          setOkMessage("Partecipante cancellato");
           return response.json();
         })
         .then(data => {
           resolve(data);
         })
         .catch(error => {
+          setErrorMessage(error.message);
           reject(error.message);
         });
     });
@@ -218,6 +221,13 @@ export default function GuestFormPage({ handleSubmitFromGuestFormPage }) {
                       <Row key={index} className="mb-4"> {/* Adjust the margin between groups */}
                         {/* First Column: Input Fields Stacked Vertically */}
                         <Col>
+                          {/* ID */}
+                          <Form.Control
+                            type="hidden"
+                            name={`id_${index}`}
+                            value={guest.id}
+                          />
+
                           {/* First Name */}
                           <Form.Control
                             type="text"
